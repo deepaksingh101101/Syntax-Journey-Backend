@@ -58,9 +58,9 @@ const Sidebar = () => {
       </div>
       <div className="sidebar-body">
         <div className="sidebar-menu">
-          <ul className="menu-list">
+          <ul className="menu-list p-0">
             <li className="menu-item">
-              <Link to="/" className="menu-link active">
+              <Link to="/" className="menu-link active text-decoration-none">
                 <span className="menu-link-icon">
                   <MdOutlineGridView size={18} />
                 </span>
@@ -68,7 +68,7 @@ const Sidebar = () => {
               </Link>
             </li>
             <li className="menu-item">
-              <Link to="/" className="menu-link">
+              <Link to="/" className="menu-link text-decoration-none">
                 <span className="menu-link-icon">
                   <MdOutlineBarChart size={20} />
                 </span>
@@ -76,7 +76,7 @@ const Sidebar = () => {
               </Link>
             </li>
             <li className="menu-item">
-              <Link to="/" className="menu-link">
+              <Link to="/" className="menu-link text-decoration-none">
                 <span className="menu-link-icon">
                   <MdOutlineAttachMoney size={20} />
                 </span>
@@ -84,7 +84,7 @@ const Sidebar = () => {
               </Link>
             </li>
             <li className="menu-item">
-              <Link to="/" className="menu-link">
+              <Link to="/" className="menu-link text-decoration-none">
                 <span className="menu-link-icon">
                   <MdOutlineCurrencyExchange size={18} />
                 </span>
@@ -92,7 +92,7 @@ const Sidebar = () => {
               </Link>
             </li>
             <li className="menu-item">
-              <Link to="/" className="menu-link">
+              <Link to="/" className="menu-link text-decoration-none">
                 <span className="menu-link-icon">
                   <MdOutlineShoppingBag size={20} />
                 </span>
@@ -100,7 +100,7 @@ const Sidebar = () => {
               </Link>
             </li>
             <li className="menu-item">
-              <Link to="/" className="menu-link">
+              <Link to="/" className="menu-link text-decoration-none">
                 <span className="menu-link-icon">
                   <MdOutlinePeople size={20} />
                 </span>
@@ -108,7 +108,7 @@ const Sidebar = () => {
               </Link>
             </li>
             <li className="menu-item">
-              <Link to="/" className="menu-link">
+              <Link to="/" className="menu-link text-decoration-none">
                 <span className="menu-link-icon">
                   <MdOutlineMessage size={18} />
                 </span>
@@ -121,7 +121,7 @@ const Sidebar = () => {
         <div className="sidebar-menu sidebar-menu2">
           <ul className="menu-list">
             <li className="menu-item">
-              <Link to="/" className="menu-link">
+              <Link to="/" className="menu-link text-decoration-none">
                 <span className="menu-link-icon">
                   <MdOutlineSettings size={20} />
                 </span>
@@ -129,7 +129,7 @@ const Sidebar = () => {
               </Link>
             </li>
             <li className="menu-item">
-              <Link to="/" className="menu-link">
+              <Link to="/" className="menu-link text-decoration-none">
                 <span className="menu-link-icon">
                   <MdOutlineLogout size={20} />
                 </span>
