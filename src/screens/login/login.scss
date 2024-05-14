@@ -1,0 +1,21 @@
+.logoImg{
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+    border-radius: 50px;
+    background: linear-gradient(90deg, #7c46bea8 40px, #d5e7fb 20px);
+}
+.left{
+    background-image: linear-gradient(180deg, #188fff00, #5b2c92);
+    >img{
+        object-fit: cover;
+        height: 100%;
+        width: 100%;
+        mix-blend-mode: multiply;
+    }
+}
+.right .btn{
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+}
+.text-end{
+    color: var(--secondary-color);
+}
