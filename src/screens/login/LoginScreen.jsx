@@ -1,17 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css"; // Ensure you have imported Bootstrap CSS
 import logo from "../../assets/images/mytr.png";
 import "./login.scss";
 import { Link } from "react-router-dom";
 import {postApi} from '../../helpers/requestHelpers.js'
 import {Toast} from '../../components/alert/Alert.jsx'
+import { useNavigate } from "react-router-dom";
 
 
 const LoginScreen = () => {
+  const navigate = useNavigate();
+
+
+//   useEffect(() => {
+//     const auth=localStorage.getItem("user")
+// if(auth){
+// navigate('/das')
+// }
+//   }, [])
+
   // State variable for login data object
   const [loginData, setLoginData] = useState({ email: "", password: "" });
   const [errorMessage, setErrorMessage] = useState()
   const [loading, setLoading] = useState(false)
+
+
   // Function to handle form submission
   const handleSubmit = async(e) => {
     e.preventDefault(); // Prevent default form submission
@@ -20,11 +33,13 @@ const LoginScreen = () => {
       const response =  await postApi("post", "/api/user/login", { email:loginData?.email,password:loginData?.password });
       if(response?.data?.status==true){
         setLoading(false)
+
+        navigate('/das')
         Toast.fire({
           icon: "success",
           title: "Login Successfull"
       });
-        localStorage.setItem("user",response?.data)
+        localStorage.setItem("user",JSON.stringify(response?.data))
       }
       else{
         setLoading(false)
