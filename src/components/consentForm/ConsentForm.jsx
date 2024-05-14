@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import SignatureCanvas from 'react-signature-canvas';
-
+import { uploadImage} from '../../helpers/requestHelpers'
 
 const ConsentForm = () => {
     const questions = [
@@ -10,25 +10,39 @@ const ConsentForm = () => {
         { "ques": "questions3" },
     ]
     const [sign, setSign] = useState();
-    const [signurl, setSignurl] = useState();
 
     const handleClearSign = () => {
         sign.clear();
     };
-    const generateSign = () => {
-        setSignurl(sign.getTrimmedCanvas().toDataURL('image/png'));
+    const generateSign = async () => {
+        // Assuming sign is defined somewhere in your code
         const base64 = sign.getTrimmedCanvas().toDataURL('image/png');
-        // const base64 = 'data:image/png;base64,....' // Place your base64 url here.
-        fetch(base64)
-            .then(res => res.blob())
-            .then(blob => {
-                const fd = new FormData();
-                const file = new File([blob], "filename.png");
-                fd.append('image', file)
-                console.log(fd.image);
-            })
-            
+    
+        // Convert base64 string to Blob
+        const base64ToBlob = (base64) => {
+            const byteCharacters = atob(base64.split(',')[1]);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            return new Blob([byteArray], { type: 'image/png' });
+        };
+    
+        // Create a FormData object
+        const formData = new FormData();
+        const file = base64ToBlob(base64);
+        formData.append('Image', file, 'signature.png');
+    
+        try {
+            const response = await uploadImage("/api/consent/uploadImage", formData);
+            console.log(response);
+        } catch (error) {
+            console.log(error);
         }
+    };
+    
+
         return (
             <div className="container consentForm p-5">
                 <form className='row g-3'>
