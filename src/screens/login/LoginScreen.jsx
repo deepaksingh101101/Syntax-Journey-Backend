@@ -1,10 +1,68 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css"; // Ensure you have imported Bootstrap CSS
 import logo from "../../assets/images/mytr.png";
 import "./login.scss";
 import { Link } from "react-router-dom";
+import {postApi} from '../../helpers/requestHelpers.js'
+import {Toast} from '../../components/alert/Alert.jsx'
+import { useNavigate } from "react-router-dom";
+
 
 const LoginScreen = () => {
+  const navigate = useNavigate();
+
+
+//   useEffect(() => {
+//     const auth=localStorage.getItem("user")
+// if(auth){
+// navigate('/das')
+// }
+//   }, [])
+
+  // State variable for login data object
+  const [loginData, setLoginData] = useState({ email: "", password: "" });
+  const [errorMessage, setErrorMessage] = useState()
+  const [loading, setLoading] = useState(false)
+
+
+  // Function to handle form submission
+  const handleSubmit = async(e) => {
+    e.preventDefault(); // Prevent default form submission
+   setLoading(true)
+    try {
+      const response =  await postApi("post", "/api/user/login", { email:loginData?.email,password:loginData?.password });
+      if(response?.data?.status==true){
+        setLoading(false)
+
+        navigate('/das')
+        Toast.fire({
+          icon: "success",
+          title: "Login Successfull"
+      });
+        localStorage.setItem("user",JSON.stringify(response?.data))
+      }
+      else{
+        setLoading(false)
+        setErrorMessage(response?.response?.data?.message?response?.response?.data?.message:response?.response?.data?.errors[0].msg)
+        
+      }
+     
+    } catch (error) {
+      setLoading(false)
+      Toast.fire({
+        icon: "error",
+        title: error
+    });
+    }
+  };
+
+  // Function to update the login data object
+  const handleInputChange = (e) => {
+    setErrorMessage("")
+    const { name, value } = e.target;
+    setLoginData({ ...loginData, [name]: value });
+  };
+
   return (
     <div className="container d-flex align-items-center justify-content-center vh-100">
       <div className="d-flex align-items-center justify-content-center overflow-hidden h-100 w-100   ">
@@ -35,7 +93,7 @@ const LoginScreen = () => {
             <span className="text-start text-secondary">
               Login into your account
             </span>
-            <form>
+            <form onSubmit={handleSubmit}>
               <div className="mt-4 mb-3">
                 <label htmlFor="email" className="form-label">
                   Email
@@ -44,8 +102,11 @@ const LoginScreen = () => {
                   type="email"
                   className="form-control"
                   id="email"
+                  name="email"
                   placeholder="Enter your email"
                   required
+                  value={loginData.email}
+                  onChange={handleInputChange}
                 />
               </div>
               <div className="mb-3">
@@ -56,18 +117,24 @@ const LoginScreen = () => {
                   type="password"
                   className="form-control"
                   id="password"
+                  name="password"
                   placeholder="Enter your password"
                   required
+                  value={loginData.password}
+                  onChange={handleInputChange}
                 />
               </div>
-              <div className="text-end">
-                <Link href="#!" className="text-decoration-none text-secondary ">
+              <div className="d-flex justify-content-between px-1">
+                <span className="text-danger" >{errorMessage}</span>
+                <Link to="#!" className="text-decoration-none text-secondary ">
                   Forgot Password
                 </Link>
               </div>
               <div className="d-grid gap-2 mt-3">
-                <button type="button" className="btn ">
+                <button type="submit" disabled={loading} className="btn fw-bold ">
                   Log In
+                  {loading && <div style={{height:"16px", width:"16px"}} className=" ms-3   spinner-border text-light" role="status">
+                  </div>}
                 </button>
               </div>
             </form>
