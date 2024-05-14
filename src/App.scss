@@ -27,7 +27,7 @@
 
 // color mode toggle mixins
 @mixin lightMode {
-  --primary-color: #475be8;
+  --primary-color: #7C46BE;
   --secondary-color: #fff;
   --background-color: #fafafa;
   --side-link-hover-color: #f6f6f6;
@@ -169,4 +169,12 @@ ul {
       margin-bottom: 0;
     }
   }
+}
+.bg-primary-color{
+  background: var(--primary-color)!important;
+}
+
+input:focus , select:focus{
+  box-shadow: none !important;
+  border-color: var(--primary-color) !important;
 }
