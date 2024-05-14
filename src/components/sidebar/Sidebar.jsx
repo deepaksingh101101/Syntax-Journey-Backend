@@ -1,7 +1,8 @@
 import { useContext, useEffect, useRef } from "react";
 import { ThemeContext } from "../../context/ThemeContext";
 import { LIGHT_THEME } from "../../constants/themeConstants";
-import LogoBlue from "../../assets/images/logo_blue.svg";
+import mytrLogo from "../../assets/images/mytr.png"
+// import LogoBlue from "../../assets/images/logo_blue.svg";
 import LogoWhite from "../../assets/images/logo_white.svg";
 import {
   MdOutlineAttachMoney,
@@ -49,7 +50,7 @@ const Sidebar = () => {
     >
       <div className="sidebar-top">
         <div className="sidebar-brand">
-          <img src={theme === LIGHT_THEME ? LogoBlue : LogoWhite} alt="" />
+          <img src={theme === LIGHT_THEME ? mytrLogo : LogoWhite} alt="" />
           <span className="sidebar-brand-text">tabernam.</span>
         </div>
         <button className="sidebar-close-btn" onClick={closeSidebar}>
@@ -60,19 +61,19 @@ const Sidebar = () => {
         <div className="sidebar-menu">
           <ul className="menu-list p-0">
             <li className="menu-item">
-              <Link to="/" className="menu-link active text-decoration-none">
+              <Link to="/das" className="menu-link active text-decoration-none">
                 <span className="menu-link-icon">
                   <MdOutlineGridView size={18} />
                 </span>
-                <span className="menu-link-text">Dashboard</span>
+                <span className="menu-link-text">Create Consent Form</span>
               </Link>
             </li>
             <li className="menu-item">
-              <Link to="/" className="menu-link text-decoration-none">
+              <Link to="/x" className="menu-link text-decoration-none">
                 <span className="menu-link-icon">
                   <MdOutlineBarChart size={20} />
                 </span>
-                <span className="menu-link-text">Statistics</span>
+                <span className="menu-link-text">View Consent Form</span>
               </Link>
             </li>
             <li className="menu-item">
@@ -80,46 +81,14 @@ const Sidebar = () => {
                 <span className="menu-link-icon">
                   <MdOutlineAttachMoney size={20} />
                 </span>
-                <span className="menu-link-text">Payment</span>
-              </Link>
-            </li>
-            <li className="menu-item">
-              <Link to="/" className="menu-link text-decoration-none">
-                <span className="menu-link-icon">
-                  <MdOutlineCurrencyExchange size={18} />
-                </span>
-                <span className="menu-link-text">Transactions</span>
-              </Link>
-            </li>
-            <li className="menu-item">
-              <Link to="/" className="menu-link text-decoration-none">
-                <span className="menu-link-icon">
-                  <MdOutlineShoppingBag size={20} />
-                </span>
-                <span className="menu-link-text">Products</span>
-              </Link>
-            </li>
-            <li className="menu-item">
-              <Link to="/" className="menu-link text-decoration-none">
-                <span className="menu-link-icon">
-                  <MdOutlinePeople size={20} />
-                </span>
-                <span className="menu-link-text">Customer</span>
-              </Link>
-            </li>
-            <li className="menu-item">
-              <Link to="/" className="menu-link text-decoration-none">
-                <span className="menu-link-icon">
-                  <MdOutlineMessage size={18} />
-                </span>
-                <span className="menu-link-text">Messages</span>
+                <span className="menu-link-text">View Template</span>
               </Link>
             </li>
           </ul>
         </div>
 
         <div className="sidebar-menu sidebar-menu2">
-          <ul className="menu-list">
+          <ul className="menu-list p-0">
             <li className="menu-item">
               <Link to="/" className="menu-link text-decoration-none">
                 <span className="menu-link-icon">
