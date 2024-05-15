@@ -21,7 +21,7 @@ export default function ConsentList() {
 
     const generateActionButtons = (row) => (
         <div>
-          <Link to={`/adminProfile/${row.id}`}>
+          <Link to={`/viewConsent/${row._id}`}>
             <button className="btn btn-primary mx-2">
             <i className="fa-solid fa-eye"></i>
             </button>
