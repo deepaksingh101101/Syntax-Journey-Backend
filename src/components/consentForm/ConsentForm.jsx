@@ -1,11 +1,12 @@
 import  { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import SignatureCanvas from 'react-signature-canvas';
 import { getApi, postApi, uploadImage} from '../../helpers/requestHelpers'
 
 const ConsentForm = () => {
 
 
+    const navigate=useNavigate();
     const [consentData, setConsentData] = useState({ patientName: "", patientId: "",mobileNo:"",adharCard:"",gender:"",dob:"",gaurdianName:"",address:"" });
     const [errorMessage, setErrorMessage] = useState()
     const [loading, setLoading] = useState(false)
@@ -106,6 +107,7 @@ const data = {
 
 try {
     let res=await postApi('post',`api/consent/submitConsent`,data)
+    navigate('/consentList')
 console.log(res)
 } catch (error) {
     console.log(error)

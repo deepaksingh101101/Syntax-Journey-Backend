@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import './Consent.css'
 import { getApi } from '../../helpers/requestHelpers'
 import { useParams } from 'react-router-dom'
+import Loader from '../../components/loader/Loader'
 
 
 
@@ -13,14 +14,22 @@ export default function ViewConsent() {
 
 
     const [singleConsentData, setSingleConsentData] = useState()
+    const [loader, setLoader] = useState(true)
 
     const {_id}=useParams()
     console.log(_id)
 
     const getConsentData=async()=>{
-         let res=   await getApi("get",`/api/consent/consentById?consentId=${_id}`)
-         console.log(res?.data?.consent)
-         setSingleConsentData(res?.data?.consent)
+      try {
+        setLoader(true)
+        let res=   await getApi("get",`/api/consent/consentById?consentId=${_id}`)
+        console.log(res?.data?.consent)
+        setSingleConsentData(res?.data?.consent)
+        setLoader(false)
+      } catch (error) {
+        console.log(error)
+        setLoader(false)
+      }
     }
 
     useEffect(() => {
@@ -28,7 +37,14 @@ export default function ViewConsent() {
     }, [])
 
   return (
-    <div className="container consentForm px-0 py-5 d-flex  flex-wrap justify-content-center align-items-center">
+    <>
+      {loader &&
+   <div className="d-flex w-100 justify-content-center align-items-centers">
+       <Loader/>
+   </div>
+}
+  
+   {!loader && <div className="container consentForm px-0 py-5 d-flex  flex-wrap justify-content-center align-items-center">
         <div className="col-md-3 borderC mx-3 d-flex flex-column mb-5 justify-content-center ">
                         <label htmlFor="Pname" className="form-label">
                             Patient Name
@@ -128,7 +144,8 @@ export default function ViewConsent() {
                         Updated By                        </span>
                         
                     </div>
-</div>
+</div> }
+ </>
 
   )
 }

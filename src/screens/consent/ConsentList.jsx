@@ -3,16 +3,19 @@ import DataTable from 'react-data-table-component';
 import { Link } from 'react-router-dom';
 import { deleteApi, getApi } from '../../helpers/requestHelpers';
 import Swal from 'sweetalert2'
-
+import Loader from '../../components/loader/Loader'
 export default function ConsentList() {
 
+    const [loader, setLoader] = useState(true)
 
     const [filteredData, setFilteredData] = useState()
 
     const getAllConsentList=async()=>{
+        setLoader(true)
         let res=await getApi("get","api/consent/getAllConsent")
         
         setFilteredData(res?.data?.consentData)
+        setLoader(false)
     }
 
     useEffect(() => {
@@ -110,13 +113,21 @@ export default function ConsentList() {
       
 
   return (
-    <div className="container consentForm p-5">
-                 <DataTable
-  columns={columns}
-  data={modifiedData}
-  pagination
-  responsive
+  <>
+   {loader &&
+   <div className="d-flex w-100 justify-content-center align-items-centers">
+       <Loader/>
+   </div>
+}
+{ !loader && <div className="container consentForm p-5">
+             <DataTable
+columns={columns}
+data={modifiedData}
+pagination
+responsive
 />
-                    </div>
+                </div>}
+  </>
+                    
   )
 }
