@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { Link } from 'react-router-dom';
-import { getApi } from '../../helpers/requestHelpers';
+import { deleteApi, getApi } from '../../helpers/requestHelpers';
+import Swal from 'sweetalert2'
 
 export default function ConsentList() {
 
@@ -18,6 +19,33 @@ export default function ConsentList() {
     getAllConsentList()
     }, [])
 
+ 
+
+    const handleDeleteConsent=async(_id)=>{
+
+       await Swal.fire({
+            title: "Are you sure want to delete?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+          }).then(async (result) => {
+            if (result.isConfirmed) {
+              try {
+                let res= await deleteApi("delete",`api/consent/consentById?consentId=${_id}`)
+                if(res?.data?.status===true){
+                    setFilteredData(prevData => prevData.filter(item => item._id !== _id));
+                }
+              } catch (error) {
+                console.log(error)
+              }
+            }
+          });
+
+
+    }
 
     const generateActionButtons = (row) => (
         <div>
@@ -26,9 +54,9 @@ export default function ConsentList() {
             <i className="fa-solid fa-eye"></i>
             </button>
           </Link>
-          <button className="btn btn-danger mx-2">
+          <button className="btn btn-danger mx-2" onClick={(e)=>handleDeleteConsent(row?._id)}>
           <i className="fa-solid fa-trash"></i>          </button>
-          <Link to={`/editAdmin/${row.id}`}>
+          <Link to={`/editConsent/${row._id}`}>
             <button className="btn btn-info mx-2">
             <i  className=" text-white fa-solid fa-pen-to-square"></i>            </button>
           </Link>

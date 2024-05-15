@@ -8,6 +8,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import PrivateComponent from './middlewares/PrivateComponent'
 import ConsentList from "./screens/consent/ConsentList";
 import ViewConsent from "./screens/consent/ViewConsent";
+import EditConsent from "./screens/consent/EditConsent";
 
 function App() {
   
@@ -28,6 +29,7 @@ function App() {
             <Route path="/Das" element={<Dashboard />} />
             <Route path="/consentList" element={<ConsentList />} />
             <Route path="/viewConsent/:_id" element={<ViewConsent />} />
+            <Route path="/editConsent/:_id" element={<EditConsent />} />
           </Route>
 
           </Route>
