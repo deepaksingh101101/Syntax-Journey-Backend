@@ -33,6 +33,7 @@ const BaseLayout = () => {
           <img
             className="theme-icon"
             src={theme === LIGHT_THEME ? SunIcon : MoonIcon}
+            alt=""
           />
         </button>
     </main>

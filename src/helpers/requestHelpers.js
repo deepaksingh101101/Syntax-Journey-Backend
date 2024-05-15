@@ -9,7 +9,7 @@ const api=axios.create({
 
 
 api.interceptors.request.use(function (config) {
-  let access=localStorage.getItem("accessToken")
+  let access=JSON.parse(localStorage.getItem("user"))?.accessToken
 
   config.headers["Authorization"] = `Bearer ${access}`;
 
