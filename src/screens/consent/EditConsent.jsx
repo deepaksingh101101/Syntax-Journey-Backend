@@ -1,5 +1,5 @@
 import  { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import SignatureCanvas from 'react-signature-canvas';
 import { getApi, patchApi, postApi, uploadImage } from '../../helpers/requestHelpers';
 import Loader from '../../components/loader/Loader';
@@ -49,6 +49,7 @@ setLoader(false)
 
 }
 
+const navigate=useNavigate()
 const {_id}=useParams()
 
 useEffect(() => {
@@ -132,8 +133,10 @@ const data = {
 };
 
 try {
+
     let res=await patchApi('patch',`api/consent/consentById?consentId=${_id}`,data)
 console.log(res)
+navigate('/consentList')
 } catch (error) {
     console.log(error)
 }
