@@ -1,11 +1,16 @@
 import  { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import SignatureCanvas from 'react-signature-canvas';
 import { getApi, postApi, uploadImage} from '../../helpers/requestHelpers'
+import { useRecordWebcam } from 'react-record-webcam'
 
 const ConsentForm = () => {
 
+    const OPTIONS={options: { fileName: 'custom-name', fileType: 'webm',height:1080,width:1920 }}
+    const {   createRecording, openCamera, startRecording, stopRecording, closeCamera,clearAllRecordings } = useRecordWebcam()
 
+
+    const navigate=useNavigate();
     const [consentData, setConsentData] = useState({ patientName: "", patientId: "",mobileNo:"",adharCard:"",gender:"",dob:"",gaurdianName:"",address:"" });
     const [errorMessage, setErrorMessage] = useState()
     const [loading, setLoading] = useState(false)
@@ -97,7 +102,7 @@ const data = {
     signatureUrl: imageUrl,
     VideoUrl: "http",
     caseType:caseType,
-    createdBy:"admin",
+    createdBy:"admin@gmail.com",
     question: allQuestions.reduce((acc, question, index) => {
         acc[question] = inputValues[index];
         return acc;
@@ -106,12 +111,58 @@ const data = {
 
 try {
     let res=await postApi('post',`api/consent/submitConsent`,data)
+    navigate('/consentList')
 console.log(res)
 } catch (error) {
     console.log(error)
 }
 
    }   
+
+   
+
+   const handleClearVideo=()=>{
+
+   }
+
+
+
+const [recordingState, setRecordingState] = useState()
+
+const startRecoding = async () => {
+    
+    const recording = await createRecording();
+
+
+    setRecordingState(recording);
+    await openCamera(recording?.id);
+    await startRecording(recording?.id);
+  };
+
+
+  const [recordedState, setRecordedState] = useState()
+
+  const stopRecoding = async () => {
+    const recorded = await stopRecording(recordingState?.id);
+    setRecordedState(recorded)
+    await closeCamera(recordingState?.id)
+    // Upload the blob to a back-end
+    
+  };
+
+  const saveRecoding=async()=>{
+    const formData = new FormData();
+    formData.append('video', recordedState?.blob, 'recorded.webm');
+   try {
+     
+   await postApi("post","api/consent/uploadVideo",formData)
+   } catch (error) {
+    console.log(error)
+   }
+  }
+
+   const { activeRecordings } = useRecordWebcam()
+
 
         return (
             <div className="container consentForm p-5">
@@ -301,8 +352,33 @@ console.log(res)
                         </div>
                     </div>
 
+                    <div className="modal fade" id="uploadVideoModal" tabIndex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                        <div className="modal-dialog modal-fullscreen">
+                            <div className="modal-content">
+                                <button type="button" className="btn-close ms-auto p-2 " data-bs-dismiss="modal" aria-label="Close"></button>
+                                <div className="modal-body">
+                                {activeRecordings.map(recording => (
+    <div key={recording.id}>
+        <p className='text-center' >Your Camera</p>
+      <video ref={recording.webcamRef} autoPlay />
+      <p>Your Video Preview</p>
+      <video ref={recording.previewRef} autoPlay loop />
+    </div>
+  ))}
+                                </div>
+                                <div className="modal-footer">
+                                    <button type="button" className="btn btn-secondary" onClick={handleClearVideo} >Reset</button>
+                                    <button type="button" className="btn btn-primary" onClick={startRecoding}>Start Recording </button>
+                                    <button type="button" className="btn btn-primary" onClick={stopRecoding}>Stop Recording </button>
+                                    <button type="button" className="btn btn-primary" onClick={saveRecoding}>Save Recording </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+
                     <div className="col-md-6">
-                        <button className="btn bg-primary-color text-light p-5 w-100  "><i className="fa-solid fa-video"></i> Capture Consent Video</button>
+                        <button  type="button" className="btn bg-primary-color text-light p-5 w-100  " data-bs-toggle="modal" data-bs-target="#uploadVideoModal"><i className="fa-solid fa-video"></i> Capture Consent Video</button>
                     </div>
 
                     <div className="col-12">
