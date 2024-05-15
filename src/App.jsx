@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import BaseLayout from "./layout/BaseLayout";
 import { Dashboard, PageNotFound} from "./screens";
 import {Login} from "./screens"
+import {CreateTemplate} from "./screens"
 import 'bootstrap/dist/css/bootstrap.min.css'; 
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import PrivateComponent from './middlewares/PrivateComponent'
@@ -30,6 +31,7 @@ function App() {
             <Route path="/consentList" element={<ConsentList />} />
             <Route path="/viewConsent/:_id" element={<ViewConsent />} />
             <Route path="/editConsent/:_id" element={<EditConsent />} />
+            <Route path="/create-template" element={<CreateTemplate/>} />
           </Route>
 
           </Route>
