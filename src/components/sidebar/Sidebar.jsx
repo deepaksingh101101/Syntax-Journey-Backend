@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef} from "react";
 import { ThemeContext } from "../../context/ThemeContext";
 import { LIGHT_THEME } from "../../constants/themeConstants";
 import mytrLogo from "../../assets/images/mytr.png"
@@ -16,11 +16,12 @@ import {
   MdOutlineSettings,
   MdOutlineShoppingBag,
 } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import "./Sidebar.scss";
 import { SidebarContext } from "../../context/SidebarContext";
 
 const Sidebar = () => {
+
   const { theme } = useContext(ThemeContext);
   const { isSidebarOpen, closeSidebar } = useContext(SidebarContext);
   const navbarRef = useRef(null);
@@ -42,6 +43,7 @@ const Sidebar = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+ 
 
   return (
     <nav
@@ -61,28 +63,36 @@ const Sidebar = () => {
         <div className="sidebar-menu">
           <ul className="menu-list p-0">
             <li className="menu-item">
-              <Link to="/das" className="menu-link active text-decoration-none">
+              <NavLink to="/das"  className="menu-link text-decoration-none" >
                 <span className="menu-link-icon">
                   <MdOutlineGridView size={18} />
                 </span>
                 <span className="menu-link-text">Create Consent Form</span>
-              </Link>
+              </NavLink>
             </li>
             <li className="menu-item">
-              <Link to="/x" className="menu-link text-decoration-none">
+              <NavLink to="/create-template" className="menu-link text-decoration-none">
+                <span className="menu-link-icon">
+                  <MdOutlineGridView size={18} />
+                </span>
+                <span className="menu-link-text">Create Template</span>
+              </NavLink>
+            </li>
+            <li className="menu-item" >
+              <NavLink to="/x" className="menu-link text-decoration-none">
                 <span className="menu-link-icon">
                   <MdOutlineBarChart size={20} />
                 </span>
                 <span className="menu-link-text">View Consent Form</span>
-              </Link>
+              </NavLink>
             </li>
-            <li className="menu-item">
-              <Link to="/" className="menu-link text-decoration-none">
+            <li className="menu-item" >
+              <NavLink to="/" className="menu-link text-decoration-none">
                 <span className="menu-link-icon">
                   <MdOutlineAttachMoney size={20} />
                 </span>
                 <span className="menu-link-text">View Template</span>
-              </Link>
+              </NavLink>
             </li>
           </ul>
         </div>
@@ -90,20 +100,20 @@ const Sidebar = () => {
         <div className="sidebar-menu sidebar-menu2">
           <ul className="menu-list p-0">
             <li className="menu-item">
-              <Link to="/" className="menu-link text-decoration-none">
+              <NavLink to="/" className="menu-link text-decoration-none">
                 <span className="menu-link-icon">
                   <MdOutlineSettings size={20} />
                 </span>
                 <span className="menu-link-text">Settings</span>
-              </Link>
+              </NavLink>
             </li>
             <li className="menu-item">
-              <Link to="/" className="menu-link text-decoration-none">
+              <NavLink to="/" className="menu-link text-decoration-none">
                 <span className="menu-link-icon">
                   <MdOutlineLogout size={20} />
                 </span>
                 <span className="menu-link-text">Logout</span>
-              </Link>
+              </NavLink>
             </li>
           </ul>
         </div>
