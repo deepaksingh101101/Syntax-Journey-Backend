@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import { Sidebar } from "../components";
+import { AreaTop, Sidebar } from "../components";
 import { useContext } from "react";
 import { ThemeContext } from "../context/ThemeContext";
 import { DARK_THEME, LIGHT_THEME } from "../constants/themeConstants";
@@ -22,10 +22,11 @@ const BaseLayout = () => {
       {/* left of page */}
       <Sidebar />
       {/* right side/content of the page */}
+      <AreaTop/>
       <div className="content-wrapper d-flex align-items-center ">
         <Outlet />
       </div>
-      <button
+      {/* <button
           type="button"
           className="theme-toggle-btn"
           onClick={toggleTheme}
@@ -35,7 +36,8 @@ const BaseLayout = () => {
             src={theme === LIGHT_THEME ? SunIcon : MoonIcon}
             alt=""
           />
-        </button>
+        </button> */}
+        
     </main>
   );
 };
