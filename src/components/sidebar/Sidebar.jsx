@@ -79,7 +79,7 @@ const Sidebar = () => {
               </NavLink>
             </li>
             <li className="menu-item" >
-              <NavLink to="/x" className="menu-link text-decoration-none">
+              <NavLink to="/consentList" className="menu-link text-decoration-none">
                 <span className="menu-link-icon">
                   <MdOutlineBarChart size={20} />
                 </span>

@@ -119,7 +119,7 @@ export default function ConsentList() {
        <Loader/>
    </div>
 }
-{ !loader && <div className="container consentForm p-5">
+{ !loader && <div style={{minHeight:"90vh"}} className="container consentForm p-5">
              <DataTable
 columns={columns}
 data={modifiedData}
