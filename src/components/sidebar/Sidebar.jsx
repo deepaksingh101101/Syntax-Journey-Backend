@@ -79,7 +79,7 @@ const Sidebar = () => {
               </NavLink>
             </li>
             <li className="menu-item" >
-              <NavLink to="/x" className="menu-link text-decoration-none">
+              <NavLink to="/consentList" className="menu-link text-decoration-none">
                 <span className="menu-link-icon">
                   <MdOutlineBarChart size={20} />
                 </span>
@@ -87,11 +87,27 @@ const Sidebar = () => {
               </NavLink>
             </li>
             <li className="menu-item" >
-              <NavLink to="/" className="menu-link text-decoration-none">
+              <NavLink to="/templateList" className="menu-link text-decoration-none">
                 <span className="menu-link-icon">
                   <MdOutlineAttachMoney size={20} />
                 </span>
                 <span className="menu-link-text">View Template</span>
+              </NavLink>
+            </li>
+            <li className="menu-item" >
+              <NavLink to="/createAdmin" className="menu-link text-decoration-none">
+                <span className="menu-link-icon">
+                  <MdOutlineAttachMoney size={20} />
+                </span>
+                <span className="menu-link-text">Create Admin</span>
+              </NavLink>
+            </li>
+            <li className="menu-item" >
+              <NavLink to="/viewAdmin" className="menu-link text-decoration-none">
+                <span className="menu-link-icon">
+                  <MdOutlineAttachMoney size={20} />
+                </span>
+                <span className="menu-link-text">View Admin List</span>
               </NavLink>
             </li>
           </ul>

@@ -1,25 +1,25 @@
 import { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { Link } from 'react-router-dom';
-import { deleteApi, getApi } from '../../helpers/requestHelpers';
 import Swal from 'sweetalert2'
 import Loader from '../../components/loader/Loader'
-export default function ConsentList() {
+import { deleteApi, getApi } from '../../helpers/requestHelpers';
+export default function TemplateList() {
 
     const [loader, setLoader] = useState(true)
 
     const [filteredData, setFilteredData] = useState()
 
-    const getAllConsentList=async()=>{
+    const getAllTemplateList=async()=>{
         setLoader(true)
-        let res=await getApi("get","api/consent/getAllConsent")
-        
-        setFilteredData(res?.data?.consentData)
+        let res=await getApi("get","api/template/getAllTemplate")
+        console.log(res)
+        setFilteredData(res?.data?.templates)
         setLoader(false)
     }
 
     useEffect(() => {
-    getAllConsentList()
+    getAllTemplateList()
     }, [])
 
  
@@ -37,7 +37,7 @@ export default function ConsentList() {
           }).then(async (result) => {
             if (result.isConfirmed) {
               try {
-                let res= await deleteApi("delete",`api/consent/consentById?consentId=${_id}`)
+                let res= await deleteApi("delete",`api/template/deleteTemplate?templateId=${_id}`)
                 if(res?.data?.status===true){
                     setFilteredData(prevData => prevData.filter(item => item._id !== _id));
                 }
@@ -52,14 +52,14 @@ export default function ConsentList() {
 
     const generateActionButtons = (row) => (
         <div>
-          <Link to={`/viewConsent/${row._id}`}>
+          <Link to={`/viewTemplate/${row._id}`}>
             <button className="btn btn-primary mx-2">
             <i className="fa-solid fa-eye"></i>
             </button>
           </Link>
           <button className="btn btn-danger mx-2" onClick={(e)=>handleDeleteConsent(row?._id)}>
           <i className="fa-solid fa-trash"></i>          </button>
-          <Link to={`/editConsent/${row._id}`}>
+          <Link to={`/editTemplate/${row._id}`}>
             <button className="btn btn-info mx-2">
             <i  className=" text-white fa-solid fa-pen-to-square"></i>            </button>
           </Link>
@@ -74,8 +74,8 @@ export default function ConsentList() {
           sortable: true,
         },
         {
-          name: 'Patient Name',
-          selector: row => row.patientName,
+          name: 'Template Id',
+          selector: row => row._id,
           sortable: true,
         },
         {
@@ -84,13 +84,8 @@ export default function ConsentList() {
           sortable: true,
         },
         {
-          name: 'Mobile Number',
-          selector: row => row.mobileNo,
-          sortable: true,
-        },
-        {
-          name: 'Created By',
-          selector: row => row.createdBy,
+          name: 'Created At',
+          selector: row => row.createdAt,
           sortable: true,
         },
         {
@@ -104,8 +99,7 @@ export default function ConsentList() {
    
       const modifiedData = filteredData?.map((row, index) => ({
         ...row,
-        mobileNo: row?.mobileNo ,
-        createdBy: row?.createdBy ? row?.createdBy : 'Unknown',
+        templateId: row?._id ,
         sno: index + 1,
         actions: generateActionButtons(row),
       }));

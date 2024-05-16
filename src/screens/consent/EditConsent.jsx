@@ -26,6 +26,7 @@ const getAllcaseType=async()=>{
    let allCase= await getApi("get","/api/template/getAllCaseType")
    setAllCaseType(allCase?.data?.caseType)
    let res=   await getApi("get",`/api/consent/consentById?consentId=${_id}`)
+   console.log(res)
    setSingleConsentData(res?.data?.consent)
    setConsentData({
     patientId:res?.data?.consent?.patientId,
@@ -324,7 +325,7 @@ navigate('/consentList')
 
 
         <div className="col-md-6">
-            <button type='button' className="btn bg-primary-color text-light p-5 w-100  " data-bs-toggle="modal" data-bs-target="#uploadSignatureModal"><i className="fa-solid fa-file-signature"></i> Upload Signature</button>
+            <button disabled type='button' className="btn bg-primary-color text-light p-5 w-100  " data-bs-toggle="modal" data-bs-target="#uploadSignatureModal"><i className="fa-solid fa-file-signature"></i> Upload Signature</button>
         </div>
 
         {/* ----modal--- */}
@@ -348,7 +349,7 @@ navigate('/consentList')
         </div>
 
         <div className="col-md-6">
-            <button className="btn bg-primary-color text-light p-5 w-100  "><i className="fa-solid fa-video"></i> Capture Consent Video</button>
+            <button disabled className="btn bg-primary-color text-light p-5 w-100  "><i className="fa-solid fa-video"></i> Capture Consent Video</button>
         </div>
 
         <div className="col-12">

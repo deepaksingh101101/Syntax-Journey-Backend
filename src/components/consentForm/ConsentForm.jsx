@@ -100,7 +100,7 @@ e.preventDefault();
 const data = {
     ...consentData,
     signatureUrl: imageUrl,
-    VideoUrl: "http",
+    VideoUrl: videoUrlState,
     caseType:caseType,
     createdBy:"admin@gmail.com",
     question: allQuestions.reduce((acc, question, index) => {
@@ -150,12 +150,21 @@ const startRecoding = async () => {
     
   };
 
+  const [videoUrlState, setVideoUrlState] = useState()
+
   const saveRecoding=async()=>{
     const formData = new FormData();
     formData.append('video', recordedState?.blob, 'recorded.webm');
    try {
      
-   await postApi("post","api/consent/uploadVideo",formData)
+  let res= await postApi("post","api/consent/uploadVideo",formData)
+  console.log(res)
+  if(res?.data?.status===true){
+    setVideoUrlState(res?.data?.videoUrl)
+  }
+  else{
+    console.log(errorMessage)
+  }
    } catch (error) {
     console.log(error)
    }
@@ -165,7 +174,7 @@ const startRecoding = async () => {
 
 
         return (
-            <div className="container consentForm p-5">
+            <div style={{minHeight:"90vh"}} className="container consentForm p-5">
                 <form className='row g-3' onSubmit={handleConsentSubmit}>
                     <div className="col-md-4">
                         <label htmlFor="Pname" className="form-label">
