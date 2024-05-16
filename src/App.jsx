@@ -10,6 +10,7 @@ import PrivateComponent from './middlewares/PrivateComponent'
 import ConsentList from "./screens/consent/ConsentList";
 import ViewConsent from "./screens/consent/ViewConsent";
 import EditConsent from "./screens/consent/EditConsent";
+import TemplateList from "./screens/Create-template/TemplateList";
 
 function App() {
   
@@ -32,6 +33,7 @@ function App() {
             <Route path="/viewConsent/:_id" element={<ViewConsent />} />
             <Route path="/editConsent/:_id" element={<EditConsent />} />
             <Route path="/create-template" element={<CreateTemplate/>} />
+            <Route path="/templateList" element={<TemplateList/>} />
           </Route>
 
           </Route>

@@ -87,7 +87,7 @@ const Sidebar = () => {
               </NavLink>
             </li>
             <li className="menu-item" >
-              <NavLink to="/" className="menu-link text-decoration-none">
+              <NavLink to="/templateList" className="menu-link text-decoration-none">
                 <span className="menu-link-icon">
                   <MdOutlineAttachMoney size={20} />
                 </span>
