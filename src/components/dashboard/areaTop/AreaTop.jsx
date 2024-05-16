@@ -39,7 +39,7 @@ const AreaTop = () => {
   }, []);
 
   return (
-    <section className="content-area-top">
+    <section className="content-area-top d-flex d-lg-none position-fixed bg-secondary-subtle py-2 px-3 " style={{top:"20px",borderRadius:"0 20px 20px 0"}}>
       <div className="area-top-l">
         <button
           className="sidebar-open-btn"
@@ -48,24 +48,6 @@ const AreaTop = () => {
         >
           <MdOutlineMenu size={24} />
         </button>
-        <h2 className="area-top-title">Dashboard</h2>
-      </div>
-      <div className="area-top-r">
-        <div
-          ref={dateRangeRef}
-          className={`date-range-wrapper ${
-            !showDatePicker ? "hide-date-range" : ""
-          }`}
-          onClick={handleInputClick}
-        >
-          <DateRange
-            editableDateInputs={true}
-            onChange={(item) => setState([item.selection])}
-            moveRangeOnFirstSelection={false}
-            ranges={state}
-            showMonthAndYearPickers={false}
-          />
-        </div>
       </div>
     </section>
   );
