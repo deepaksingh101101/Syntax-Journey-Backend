@@ -1,8 +1,9 @@
-import  { useEffect, useState } from 'react'
+import  { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import SignatureCanvas from 'react-signature-canvas';
 import { getApi, postApi, uploadImage} from '../../helpers/requestHelpers'
 import { useRecordWebcam } from 'react-record-webcam'
+import QuillEditor from "react-quill";
 
 const ConsentForm = () => {
 
@@ -26,6 +27,7 @@ const [VideoUrl, setVideoUrl] = useState()
 
 const getAllcaseType=async()=>{
    let allCase= await getApi("get","/api/template/getAllCaseType")
+   
    setAllCaseType(allCase?.data?.caseType)
 
 }
@@ -75,12 +77,17 @@ useEffect(() => {
         setConsentData({ ...consentData, [name]: value });  
       };
 
+      const [value, setValue] = useState("");
+      const quill = useRef();
 
       const handleCaseTypeChange=async(e)=>{
         setCaseType(e.target.value)
         const res = await getApi("get",`/api/template/questionsByCaseType?caseType=${e.target.value}`);
         setAllQuestions(res?.data?.questions)
-
+        
+        const temp = await getApi("get",`/api/template/getTemplateByCaseType?caseType=${e.target.value}`);
+        console.log(temp)
+        setValue(temp?.data?.deltaForm)
 
       }
 
@@ -217,6 +224,8 @@ const startRecoding = async () => {
                             name='mobileNo'
                             placeholder="Enter Paitent Id"
                             required
+                            minLength={10}
+                            maxLength={10}
                             value={consentData.mobileNo}
                             onChange={handleInputChange} 
                         />
@@ -266,6 +275,7 @@ const startRecoding = async () => {
                             name='dob'
                             value={consentData.dob}
                             onChange={handleInputChange} 
+                            max={new Date().toISOString().split('T')[0]}
                         />
                     </div>
                     <div className="col-md-4">
@@ -322,7 +332,7 @@ const startRecoding = async () => {
                     {allQuestions?.map((que, index) => (
                 <div key={index} className="col-md-12">
                     <label htmlFor={`ques-${index}`} className="form-label">
-                        {que}
+                       <b>Question {index+1} </b>   {que}
                     </label>
                     <input
                         type="text"
@@ -336,6 +346,22 @@ const startRecoding = async () => {
                     />
                 </div>
             ))}
+
+
+{caseType &&<div className="col-md-12">
+                        <label htmlFor="caseType" className="form-label">
+                            Template Content
+                        </label>
+<QuillEditor
+            // ref={quill}
+            theme="snow"
+            value={value}
+            readOnly={true} // Set readOnly to true to disable editing
+            modules={{
+                toolbar: false, // Hide the toolbar
+              }}
+          />
+          </div>}
 
                     <div className="col-md-6">
                         <button type='button' className="btn bg-primary-color text-light p-5 w-100  " data-bs-toggle="modal" data-bs-target="#uploadSignatureModal"><i className="fa-solid fa-file-signature"></i> Upload Signature</button>
