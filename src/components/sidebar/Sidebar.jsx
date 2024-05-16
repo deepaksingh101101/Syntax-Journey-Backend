@@ -94,6 +94,22 @@ const Sidebar = () => {
                 <span className="menu-link-text">View Template</span>
               </NavLink>
             </li>
+            <li className="menu-item" >
+              <NavLink to="/createAdmin" className="menu-link text-decoration-none">
+                <span className="menu-link-icon">
+                  <MdOutlineAttachMoney size={20} />
+                </span>
+                <span className="menu-link-text">Create Admin</span>
+              </NavLink>
+            </li>
+            <li className="menu-item" >
+              <NavLink to="/viewAdmin" className="menu-link text-decoration-none">
+                <span className="menu-link-icon">
+                  <MdOutlineAttachMoney size={20} />
+                </span>
+                <span className="menu-link-text">View Admin List</span>
+              </NavLink>
+            </li>
           </ul>
         </div>
 
