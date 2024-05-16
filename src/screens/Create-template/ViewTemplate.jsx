@@ -122,7 +122,6 @@ export default function ViewTemplate() {
                         Template View
                         </label>
 <QuillEditor
-            // ref={quill}
             theme="snow"
             value={value}
             readOnly={true} // Set readOnly to true to disable editing

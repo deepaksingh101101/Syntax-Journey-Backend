@@ -224,6 +224,8 @@ const startRecoding = async () => {
                             name='mobileNo'
                             placeholder="Enter Paitent Id"
                             required
+                            minLength={10}
+                            maxLength={10}
                             value={consentData.mobileNo}
                             onChange={handleInputChange} 
                         />
@@ -273,6 +275,7 @@ const startRecoding = async () => {
                             name='dob'
                             value={consentData.dob}
                             onChange={handleInputChange} 
+                            max={new Date().toISOString().split('T')[0]}
                         />
                     </div>
                     <div className="col-md-4">
@@ -345,7 +348,7 @@ const startRecoding = async () => {
             ))}
 
 
-<div className="col-md-12">
+{caseType &&<div className="col-md-12">
                         <label htmlFor="caseType" className="form-label">
                             Template Content
                         </label>
@@ -358,7 +361,7 @@ const startRecoding = async () => {
                 toolbar: false, // Hide the toolbar
               }}
           />
-          </div>
+          </div>}
 
                     <div className="col-md-6">
                         <button type='button' className="btn bg-primary-color text-light p-5 w-100  " data-bs-toggle="modal" data-bs-target="#uploadSignatureModal"><i className="fa-solid fa-file-signature"></i> Upload Signature</button>
