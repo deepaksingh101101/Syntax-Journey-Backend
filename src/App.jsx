@@ -12,6 +12,7 @@ import ViewConsent from "./screens/consent/ViewConsent";
 import EditConsent from "./screens/consent/EditConsent";
 import TemplateList from "./screens/Create-template/TemplateList";
 import ViewTemplate from "./screens/Create-template/ViewTemplate";
+import EditTemplate from "./screens/Create-template/EditTemplate";
 
 function App() {
   
@@ -36,6 +37,7 @@ function App() {
             <Route path="/create-template" element={<CreateTemplate/>} />
             <Route path="/templateList" element={<TemplateList/>} />
             <Route path="/viewTemplate/:_id" element={<ViewTemplate/>} />
+            <Route path="/editTemplate/:_id" element={<EditTemplate/>} />
           </Route>
 
           </Route>

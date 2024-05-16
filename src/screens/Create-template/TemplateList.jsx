@@ -59,7 +59,7 @@ export default function TemplateList() {
           </Link>
           <button className="btn btn-danger mx-2" onClick={(e)=>handleDeleteConsent(row?._id)}>
           <i className="fa-solid fa-trash"></i>          </button>
-          <Link to={`/editConsent/${row._id}`}>
+          <Link to={`/editTemplate/${row._id}`}>
             <button className="btn btn-info mx-2">
             <i  className=" text-white fa-solid fa-pen-to-square"></i>            </button>
           </Link>
