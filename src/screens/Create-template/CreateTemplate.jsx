@@ -20,7 +20,8 @@ console.log("hello")
     const formData = {
       caseType: document.getElementById("Ctype").value,
       questions: questions.map(question => ({ text: question })),
-      html: quill.current.getEditor().root.innerHTML, // Get HTML content from Quill editor
+      // html: quill.current.getEditor().root.innerHTML, // Get HTML content from Quill editor
+      html: "hi",
       createdBy: "2312314343413",
       deltaForm:deltaContent,
     };

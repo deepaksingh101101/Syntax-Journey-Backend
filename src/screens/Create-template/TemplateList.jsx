@@ -37,7 +37,7 @@ export default function TemplateList() {
           }).then(async (result) => {
             if (result.isConfirmed) {
               try {
-                let res= await deleteApi("delete",`api/consent/consentById?consentId=${_id}`)
+                let res= await deleteApi("delete",`api/template/deleteTemplate?templateId=${_id}`)
                 if(res?.data?.status===true){
                     setFilteredData(prevData => prevData.filter(item => item._id !== _id));
                 }
