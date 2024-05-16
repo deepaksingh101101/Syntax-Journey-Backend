@@ -52,7 +52,7 @@ export default function TemplateList() {
 
     const generateActionButtons = (row) => (
         <div>
-          <Link to={`/viewConsent/${row._id}`}>
+          <Link to={`/viewTemplate/${row._id}`}>
             <button className="btn btn-primary mx-2">
             <i className="fa-solid fa-eye"></i>
             </button>
