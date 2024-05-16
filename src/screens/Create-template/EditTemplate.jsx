@@ -1,44 +1,69 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import QuillEditor from "react-quill";
 import 'react-quill/dist/quill.snow.css';
 import './CreateTemplate.scss';
-import { postApi } from "../../helpers/requestHelpers";
+import { getApi, postApi } from "../../helpers/requestHelpers";
 import { Toast } from "../../components/alert/Alert";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-const CreateTemplate = () => {
+const EditTemplate = () => {
   const [value, setValue] = useState("");
   const quill = useRef();
 const navigate=useNavigate();
+const {_id}=useParams()
+const [caseType, setCaseType] = useState("")
+const [templateData, setTemplateData] = useState()
+const [questions, setQuestions] = useState([]);
+const [questionInput, setQuestionInput] = useState("");
+
+const getTemplateById=async()=>{
+    let res=   await getApi("get",`api/template/templateId/?templateId=${_id}`)
+    console.log(res?.data?.template?.questions)
+    setTemplateData(res?.data?.template)
+    setCaseType(res?.data?.template?.caseType)
+    setValue(res?.data?.template?.deltaForm)
+
+
+
+    setQuestions(res?.data?.template?.questions)
+    
+}
+
+useEffect(() => {
+getTemplateById()
+}, [])
+
+
   const submitHandler = async(event) => {
     event.preventDefault(); // Prevent the default form submission behavior
-console.log("hello")
+
     // Accessing the Quill editor instance and its contents in Delta format
     const editor = quill.current.getEditor();
     const deltaContent = editor.getContents();
     
     const formData = {
       caseType: document.getElementById("Ctype").value,
-      questions: questions.map(question => ({ text: question })),
+      questions: questions.map(question => ({ text: question?.text?question?.text:question })),
       // html: quill.current.getEditor().root.innerHTML, // Get HTML content from Quill editor
       html: "hi",
       createdBy: "2312314343413",
       deltaForm:deltaContent,
+      updatedBy:"deepak"
     };
   
     console.log(formData)
    
 try {
-  let res= await postApi("post","api/template/submitTemplate",formData)
+  let res= await postApi("post",`/api/template/updateTemplate?templateId=${_id}`,formData)
   console.log(res)
 
   if(res?.data?.status===true){
  
    Toast.fire({
      icon: "success",
-     title: "Template Created"
+     title: "Template Updated"
  });
- navigate('/das')
+ navigate('/templateList')
   }
   else{
    Toast.fire({
@@ -99,9 +124,7 @@ try {
     "indent", "link", "image", "color", "clean"
   ];
 
-  const [questions, setQuestions] = useState([]);
-  const [questionInput, setQuestionInput] = useState("");
-
+ 
   const handleAddQuestion = () => {
     if (questionInput.trim()) {  
       setQuestions([...questions, questionInput]);
@@ -114,7 +137,7 @@ try {
     setQuestions(newQuestions);
   };
 
-  
+
 
   return (
     <div className="container consentForm p-5">
@@ -129,6 +152,8 @@ try {
             id="Ctype"
             placeholder="Enter Case Type"
             required
+            value={caseType}
+            onChange={(e)=>{setCaseType(e.target.value)}}
             name='caseType'
           />
         </div>
@@ -166,11 +191,11 @@ try {
         {/* List questions */}
         <div className="col-md-12">
           <ul className="list-group mt-3">
-            {questions.map((question, index) => (
+            {questions?.map((question, index) => (
               <div key={index} className="">
                 <span  className="form-label ">Question {index+1}</span>
               <li  className="list-group-item my-1 d-flex justify-content-between align-items-center">
-                {question}
+                {question['text']?question['text']:question}
                 <button type="button" className="btn btn-danger btn-sm" onClick={() => handleRemoveQuestion(index)}>Remove</button>
               </li>
               </div>
@@ -186,4 +211,4 @@ try {
   )
 }
 
-export default CreateTemplate;
+export default EditTemplate;
