@@ -52,8 +52,8 @@ const Sidebar = () => {
     >
       <div className="sidebar-top">
         <div className="sidebar-brand">
-          <img src={theme === LIGHT_THEME ? mytrLogo : LogoWhite} alt="" />
-          <span className="sidebar-brand-text">tabernam.</span>
+          <img src={mytrLogo} alt="" />
+          {/* <span className="sidebar-brand-text">tabernam.</span> */}
         </div>
         <button className="sidebar-close-btn" onClick={closeSidebar}>
           <MdOutlineClose size={24} />
