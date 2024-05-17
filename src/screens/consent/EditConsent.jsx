@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import SignatureCanvas from 'react-signature-canvas';
 import { getApi, patchApi, postApi, uploadImage } from '../../helpers/requestHelpers';
 import Loader from '../../components/loader/Loader';
+import { AreaTop } from '../../components';
 
 export default function EditConsent() {
 
@@ -154,7 +155,10 @@ navigate('/consentList')
         </div>
      }
 
-    {!loader && <div className="container consentForm p-5">
+    {!loader &&
+        <div className="content-area">
+      <AreaTop title={`Edit Consent Form - ${singleConsentData?.patientName}`}/>
+    <div className="container consentForm p-5">
     <form className='row g-3' onSubmit={handleConsentSubmit}>
         <div className="col-md-4">
             <label htmlFor="Pname" className="form-label">
@@ -356,6 +360,7 @@ navigate('/consentList')
             <button className="btn btn-success w-100">Submit</button>
         </div>
     </form>
+</div>
 </div>}
 </>
   )
