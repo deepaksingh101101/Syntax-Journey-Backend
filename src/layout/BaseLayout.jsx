@@ -1,11 +1,12 @@
 import { Outlet } from "react-router-dom";
-import { AreaTop, Sidebar } from "../components";
+// import { AreaTop, Sidebar } from "../components";
 import { useContext } from "react";
 import { ThemeContext } from "../context/ThemeContext";
 import { DARK_THEME, LIGHT_THEME } from "../constants/themeConstants";
 import MoonIcon from "../assets/icons/moon.svg";
 import SunIcon from "../assets/icons/sun.svg";
 import { useEffect } from "react";
+import { Sidebar } from "../components";
 
 const BaseLayout = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
@@ -22,7 +23,7 @@ const BaseLayout = () => {
       {/* left of page */}
       <Sidebar />
       {/* right side/content of the page */}
-      <AreaTop/>
+      {/* <AreaTop/> */}
       <div className="content-wrapper outlet_outer d-flex   ">
         <Outlet />
       </div>
