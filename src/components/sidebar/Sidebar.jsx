@@ -75,7 +75,7 @@ const Sidebar = () => {
             <li className="menu-item">
               <NavLink to="/das"  className="menu-link text-decoration-none" >
                 <span className="menu-link-icon">
-                  <MdOutlineGridView size={18} />
+                <i className="fa-brands fa-wpforms"></i>
                 </span>
                 <span className="menu-link-text">Create Consent Form</span>
               </NavLink>
@@ -83,7 +83,7 @@ const Sidebar = () => {
            {authUserData && <li className="menu-item">
               <NavLink to="/create-template" className="menu-link text-decoration-none">
                 <span className="menu-link-icon">
-                  <MdOutlineGridView size={18} />
+                <i className="fa-solid fa-file-pen"></i>
                 </span>
                 <span className="menu-link-text">Create Template</span>
               </NavLink>
@@ -91,7 +91,7 @@ const Sidebar = () => {
             <li className="menu-item" >
               <NavLink to="/consentList" className="menu-link text-decoration-none">
                 <span className="menu-link-icon">
-                  <MdOutlineBarChart size={20} />
+                <i className="fa-solid fa-file-waveform"></i>
                 </span>
                 <span className="menu-link-text">View Consent Form</span>
               </NavLink>
@@ -99,7 +99,7 @@ const Sidebar = () => {
            {authUserData && <li className="menu-item" >
               <NavLink to="/templateList" className="menu-link text-decoration-none">
                 <span className="menu-link-icon">
-                  <MdOutlineAttachMoney size={20} />
+                <i className="fa-solid fa-newspaper"></i>
                 </span>
                 <span className="menu-link-text">View Template</span>
               </NavLink>
@@ -107,7 +107,7 @@ const Sidebar = () => {
            {authUserData && <li className="menu-item" >
               <NavLink to="/createAdmin" className="menu-link text-decoration-none">
                 <span className="menu-link-icon">
-                  <MdOutlineAttachMoney size={20} />
+                <i className="fa-solid fa-user-tie"></i>
                 </span>
                 <span className="menu-link-text">Create Admin</span>
               </NavLink>
@@ -115,7 +115,7 @@ const Sidebar = () => {
            {authUserData && <li className="menu-item" >
               <NavLink to="/viewAdmin" className="menu-link text-decoration-none">
                 <span className="menu-link-icon">
-                  <MdOutlineAttachMoney size={20} />
+                <i className="fa-solid fa-users-line"></i>
                 </span>
                 <span className="menu-link-text">View Admin List</span>
               </NavLink>
