@@ -23,7 +23,7 @@ const BaseLayout = () => {
       <Sidebar />
       {/* right side/content of the page */}
       <AreaTop/>
-      <div className="content-wrapper d-flex align-items-center ">
+      <div className="content-wrapper outlet_outer d-flex   ">
         <Outlet />
       </div>
       {/* <button

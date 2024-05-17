@@ -149,7 +149,7 @@ navigate('/consentList')
 <>
 
     {loader &&
-        <div className="d-flex w-100 justify-content-center align-items-centers">
+        <div className="d-flex w-100 justify-content-center align-items-center">
             <Loader/>
         </div>
      }
