@@ -3,6 +3,7 @@ import { postApi } from '../../helpers/requestHelpers';
 import Loader from '../../components/loader/Loader';
 import { Toast } from "../../components/alert/Alert";
 import { useNavigate } from 'react-router-dom';
+import { AreaTop } from '../../components';
 
 export default function CreateAdmin() {
   const [adminEmail, setAdminEmail] = useState('');
@@ -62,7 +63,8 @@ export default function CreateAdmin() {
 
 
    {!loading && 
-  
+    <div className="content-area">
+      <AreaTop title='Create New Admin'/>
     <div style={{ height: "100%" }} className="container consentForm p-5">
       <form className="row" onSubmit={handleSubmit}>
         <div className="col-md-3 my-2">
@@ -123,7 +125,7 @@ export default function CreateAdmin() {
         </div>
       </form>
     </div>
-  
+  </div>
  
 
   }
