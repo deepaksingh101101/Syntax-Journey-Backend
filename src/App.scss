@@ -173,6 +173,10 @@ ul {
 .bg-primary-color{
   background: var(--primary-color)!important;
 }
+.btn-main{
+  background: var(--primary-color)!important;
+  color: var(--light-color) !important;
+}
 
 input:focus , select:focus{
   box-shadow: none !important;

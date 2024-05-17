@@ -11,4 +11,19 @@
         color:var(--side-text-color);
     }
 }
+.sigCanvas{
+    width: 100%;
+    height: 100%;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+.videoPreview{
+    width: 100vw;
+    height: 70vh;
+}
 
+@media (max-width: 768px){
+    .videoPreview{
+        width: 100%;
+        height: 100%;
+    }
+}

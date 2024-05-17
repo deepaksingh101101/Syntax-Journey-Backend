@@ -25,6 +25,7 @@ const ConsentForm = () => {
 
     const [imageUrl, setImageUrl] = useState()
     const [VideoUrl, setVideoUrl] = useState()
+    const [showPreview , setShowPreview] = useState();
 
     const getAllcaseType = async () => {
         let allCase = await getApi("get", "/api/template/getAllCaseType")
@@ -155,6 +156,7 @@ const ConsentForm = () => {
         const recorded = await stopRecording(recordingState?.id);
         setRecordedState(recorded)
         await closeCamera(recordingState?.id)
+        setShowPreview(true);
         // Upload the blob to a back-end
 
 
@@ -380,16 +382,20 @@ const ConsentForm = () => {
                 <div className="modal fade" id="uploadSignatureModal" tabIndex="-1" aria-labelledby="modalLabel" aria-hidden="true">
                     <div className="modal-dialog modal-fullscreen">
                         <div className="modal-content">
-                            <button type="button" className="btn-close ms-auto p-2 " data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div className="modal-header">
+                        <h2>Your Signature</h2>
+                            <button type="button" className="btn-close ms-auto p-4 " data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        
                             <div className="modal-body">
                                 <SignatureCanvas
-                                    canvasProps={{ width: 500, height: 200, className: 'sigCanvas' }}
+                                    canvasProps={{ className: 'sigCanvas' }}
                                     ref={data => setSign(data)}
                                 />
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-secondary" onClick={handleClearSign} >Reset</button>
-                                <button type="button" className="btn btn-primary" onClick={generateSign}>Save changes</button>
+                                <button type="button" className="btn btn-main" onClick={generateSign}>Save changes</button>
                             </div>
                         </div>
                     </div>
@@ -399,29 +405,29 @@ const ConsentForm = () => {
                 <div className="modal fade" id="uploadVideoModal" tabIndex="-1" aria-labelledby="modalLabel" aria-hidden="true">
                     <div className="modal-dialog modal-fullscreen">
                         <div className="modal-content">
-                            <button type="button" id='saveBtn' className="btn-close ms-auto p-2 " data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" id='saveBtn' className="btn-close ms-auto p-4 " data-bs-dismiss="modal" aria-label="Close"></button>
                             {loading &&
                                 <div className="d-flex w-100 justify-content-center align-items-centers">
                                     <Loader />
                                 </div>
                             }
-                            <div className="modal-body">
+                            <div className="modal-body d-flex align-items-center ">
                                 {activeRecordings.map(recording => (
-                                    <div key={recording.id}>
-                                        <p className='text-center' >Your Camera</p>
-                                        <video ref={recording.webcamRef} autoPlay style={{ width: "100vw", height: "70vh" }} />
-                                        <p>Your Video Preview</p>
-                                        <video ref={recording.previewRef} style={{ width: "100vw", height: "70vh" }} controls />
+                                    <div key={recording.id} >
+                                        <h2 className={`text-center ${showPreview? 'd-none' : ''}`} >Your Camera</h2>
+                                        <video ref={recording.webcamRef} autoPlay className={`videoPreview ${showPreview? 'd-none' : ''}`} />
+                                        <h2 className={`text-center ${!showPreview? 'd-none' : ''}`}>Your Video Preview</h2>
+                                        <video ref={recording.previewRef} controls className={`videoPreview ${!showPreview? 'd-none' : ''}`} />
                                     </div>
                                 ))}
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-secondary" onClick={handleClearVideo} >Reset</button>
-                                <button type="button" className="btn btn-primary" onClick={startRecoding}>Start Recording </button>
-                                <button type="button" className="btn btn-primary" onClick={stopRecoding}>Stop Recording </button>
+                                <button type="button" className="btn btn-main" onClick={startRecoding}>Start Recording </button>
+                                <button type="button" className="btn btn-danger" onClick={stopRecoding}>Stop Recording </button>
                                 <button
                                     type="button"
-                                    className="btn btn-primary"
+                                    className="btn btn-success"
                                     data-bs-dismiss={recordedState?.id && loading ? 'modal' : ''}
                                     onClick={saveRecoding}
                                 >
