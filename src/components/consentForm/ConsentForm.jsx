@@ -395,7 +395,7 @@ const ConsentForm = () => {
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-secondary" onClick={handleClearSign} >Reset</button>
-                                <button type="button" className="btn btn-main" onClick={generateSign}>Save changes</button>
+                                <button type="button" className="btn btn-main" data-bs-dismiss="modal" onClick={generateSign}>Save changes</button>
                             </div>
                         </div>
                     </div>
@@ -407,7 +407,7 @@ const ConsentForm = () => {
                         <div className="modal-content">
                             <button type="button" id='saveBtn' className="btn-close ms-auto p-4 " data-bs-dismiss="modal" aria-label="Close"></button>
                             {loading &&
-                                <div className="d-flex w-100 justify-content-center align-items-centers">
+                                <div className="d-flex w-100 justify-content-center align-items-center">
                                     <Loader />
                                 </div>
                             }

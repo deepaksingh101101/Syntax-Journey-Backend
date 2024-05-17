@@ -16,7 +16,7 @@ import {
   MdOutlineSettings,
   MdOutlineShoppingBag,
 } from "react-icons/md";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import "./Sidebar.scss";
 import { SidebarContext } from "../../context/SidebarContext";
 
@@ -25,6 +25,8 @@ const Sidebar = () => {
   const { theme } = useContext(ThemeContext);
   const { isSidebarOpen, closeSidebar } = useContext(SidebarContext);
   const navbarRef = useRef(null);
+  
+  let authUserData= JSON.parse(localStorage.getItem('user'))?.user?.isSuperAdmin
 
   // closing the navbar when clicked outside the sidebar area
   const handleClickOutside = (event) => {
@@ -44,6 +46,14 @@ const Sidebar = () => {
     };
   }, []);
  
+  const navigate=useNavigate()
+
+  const handleLogout=()=>{
+    localStorage.clear();
+    navigate('/')
+
+  }
+
 
   return (
     <nav
@@ -70,14 +80,14 @@ const Sidebar = () => {
                 <span className="menu-link-text">Create Consent Form</span>
               </NavLink>
             </li>
-            <li className="menu-item">
+           {authUserData && <li className="menu-item">
               <NavLink to="/create-template" className="menu-link text-decoration-none">
                 <span className="menu-link-icon">
                   <MdOutlineGridView size={18} />
                 </span>
                 <span className="menu-link-text">Create Template</span>
               </NavLink>
-            </li>
+            </li>}
             <li className="menu-item" >
               <NavLink to="/consentList" className="menu-link text-decoration-none">
                 <span className="menu-link-icon">
@@ -86,44 +96,44 @@ const Sidebar = () => {
                 <span className="menu-link-text">View Consent Form</span>
               </NavLink>
             </li>
-            <li className="menu-item" >
+           {authUserData && <li className="menu-item" >
               <NavLink to="/templateList" className="menu-link text-decoration-none">
                 <span className="menu-link-icon">
                   <MdOutlineAttachMoney size={20} />
                 </span>
                 <span className="menu-link-text">View Template</span>
               </NavLink>
-            </li>
-            <li className="menu-item" >
+            </li>}
+           {authUserData && <li className="menu-item" >
               <NavLink to="/createAdmin" className="menu-link text-decoration-none">
                 <span className="menu-link-icon">
                   <MdOutlineAttachMoney size={20} />
                 </span>
                 <span className="menu-link-text">Create Admin</span>
               </NavLink>
-            </li>
-            <li className="menu-item" >
+            </li>}
+           {authUserData && <li className="menu-item" >
               <NavLink to="/viewAdmin" className="menu-link text-decoration-none">
                 <span className="menu-link-icon">
                   <MdOutlineAttachMoney size={20} />
                 </span>
                 <span className="menu-link-text">View Admin List</span>
               </NavLink>
-            </li>
+            </li>}
           </ul>
         </div>
 
         <div className="sidebar-menu sidebar-menu2">
           <ul className="menu-list p-0">
-            <li className="menu-item">
+            {/* <li className="menu-item">
               <NavLink to="/" className="menu-link text-decoration-none">
                 <span className="menu-link-icon">
                   <MdOutlineSettings size={20} />
                 </span>
                 <span className="menu-link-text">Settings</span>
               </NavLink>
-            </li>
-            <li className="menu-item">
+            </li> */}
+            <li className="menu-item" onClick={handleLogout}>
               <NavLink to="/" className="menu-link text-decoration-none">
                 <span className="menu-link-icon">
                   <MdOutlineLogout size={20} />

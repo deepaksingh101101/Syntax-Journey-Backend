@@ -182,3 +182,9 @@ input:focus , select:focus{
   box-shadow: none !important;
   border-color: var(--primary-color) !important;
 }
+
+
+
+.outlet_outer > div:first-child {
+  width: 100%;
+}
