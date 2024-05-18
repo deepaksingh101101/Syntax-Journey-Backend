@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import Loader from '../../components/loader/Loader';
 import { deleteApi, getApi } from '../../helpers/requestHelpers';
+import { AreaTop } from '../../components';
 
 export default function TemplateList() {
   const [loader, setLoader] = useState(true);
@@ -121,6 +122,8 @@ export default function TemplateList() {
         </div>
       )}
       {!loader && (
+        <div className="content-area">
+      <AreaTop title='Template List'/>
         <div style={{ minHeight: '90vh' }} className="container consentForm p-5">
           <div className="d-flex align-items-center mb-3 pb-3 justify-content-end">
             <div className="search-container">
@@ -138,6 +141,7 @@ export default function TemplateList() {
           </div>
 
           <DataTable columns={columns} data={modifiedData} pagination responsive />
+        </div>
         </div>
       )}
     </>

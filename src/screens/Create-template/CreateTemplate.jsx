@@ -5,6 +5,7 @@ import './CreateTemplate.scss';
 import { postApi } from "../../helpers/requestHelpers";
 import { Toast } from "../../components/alert/Alert";
 import { useNavigate } from "react-router-dom";
+import { AreaTop } from "../../components";
 
 const CreateTemplate = () => {
   const [value, setValue] = useState("");
@@ -117,6 +118,8 @@ try {
   
 
   return (
+    <div className="content-area">
+      <AreaTop title='Template Form'/>
     <div className="container consentForm p-5">
       <form className='row g-3' onSubmit={submitHandler}>
         <div className="col-md-12">
@@ -182,6 +185,7 @@ try {
           <button type="submit" className="btn btn-success w-100">Submit</button>
         </div>
       </form>
+    </div>
     </div>
   )
 }

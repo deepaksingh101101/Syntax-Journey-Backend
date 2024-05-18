@@ -409,7 +409,7 @@ const ConsentForm = () => {
                         
                             <div className="modal-body">
                                 <SignatureCanvas
-                                    canvasProps={{ className: 'sigCanvas' }}
+                                    canvasProps={{width:1200,height:450, className: 'sigCanvas' }}
                                     ref={data => setSign(data)}
                                 />
                             </div>

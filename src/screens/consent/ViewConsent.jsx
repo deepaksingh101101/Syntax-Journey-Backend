@@ -4,6 +4,7 @@ import './Consent.css'
 import { getApi } from '../../helpers/requestHelpers'
 import { useParams } from 'react-router-dom'
 import Loader from '../../components/loader/Loader'
+import { AreaTop } from '../../components'
 
 
 
@@ -44,7 +45,10 @@ export default function ViewConsent() {
    </div>
 }
   
-   {!loader && <div className="container consentForm px-0 py-5 d-flex  flex-wrap justify-content-center align-items-center">
+   {!loader && 
+    <div className="content-area">
+      <AreaTop title={`Consent Form - ${singleConsentData?.patientName}`}/>
+   <div className="container consentForm px-0 py-5 d-flex  flex-wrap justify-content-center align-items-center">
         <div className="col-md-3 borderC mx-3 d-flex flex-column mb-5 justify-content-center ">
                         <label htmlFor="Pname" className="form-label">
                             Patient Name
@@ -144,7 +148,9 @@ export default function ViewConsent() {
                         Updated By                        </span>
                         
                     </div>
-</div> }
+</div>
+</div>
+ }
  </>
 
   )
