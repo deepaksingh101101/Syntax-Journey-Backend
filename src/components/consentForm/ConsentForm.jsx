@@ -5,11 +5,13 @@ import { getApi, postApi, uploadImage } from '../../helpers/requestHelpers'
 import { useRecordWebcam } from 'react-record-webcam'
 import QuillEditor from "react-quill";
 import Loader from '../loader/Loader';
+import { Toast } from "../../components/alert/Alert";
 
 const ConsentForm = () => {
 
     const OPTIONS = { options: { fileName: 'custom-name', fileType: 'webm', height: 1080, width: 1920 } }
     const { createRecording, openCamera, startRecording, stopRecording, closeCamera, clearAllRecordings } = useRecordWebcam()
+    const [loader, setLoader] = useState(false);
 
 
     const navigate = useNavigate();
@@ -110,8 +112,27 @@ const ConsentForm = () => {
         e.preventDefault();
         // e.stopPropagation();
         
-       
+        setLoader(true)
+        console.log(imageUrl)
 
+        if(imageUrl===undefined){
+            Toast.fire({
+                icon: "error",
+                title: "We need Your Signature",
+              });
+              setLoader(false)
+              setLoading(false)
+              return
+        }
+        if(videoUrlState===undefined){
+            Toast.fire({
+                icon: "error",
+                title: "We need Your Video",
+              });
+              setLoader(false)
+              setLoading(false)
+              return
+        }
 
         // const form = e.currentTarget;
         // if (!form.checkValidity()) {
@@ -135,11 +156,14 @@ const ConsentForm = () => {
             setLoading(true);
             let res = await postApi('post', `api/consent/submitConsent`, data);
             setLoading(false);
+            setLoader(false)
             navigate('/consentList');
             console.log(res);
         } catch (error) {
             console.log(error);
             setLoading(false);
+            setLoader(false)
+
         }
     };
     
@@ -209,7 +233,13 @@ const ConsentForm = () => {
 
 
     return (
-        <div style={{ minHeight: "90vh" }} className="container consentForm p-5">
+        <>
+          {loader && (
+        <div className="d-flex w-100 justify-content-center align-items-center">
+          <Loader />
+        </div>
+      )}
+       { !loader &&  <div style={{ minHeight: "90vh" }} className="container consentForm p-5">
             <form className='row g-3 needs-validation'  onSubmit={handleConsentSubmit}>
             <div className="col-md-4  has-validation">
     <label htmlFor="Pname" className="form-label">Patient Name</label>
@@ -466,7 +496,8 @@ const ConsentForm = () => {
                     <button className="btn btn-success w-100">Submit</button>
                 </div>
             </form>
-        </div>
+        </div>}
+        </>
     )
 }
 
