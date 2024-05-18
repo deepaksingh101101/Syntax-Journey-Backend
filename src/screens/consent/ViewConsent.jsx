@@ -106,15 +106,7 @@ export default function ViewConsent() {
                        {singleConsentData?.gaurdianName}                       </span>
                         
                     </div>
-        <div className="col-md-5 borderC mx-3  d-flex flex-column mb-5 justify-content-center ">
-                        <label htmlFor="caseType" className="form-label">
-                            Case Type
-                        </label>
-                        <span className="form-label">
-                        {singleConsentData?.caseType}
-                        </span>
-                        
-                    </div>
+       
                     
                     
                     <div className="col-md-5 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
@@ -152,14 +144,14 @@ export default function ViewConsent() {
                         {singleConsentData?.createdBy}                        </span>
                         
                     </div>
-                    <div className="col-md-5 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
+                    {/* <div className="col-md-5 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
                         <label htmlFor="updated By" className="form-label">
                         Updated By
                         </label>
                         <span className="form-label">
                         {singleConsentData?.updatedBy?singleConsentData?.updatedBy:"Unknown"}                       </span>
                         
-                    </div>
+                    </div> */}
 
                     <div className="col-md-5 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
                         <label htmlFor="video" className="form-label">
@@ -181,8 +173,17 @@ export default function ViewConsent() {
                                              </span>
                         
                     </div>
+                    <div className="col-md-10 borderC mx-3  d-flex flex-column mb-5 justify-content-center ">
+                        <label htmlFor="caseType" className="form-label">
+                            Case Type
+                        </label>
+                        <span className="form-label">
+                        {singleConsentData?.caseType}
+                        </span>
+                        
+                    </div>
 
-                    {caseType && <div className="col-md-10">
+                    {caseType && <div className="col-md-10  px-2 px-sm-3 px-md-5 px-lg-0">
                     <label htmlFor="caseType" className="form-label">
                         Template Content
                     </label>
@@ -199,7 +200,7 @@ export default function ViewConsent() {
 
 
                 {allQuestions?.map((que, index) => (
-                    <div key={index} className="col-md-10 mt-3">
+                    <div key={index} className="col-md-10 w-100    px-2 px-sm-3 px-md-5 px-lg-5 mt-3">
                         <label htmlFor={`ques-${index}`} className="form-label">
                             <b>Question {index + 1} </b>   {que}
                         </label>
