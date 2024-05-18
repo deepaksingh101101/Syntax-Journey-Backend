@@ -49,7 +49,7 @@ export default function ViewConsent() {
     <div className="content-area">
       <AreaTop title={`Consent Form - ${singleConsentData?.patientName}`}/>
    <div className="container consentForm px-0 py-5 d-flex  flex-wrap justify-content-center align-items-center">
-        <div className="col-md-3 borderC mx-3 d-flex flex-column mb-5 justify-content-center ">
+        <div className="col-md-5 borderC mx-3 d-flex flex-column mb-5 justify-content-center ">
                         <label htmlFor="Pname" className="form-label">
                             Patient Name
                         </label>
@@ -58,7 +58,7 @@ export default function ViewConsent() {
                         </span>
                         
                     </div>
-                    <div className="col-md-3 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
+                    <div className="col-md-5 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
                         <label htmlFor="patientId" className="form-label">
                         Patient Id
                         </label>
@@ -66,16 +66,7 @@ export default function ViewConsent() {
                         {singleConsentData?.patientId}                      </span>
                         
                     </div>
-        <div className="col-md-3 borderC mx-3 d-flex flex-column mb-5 justify-content-center ">
-                        <label htmlFor="caseType" className="form-label">
-                            Case Type
-                        </label>
-                        <span className="form-label">
-                        {singleConsentData?.caseType}
-                        </span>
-                        
-                    </div>
-                    <div className="col-md-3 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
+                    <div className="col-md-5 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
                         <label htmlFor="adharCard" className="form-label">
                             Aadhar Number
                         </label>
@@ -84,7 +75,7 @@ export default function ViewConsent() {
                         </span>
                         
                     </div>
-                    <div className="col-md-3 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
+                    <div className="col-md-5 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
                         <label htmlFor="gaurdianName" className="form-label">
                         Gaurdian Name
                         </label>
@@ -92,7 +83,18 @@ export default function ViewConsent() {
                        {singleConsentData?.gaurdianName}                       </span>
                         
                     </div>
-                    <div className="col-md-3 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
+        <div className="col-md-5 borderC mx-3  d-flex flex-column mb-5 justify-content-center ">
+                        <label htmlFor="caseType" className="form-label">
+                            Case Type
+                        </label>
+                        <span className="form-label">
+                        {singleConsentData?.caseType}
+                        </span>
+                        
+                    </div>
+                    
+                    
+                    <div className="col-md-5 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
                         <label htmlFor="mobileNo" className="form-label">
                         Mobile Number
                         </label>
@@ -100,23 +102,7 @@ export default function ViewConsent() {
                         {singleConsentData?.mobileNo }                       </span>
                         
                     </div>
-                    <div className="col-md-3 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
-                        <label htmlFor="signature" className="form-label">
-                        Signature
-                        </label>
-                        <span className="form-label">
-                        signature                        </span>
-                        
-                    </div>
-                    <div className="col-md-3 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
-                        <label htmlFor="video" className="form-label">
-                        Video
-                        </label>
-                        <span className="form-label">
-                        video                        </span>
-                        
-                    </div>
-                    <div className="col-md-3 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
+                    <div className="col-md-5 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
                         <label htmlFor="createdAt" className="form-label">
                         Created At
                         </label>
@@ -124,7 +110,7 @@ export default function ViewConsent() {
                         {singleConsentData?.createdAt}                        </span>
                         
                     </div>
-                    <div className="col-md-3 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
+                    <div className="col-md-5 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
                         <label htmlFor="updated At" className="form-label">
                         Updated At
                         </label>
@@ -132,20 +118,44 @@ export default function ViewConsent() {
                         {singleConsentData?.updatedAt}                       </span>
                         
                     </div>
-                    <div className="col-md-3 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
+                   
+                    
+                   
+                    <div className="col-md-5 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
                         <label htmlFor="created By" className="form-label">
                         Created By
                         </label>
                         <span className="form-label">
-                        Created By                        </span>
+                        {singleConsentData?.createdBy}                        </span>
                         
                     </div>
-                    <div className="col-md-3 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
+                    <div className="col-md-5 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
                         <label htmlFor="updated By" className="form-label">
                         Updated By
                         </label>
                         <span className="form-label">
-                        Updated By                        </span>
+                        {singleConsentData?.updatedBy?singleConsentData?.updatedBy:"Unknown"}                       </span>
+                        
+                    </div>
+
+                    <div className="col-md-5 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
+                        <label htmlFor="video" className="form-label">
+                        Video
+                        </label>
+                        <span className="form-label d-flex justify-content-center mt-2">
+                            <video autoPlay  style={{width:"280px",height:"200px"}} src={singleConsentData?.VideoUrl}>
+
+                            </video>
+                                                </span>
+                        
+                    </div>
+                    <div className="col-md-5 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
+                        <label htmlFor="signature" className="form-label">
+                        Signature
+                        </label>
+                        <span className="form-label d-flex justify-content-center">
+                        <img style={{maxWidth:"280px",height:"200px"}} src={singleConsentData?.signatureUrl} alt="" />
+                                             </span>
                         
                     </div>
 </div>
