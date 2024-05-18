@@ -35,9 +35,13 @@ const ConsentForm = () => {
     }
 
     useEffect(() => {
-        getAllcaseType()
-    }, [])
-
+        // Fetch case types when component mounts
+        getAllcaseType();
+    
+        // Set up form validation
+      
+    }, []);
+    
 
     const [sign, setSign] = useState();
 
@@ -104,8 +108,17 @@ const ConsentForm = () => {
 
     const handleConsentSubmit = async (e) => {
         e.preventDefault();
+        // e.stopPropagation();
+        
+       
 
 
+        // const form = e.currentTarget;
+        // if (!form.checkValidity()) {
+        //     form.classList.add('was-validated');
+        //     return;
+        // }
+        
         const data = {
             ...consentData,
             signatureUrl: imageUrl,
@@ -117,17 +130,19 @@ const ConsentForm = () => {
                 return acc;
             }, {})
         };
-
+    
         try {
-            let res = await postApi('post', `api/consent/submitConsent`, data)
-            navigate('/consentList')
-            console.log(res)
+            setLoading(true);
+            let res = await postApi('post', `api/consent/submitConsent`, data);
+            setLoading(false);
+            navigate('/consentList');
+            console.log(res);
         } catch (error) {
-            console.log(error)
+            console.log(error);
+            setLoading(false);
         }
-
-    }
-
+    };
+    
 
 
     const handleClearVideo = () => {
@@ -190,24 +205,29 @@ const ConsentForm = () => {
     const { activeRecordings } = useRecordWebcam()
 
 
+   
+
+
     return (
         <div style={{ minHeight: "90vh" }} className="container consentForm p-5">
-            <form className='row g-3' onSubmit={handleConsentSubmit}>
-                <div className="col-md-4">
-                    <label htmlFor="Pname" className="form-label">
-                        Patient Name
-                    </label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        id="Pname"
-                        placeholder="Enter Paitent Name"
-                        required
-                        name='patientName'
-                        value={consentData.patientName}
-                        onChange={handleInputChange}
-                    />
-                </div>
+            <form className='row g-3 needs-validation'  onSubmit={handleConsentSubmit}>
+            <div className="col-md-4  has-validation">
+    <label htmlFor="Pname" className="form-label">Patient Name</label>
+    <input
+        type="text"
+        className="form-control"
+        id="Pname"
+        placeholder="Enter Patient Name"
+        required
+        name="patientName"
+        value={consentData.patientName}
+        onChange={handleInputChange}
+        aria-describedby="inputGroupPrepend3 validationServerUsernameFeedback"
+    />
+</div>
+
+
+
                 <div className="col-md-4">
                     <label htmlFor="Pid" className="form-label">
                         Patient Id

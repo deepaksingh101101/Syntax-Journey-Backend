@@ -44,7 +44,7 @@ try {
   else{
    Toast.fire({
      icon: "error",
-     title: `${res?.response?.data?.message}`
+     title: `${res?.response?.data?.errors?.[0]?.msg ? res.response.data.errors[0].msg : res?.response?.data?.message}`
  });
   }
 } catch (error) {
@@ -156,7 +156,7 @@ try {
               type="text"
               className="form-control"
               id="question_input"
-              placeholder="Enter Question"
+              placeholder="Enter Question and click on add to add"
               required={questions?.length>=1?false:true}
               value={questionInput}
               onChange={(e) => setQuestionInput(e.target.value)}
