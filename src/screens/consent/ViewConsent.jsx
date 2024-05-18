@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom'
 import Loader from '../../components/loader/Loader'
 import { AreaTop } from '../../components'
 
+import QuillEditor from "react-quill";
 
 
 
@@ -35,7 +36,30 @@ export default function ViewConsent() {
 
     useEffect(() => {
         getConsentData();
+        handleCaseTypeChange();
     }, [])
+
+    const [value, setValue] = useState("");
+
+    const [caseType, setCaseType] = useState()
+    const [allQuestions, setAllQuestions] = useState()
+
+    const handleCaseTypeChange = async () => {
+        setCaseType(singleConsentData?.caseType)
+        const res = await getApi("get", `/api/template/questionsByCaseType?caseType=${singleConsentData?.caseType}`);
+        setAllQuestions(res?.data?.questions)
+
+        const temp = await getApi("get", `/api/template/getTemplateByCaseType?caseType=${singleConsentData?.caseType}`);
+        console.log(temp)
+        setValue(temp?.data?.deltaForm)
+
+    }
+
+    const [inputValues, setInputValues] = useState([]);
+
+
+
+
 
   return (
     <>
@@ -158,6 +182,40 @@ export default function ViewConsent() {
                                              </span>
                         
                     </div>
+
+                    {caseType && <div className="col-md-10">
+                    <label htmlFor="caseType" className="form-label">
+                        Template Content
+                    </label>
+                    <QuillEditor
+                        // ref={quill}
+                        theme="snow"
+                        value={value}
+                        readOnly={true} // Set readOnly to true to disable editing
+                        modules={{
+                            toolbar: false, // Hide the toolbar
+                        }}
+                    />
+                </div>}
+
+
+                {allQuestions?.map((que, index) => (
+                    <div key={index} className="col-md-12">
+                        <label htmlFor={`ques-${index}`} className="form-label">
+                            <b>Question {index + 1} </b>   {que}
+                        </label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            id={`ques-${index}`}
+                            name='questions'
+                            placeholder="Enter Your Answer"
+                            // value={inputValues[index] || ''}
+                            required
+                        />
+                    </div>
+                ))}
+
 </div>
 </div>
  }
