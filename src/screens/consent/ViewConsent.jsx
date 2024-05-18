@@ -27,6 +27,14 @@ export default function ViewConsent() {
         let res=   await getApi("get",`/api/consent/consentById?consentId=${_id}`)
         console.log(res?.data?.consent)
         setSingleConsentData(res?.data?.consent)
+
+        setCaseType(res?.data?.consent?.caseType)
+        const rest = await getApi("get", `/api/template/questionsByCaseType?caseType=${res?.data?.consent?.caseType}`);
+        setAllQuestions(rest?.data?.questions)
+
+        const temp = await getApi("get", `/api/template/getTemplateByCaseType?caseType=${res?.data?.consent?.caseType}`);
+        console.log(temp)
+        setValue(temp?.data?.deltaForm)
         setLoader(false)
       } catch (error) {
         console.log(error)
@@ -36,7 +44,7 @@ export default function ViewConsent() {
 
     useEffect(() => {
         getConsentData();
-        handleCaseTypeChange();
+        // handleCaseTypeChange();
     }, [])
 
     const [value, setValue] = useState("");
@@ -44,16 +52,7 @@ export default function ViewConsent() {
     const [caseType, setCaseType] = useState()
     const [allQuestions, setAllQuestions] = useState()
 
-    const handleCaseTypeChange = async () => {
-        setCaseType(singleConsentData?.caseType)
-        const res = await getApi("get", `/api/template/questionsByCaseType?caseType=${singleConsentData?.caseType}`);
-        setAllQuestions(res?.data?.questions)
-
-        const temp = await getApi("get", `/api/template/getTemplateByCaseType?caseType=${singleConsentData?.caseType}`);
-        console.log(temp)
-        setValue(temp?.data?.deltaForm)
-
-    }
+   
 
     const [inputValues, setInputValues] = useState([]);
 
@@ -200,7 +199,7 @@ export default function ViewConsent() {
 
 
                 {allQuestions?.map((que, index) => (
-                    <div key={index} className="col-md-12">
+                    <div key={index} className="col-md-10 mt-3">
                         <label htmlFor={`ques-${index}`} className="form-label">
                             <b>Question {index + 1} </b>   {que}
                         </label>
