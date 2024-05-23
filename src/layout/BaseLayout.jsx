@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 // import { AreaTop, Sidebar } from "../components";
 import { useContext } from "react";
+import './BaseLayout.css'
 import { ThemeContext } from "../context/ThemeContext";
 import { DARK_THEME, LIGHT_THEME } from "../constants/themeConstants";
 import MoonIcon from "../assets/icons/moon.svg";

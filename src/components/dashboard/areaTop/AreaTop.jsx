@@ -14,7 +14,7 @@ const AreaTop = ({title}) => {
     <section className="content-area-top">
       <div className="area-top-l d-flex align-items-center gap-3 ">
         <button
-          className="sidebar-open-btn d-block d-md-none d-lg-none d-xl-none"
+          className="sidebar-open-btn d-block d-md-block d-lg-block d-xl-none"
           type="button"
           onClick={openSidebar}
         >
