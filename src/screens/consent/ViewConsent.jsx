@@ -8,6 +8,7 @@ import { AreaTop } from '../../components'
 import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html'; 
 import React, { useRef } from 'react';
 import ReactToPrint from 'react-to-print';
+import { format } from "date-fns";
 
 import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
@@ -370,7 +371,7 @@ const prindPdf = async () => {
                         Created At
                         </label>
                         <span className="form-label">
-                        {singleConsentData?.createdAt}                        </span>
+                       {format(new Date(singleConsentData?.createdAt), "MM/dd/yyyy")}                    </span>
                         
                     </div>
                     <div className="col-md-5 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
@@ -378,7 +379,9 @@ const prindPdf = async () => {
                         Updated At
                         </label>
                         <span className="form-label">
-                        {singleConsentData?.updatedAt}                       </span>
+                        {format(new Date(singleConsentData?.updatedAt), "MM/dd/yyyy")} 
+                      
+                                              </span>
                         
                     </div>
                    

@@ -7,6 +7,7 @@ import Loader from '../../components/loader/Loader'
 
 import QuillEditor from "react-quill";
 import { AreaTop } from '../../components'
+import { format } from "date-fns";
 
 
 
@@ -49,9 +50,9 @@ export default function ViewTemplate() {
   
    {!loader && 
     <div className="">
-      <AreaTop title={`Template - ${singleConsentData?._id}`}/>
+      <AreaTop title={`Template Id - ${singleConsentData?._id}`}/>
    <div className="container consentForm px-0 py-5 d-flex  flex-wrap justify-content-center align-items-center">
-        <div className="col-md-3 borderC mx-3 d-flex flex-column mb-5 justify-content-center ">
+        {/* <div className="col-md-5 borderC mx-3 d-flex flex-column mb-5 justify-content-center ">
                         <label htmlFor="Pname" className="form-label">
                             Template Id
                         </label>
@@ -59,31 +60,27 @@ export default function ViewTemplate() {
                             {singleConsentData?._id}
                         </span>
                         
-                    </div>
-                   
-        <div className="col-md-3 borderC mx-3 d-flex flex-column mb-5 justify-content-center ">
-                        <label htmlFor="caseType" className="form-label">
-                            Case Type
-                        </label>
-                        <span className="form-label">
-                        {singleConsentData?.caseType}
-                        </span>
-                        
-                    </div>
-                    <div className="col-md-3 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
+                    </div> */}
+                    <div className="col-md-11 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
                         <label htmlFor="patientId" className="form-label">
                         Created At
                         </label>
                         <span className="form-label">
-                        {singleConsentData?.createdAt}                      </span>
-                        
+                        {format(new Date(singleConsentData?.createdAt), "MM/dd/yyyy")} 
+
+                                         </span>
+
                     </div>
-                    <div className="col-md-3 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
+                   
+      
+                    
+                    <div className="col-md-11 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
                         <label htmlFor="adharCard" className="form-label">
                             Updated At
                         </label>
                         <span className="form-label">
-                        {singleConsentData?.updatedAt}
+                        {format(new Date(singleConsentData?.updatedAt), "MM/dd/yyyy")} 
+
                         </span>
                         
                     </div>
@@ -91,7 +88,7 @@ export default function ViewTemplate() {
                     
                    
         
-                    <div className="col-md-3 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
+                    <div className="col-md-11 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
                         <label htmlFor="created By" className="form-label">
                         Created By
                         </label>
@@ -99,7 +96,7 @@ export default function ViewTemplate() {
                         {singleConsentData?.createdBy}                       </span>
                         
                     </div>
-                    <div className="col-md-3 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
+                    <div className="col-md-11 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
                         <label htmlFor="updated By" className="form-label">
                         Updated By
                         </label>
@@ -108,7 +105,16 @@ export default function ViewTemplate() {
                         
                     </div>
 
-                    <div className="col-md-10">
+                    <div className="col-md-11 borderC mx-3 d-flex flex-column mb-5 justify-content-center ">
+                        <label htmlFor="caseType" className="form-label">
+                            Case Type
+                        </label>
+                        <span className="form-label">
+                        {singleConsentData?.caseType}
+                        </span>
+                        
+                    </div>
+                    <div className="col-md-11">
   <ul className="list-group ">
     {singleConsentData?.questions.map((question, index) => (
       <div key={index} className="mt-2">
@@ -121,7 +127,7 @@ export default function ViewTemplate() {
   </ul>
 </div>
 
-<div className="col-md-10 my-4">
+<div className="col-md-11 my-4">
 <label htmlFor="created By" className="form-label">
                         Template View
                         </label>
