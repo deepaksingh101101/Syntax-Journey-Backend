@@ -97,6 +97,8 @@ useEffect(() => {
 
     const handleInputChange = async(e) => {
         setErrorMessage("")
+        setMobileRedBorder(false);
+        setAadharRedBorder(false);
         const { name, value } = e.target;
         setConsentData({ ...consentData, [name]: value });  
       };
@@ -123,7 +125,17 @@ useEffect(() => {
       
    const handleConsentSubmit=async(e)=>{
 e.preventDefault();
+if(consentData?.mobileNo?.length!=10){
+    setMobileRedBorder(true);
+    window.scrollTo(0,0)
+    return
+}
 
+if(consentData?.adharCard?.length!=12){
+    setAadharRedBorder(true);
+    window.scrollTo(0,0)
+    return
+}
 
 const data = {
     ...consentData,
@@ -143,6 +155,8 @@ navigate('/consentList')
 }
 
    }   
+   const [mobileRedBorder, setMobileRedBorder] = useState(false)
+   const [aadharRedBorder, setAadharRedBorder] = useState(false)
 
 
   return (
@@ -191,7 +205,7 @@ navigate('/consentList')
         </div>
         <div className="col-md-4">
             <label htmlFor="Pnum" className="form-label">
-                Mobile Number
+                Mobile Number <span style={{ color: "red" }}>{mobileRedBorder && "(Must be of 10 digits)"}</span>
             </label>
             <input
                 type="number"
@@ -200,13 +214,14 @@ navigate('/consentList')
                 name='mobileNo'
                 placeholder="Enter Paitent Id"
                 required
+                style={mobileRedBorder ? { border: "1px solid red" } : {}}
                 value={consentData?.mobileNo}
                 onChange={handleInputChange} 
             />
         </div>
         <div className="col-md-4">
             <label htmlFor="Paadhar" className="form-label">
-                Aadhar Card
+                Aadhar Card <span style={{ color: "red" }}>{aadharRedBorder && "(Must be of 12 digits)"}</span>
             </label>
             <input
                 type="text"
@@ -214,6 +229,8 @@ navigate('/consentList')
                 id="Paadhar"
                 placeholder="Enter Aadhar Number"
                 required
+                style={aadharRedBorder ? { border: "1px solid red" } : {}}
+
                 value={consentData?.adharCard}
                 onChange={handleInputChange} 
                 name='adharCard'
