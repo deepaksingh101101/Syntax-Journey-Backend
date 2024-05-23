@@ -82,6 +82,8 @@ const ConsentForm = () => {
 
     const handleInputChange = async (e) => {
         setErrorMessage("")
+        setMobileRedBorder(false);
+        setAadharRedBorder(false);
         const { name, value } = e.target;
         setConsentData({ ...consentData, [name]: value });
     };
@@ -111,6 +113,18 @@ const ConsentForm = () => {
         e.preventDefault();
         // e.stopPropagation();
         
+        if(consentData?.mobileNo?.length!=10){
+            setMobileRedBorder(true);
+            window.scrollTo(0,0)
+            return
+        }
+
+        if(consentData?.adharCard?.length!=12){
+            setAadharRedBorder(true);
+            window.scrollTo(0,0)
+            return
+        }
+
         setLoader(true)
         console.log(imageUrl)
 
@@ -144,7 +158,7 @@ const ConsentForm = () => {
             signatureUrl: imageUrl,
             VideoUrl: videoUrlState,
             caseType: caseType,
-            createdBy: "admin@gmail.com",
+            createdBy: JSON.parse(localStorage.getItem('user'))?.user?.email,
             question: allQuestions.reduce((acc, question, index) => {
                 acc[question] = inputValues[index];
                 return acc;
@@ -228,7 +242,8 @@ const ConsentForm = () => {
     const { activeRecordings } = useRecordWebcam()
 
 
-   
+   const [mobileRedBorder, setMobileRedBorder] = useState(false)
+   const [aadharRedBorder, setAadharRedBorder] = useState(false)
 
 
     return (
@@ -273,25 +288,24 @@ const ConsentForm = () => {
                     />
                 </div>
                 <div className="col-md-4">
-                    <label htmlFor="Pnum" className="form-label">
-                        Mobile Number
-                    </label>
-                    <input
-                        type="number"
-                        className="form-control"
-                        id="Pnum"
-                        name='mobileNo'
-                        placeholder="Enter Paitent Id"
-                        required
-                        minLength={10}
-                        maxLength={10}
-                        value={consentData.mobileNo}
-                        onChange={handleInputChange}
-                    />
-                </div>
+            <label htmlFor="Pnum" className="form-label">
+                Mobile Number <span style={{ color: "red" }}>{mobileRedBorder && "(Must be of 10 digits)"}</span>
+            </label>
+            <input
+                type="text"
+                className="form-control"
+                id="Pnum"
+                style={mobileRedBorder ? { border: "1px solid red" } : {}}
+                name='mobileNo'
+                placeholder="Enter Mobile Number"
+                required
+                value={consentData.mobileNo}
+                onChange={handleInputChange}
+            />
+        </div>
                 <div className="col-md-4">
                     <label htmlFor="Paadhar" className="form-label">
-                        Aadhar Card
+                        Aadhar Card  <span style={{ color: "red" }}>{aadharRedBorder && "(Must be of 12 digits)"}</span>
                     </label>
                     <input
                         type="text"
@@ -299,6 +313,8 @@ const ConsentForm = () => {
                         id="Paadhar"
                         placeholder="Enter Aadhar Number"
                         required
+                        style={aadharRedBorder ? { border: "1px solid red" } : {}}
+
                         value={consentData.adharCard}
                         onChange={handleInputChange}
                         name='adharCard'
