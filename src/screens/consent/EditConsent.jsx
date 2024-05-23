@@ -8,7 +8,7 @@ import { AreaTop } from '../../components';
 export default function EditConsent() {
 
 
-    const [consentData, setConsentData] = useState({ patientName: "", patientId: "",mobileNo:"",adharCard:"",gender:"",dob:"",gaurdianName:"",address:"" });
+    const [consentData, setConsentData] = useState({ patientName: "", patientId: "",mobileNo:"",adharCard:"",gender:"",dob:"",gaurdianName:"",address:"",relation:"" });
     const [errorMessage, setErrorMessage] = useState()
     const [loader, setLoader] = useState(true)
 
@@ -38,6 +38,7 @@ const getAllcaseType=async()=>{
     dob:res?.data?.consent?.dob,
     gaurdianName:res?.data?.consent?.gaurdianName,
     address:res?.data?.consent?.address,
+    relation:res?.data?.consent?.relation,
    })
    setCaseType(res?.data?.consent?.caseType)
    setImageUrl(res?.data?.consent?.signatureUrl)
@@ -127,10 +128,8 @@ e.preventDefault();
 const data = {
     ...consentData,
     signatureUrl: imageUrl,
-    updatedBy:"deepak",
-    VideoUrl: "http",
+    updatedBy:JSON.parse(localStorage.getItem('user'))?.user?.email,
     caseType:caseType,
-    createdBy:"admin@gmail.com",
     question: inputValues,
 };
 
@@ -282,7 +281,24 @@ navigate('/consentList')
                 onChange={handleInputChange} 
             />
         </div>
+
         <div className="col-md-4">
+            <label htmlFor="relation" className="form-label">
+                Relation with patient
+            </label>
+            <input
+                type="text"
+                className="form-control "
+                id="relation"
+                placeholder="Enter Relation with patient"
+                required
+                name='relation'
+                value={consentData?.relation}
+                onChange={handleInputChange} 
+            />
+        </div>
+        
+        <div className="col-md-12">
             <label htmlFor="caseType" className="form-label">
                 Case Type
             </label>
