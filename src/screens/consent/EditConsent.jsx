@@ -8,7 +8,7 @@ import { AreaTop } from '../../components';
 export default function EditConsent() {
 
 
-    const [consentData, setConsentData] = useState({ patientName: "", patientId: "",mobileNo:"",adharCard:"",gender:"",dob:"",gaurdianName:"",address:"" });
+    const [consentData, setConsentData] = useState({ patientName: "", patientId: "",mobileNo:"",adharCard:"",gender:"",dob:"",gaurdianName:"",address:"",relation:"" });
     const [errorMessage, setErrorMessage] = useState()
     const [loader, setLoader] = useState(true)
 
@@ -38,6 +38,7 @@ const getAllcaseType=async()=>{
     dob:res?.data?.consent?.dob,
     gaurdianName:res?.data?.consent?.gaurdianName,
     address:res?.data?.consent?.address,
+    relation:res?.data?.consent?.relation,
    })
    setCaseType(res?.data?.consent?.caseType)
    setImageUrl(res?.data?.consent?.signatureUrl)
@@ -96,6 +97,8 @@ useEffect(() => {
 
     const handleInputChange = async(e) => {
         setErrorMessage("")
+        setMobileRedBorder(false);
+        setAadharRedBorder(false);
         const { name, value } = e.target;
         setConsentData({ ...consentData, [name]: value });  
       };
@@ -122,15 +125,23 @@ useEffect(() => {
       
    const handleConsentSubmit=async(e)=>{
 e.preventDefault();
+if(consentData?.mobileNo?.length!=10){
+    setMobileRedBorder(true);
+    window.scrollTo(0,0)
+    return
+}
 
+if(consentData?.adharCard?.length!=12){
+    setAadharRedBorder(true);
+    window.scrollTo(0,0)
+    return
+}
 
 const data = {
     ...consentData,
     signatureUrl: imageUrl,
-    updatedBy:"deepak",
-    VideoUrl: "http",
+    updatedBy:JSON.parse(localStorage.getItem('user'))?.user?.email,
     caseType:caseType,
-    createdBy:"admin@gmail.com",
     question: inputValues,
 };
 
@@ -144,6 +155,8 @@ navigate('/consentList')
 }
 
    }   
+   const [mobileRedBorder, setMobileRedBorder] = useState(false)
+   const [aadharRedBorder, setAadharRedBorder] = useState(false)
 
 
   return (
@@ -192,7 +205,7 @@ navigate('/consentList')
         </div>
         <div className="col-md-4">
             <label htmlFor="Pnum" className="form-label">
-                Mobile Number
+                Mobile Number <span style={{ color: "red" }}>{mobileRedBorder && "(Must be of 10 digits)"}</span>
             </label>
             <input
                 type="number"
@@ -201,13 +214,14 @@ navigate('/consentList')
                 name='mobileNo'
                 placeholder="Enter Paitent Id"
                 required
+                style={mobileRedBorder ? { border: "1px solid red" } : {}}
                 value={consentData?.mobileNo}
                 onChange={handleInputChange} 
             />
         </div>
         <div className="col-md-4">
             <label htmlFor="Paadhar" className="form-label">
-                Aadhar Card
+                Aadhar Card <span style={{ color: "red" }}>{aadharRedBorder && "(Must be of 12 digits)"}</span>
             </label>
             <input
                 type="text"
@@ -215,6 +229,8 @@ navigate('/consentList')
                 id="Paadhar"
                 placeholder="Enter Aadhar Number"
                 required
+                style={aadharRedBorder ? { border: "1px solid red" } : {}}
+
                 value={consentData?.adharCard}
                 onChange={handleInputChange} 
                 name='adharCard'
@@ -282,7 +298,24 @@ navigate('/consentList')
                 onChange={handleInputChange} 
             />
         </div>
+
         <div className="col-md-4">
+            <label htmlFor="relation" className="form-label">
+                Relation with patient
+            </label>
+            <input
+                type="text"
+                className="form-control "
+                id="relation"
+                placeholder="Enter Relation with patient"
+                required
+                name='relation'
+                value={consentData?.relation}
+                onChange={handleInputChange} 
+            />
+        </div>
+        
+        <div className="col-md-12">
             <label htmlFor="caseType" className="form-label">
                 Case Type
             </label>

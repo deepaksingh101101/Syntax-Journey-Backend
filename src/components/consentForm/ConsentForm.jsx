@@ -15,7 +15,7 @@ const ConsentForm = () => {
 
 
     const navigate = useNavigate();
-    const [consentData, setConsentData] = useState({ patientName: "", patientId: "", mobileNo: "", adharCard: "", gender: "", dob: "", gaurdianName: "", address: "" });
+    const [consentData, setConsentData] = useState({ patientName: "", patientId: "", mobileNo: "", adharCard: "", gender: "", dob: "", gaurdianName: "", address: "",relation:"" });
     const [errorMessage, setErrorMessage] = useState()
     const [loading, setLoading] = useState(false)
 
@@ -50,6 +50,7 @@ const ConsentForm = () => {
     const handleClearSign = () => {
         sign.clear();
     };
+
     const generateSign = async () => {
         // Assuming sign is defined somewhere in your code
         const base64 = sign.getTrimmedCanvas().toDataURL('image/png');
@@ -81,6 +82,8 @@ const ConsentForm = () => {
 
     const handleInputChange = async (e) => {
         setErrorMessage("")
+        setMobileRedBorder(false);
+        setAadharRedBorder(false);
         const { name, value } = e.target;
         setConsentData({ ...consentData, [name]: value });
     };
@@ -92,11 +95,9 @@ const ConsentForm = () => {
         setCaseType(e.target.value)
         const res = await getApi("get", `/api/template/questionsByCaseType?caseType=${e.target.value}`);
         setAllQuestions(res?.data?.questions)
-
         const temp = await getApi("get", `/api/template/getTemplateByCaseType?caseType=${e.target.value}`);
         console.log(temp)
         setValue(temp?.data?.deltaForm)
-
     }
 
 
@@ -112,6 +113,18 @@ const ConsentForm = () => {
         e.preventDefault();
         // e.stopPropagation();
         
+        if(consentData?.mobileNo?.length!=10){
+            setMobileRedBorder(true);
+            window.scrollTo(0,0)
+            return
+        }
+
+        if(consentData?.adharCard?.length!=12){
+            setAadharRedBorder(true);
+            window.scrollTo(0,0)
+            return
+        }
+
         setLoader(true)
         console.log(imageUrl)
 
@@ -145,7 +158,7 @@ const ConsentForm = () => {
             signatureUrl: imageUrl,
             VideoUrl: videoUrlState,
             caseType: caseType,
-            createdBy: "admin@gmail.com",
+            createdBy: JSON.parse(localStorage.getItem('user'))?.user?.email,
             question: allQuestions.reduce((acc, question, index) => {
                 acc[question] = inputValues[index];
                 return acc;
@@ -229,7 +242,8 @@ const ConsentForm = () => {
     const { activeRecordings } = useRecordWebcam()
 
 
-   
+   const [mobileRedBorder, setMobileRedBorder] = useState(false)
+   const [aadharRedBorder, setAadharRedBorder] = useState(false)
 
 
     return (
@@ -274,25 +288,24 @@ const ConsentForm = () => {
                     />
                 </div>
                 <div className="col-md-4">
-                    <label htmlFor="Pnum" className="form-label">
-                        Mobile Number
-                    </label>
-                    <input
-                        type="number"
-                        className="form-control"
-                        id="Pnum"
-                        name='mobileNo'
-                        placeholder="Enter Paitent Id"
-                        required
-                        minLength={10}
-                        maxLength={10}
-                        value={consentData.mobileNo}
-                        onChange={handleInputChange}
-                    />
-                </div>
+            <label htmlFor="Pnum" className="form-label">
+                Mobile Number <span style={{ color: "red" }}>{mobileRedBorder && "(Must be of 10 digits)"}</span>
+            </label>
+            <input
+                type="text"
+                className="form-control"
+                id="Pnum"
+                style={mobileRedBorder ? { border: "1px solid red" } : {}}
+                name='mobileNo'
+                placeholder="Enter Mobile Number"
+                required
+                value={consentData.mobileNo}
+                onChange={handleInputChange}
+            />
+        </div>
                 <div className="col-md-4">
                     <label htmlFor="Paadhar" className="form-label">
-                        Aadhar Card
+                        Aadhar Card  <span style={{ color: "red" }}>{aadharRedBorder && "(Must be of 12 digits)"}</span>
                     </label>
                     <input
                         type="text"
@@ -300,6 +313,8 @@ const ConsentForm = () => {
                         id="Paadhar"
                         placeholder="Enter Aadhar Number"
                         required
+                        style={aadharRedBorder ? { border: "1px solid red" } : {}}
+
                         value={consentData.adharCard}
                         onChange={handleInputChange}
                         name='adharCard'
@@ -368,7 +383,23 @@ const ConsentForm = () => {
                         onChange={handleInputChange}
                     />
                 </div>
+
                 <div className="col-md-4">
+                    <label htmlFor="relation" className="form-label">
+                        Relation with patient
+                    </label>
+                    <input
+                        type="text"
+                        className="form-control "
+                        id="relation"
+                        placeholder="Enter relation with patient"
+                        required
+                        name='relation'
+                        value={consentData.relation}
+                        onChange={handleInputChange}
+                    />
+                </div>
+                <div className="col-md-12">
                     <label htmlFor="caseType" className="form-label">
                         Case Type
                     </label>
@@ -423,9 +454,13 @@ const ConsentForm = () => {
                     />
                 </div>}
 
+            
+
                 <div className="col-md-6">
                     <button type='button' className="btn bg-primary-color text-light p-5 w-100  " data-bs-toggle="modal" data-bs-target="#uploadSignatureModal"><i className="fa-solid fa-file-signature"></i> Upload Signature</button>
                 </div>
+
+             
 
                 {/* ----modal--- */}
 
