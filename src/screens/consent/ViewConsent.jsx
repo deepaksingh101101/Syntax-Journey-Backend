@@ -5,6 +5,12 @@ import { getApi } from '../../helpers/requestHelpers'
 import { useParams } from 'react-router-dom'
 import Loader from '../../components/loader/Loader'
 import { AreaTop } from '../../components'
+import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html'; 
+import React, { useRef } from 'react';
+import ReactToPrint from 'react-to-print';
+
+import jsPDF from 'jspdf'
+import html2canvas from 'html2canvas'
 
 import QuillEditor from "react-quill";
 
@@ -13,8 +19,8 @@ import QuillEditor from "react-quill";
 
 export default function ViewConsent() {
 
-
-
+      const [htmlStart, setHtmlStart] = useState()
+      const printRef = useRef();
     const [singleConsentData, setSingleConsentData] = useState()
     const [loader, setLoader] = useState(true)
 
@@ -35,6 +41,14 @@ export default function ViewConsent() {
         const temp = await getApi("get", `/api/template/getTemplateByCaseType?caseType=${res?.data?.consent?.caseType}`);
         console.log(temp)
         setValue(temp?.data?.deltaForm)
+        
+        var cfg = {};
+
+        var converter = new QuillDeltaToHtmlConverter(temp?.data?.deltaForm?.ops, cfg);
+
+         setHtmlStart(converter.convert()) 
+
+    
         setLoader(false)
       } catch (error) {
         console.log(error)
@@ -55,6 +69,237 @@ export default function ViewConsent() {
    
 
     const [inputValues, setInputValues] = useState([]);
+
+
+    let htmlEnd=`
+    <div className="col-md-10 mt-2 px-2 px-sm-3 px-md-5 px-lg-0">
+    <img src='{{patientSignature}}' alt=''></img>
+                        <h3 htmlFor="signature" className="form-label font_custom_pdf">
+                        Signature and Thumb Impression of Patient:
+                        </h3>
+                    </div>
+    
+    
+    <div className="col-md-10 mt-5 px-2 px-sm-3 px-md-5 px-lg-0">
+                        <h3 htmlFor="name" className="form-label font_custom_pdf">
+                            Name: {{patientName}}
+                        </h3>
+                        
+                    </div>
+                    <div className="col-md-10 mt-2 px-2 px-sm-3 px-md-5 px-lg-0">
+                        <h3 htmlFor="address" className="form-label font_custom_pdf">
+                            Address: {{patientAddress}}
+                        </h3>
+                        
+                    </div>
+                    <div className="col-md-10  d-flex justify-content-between mt-2 px-2 px-sm-3 px-md-5 px-lg-0">
+                        <h3 htmlFor="address" className="form-label font_custom_pdf">
+                            Phone Number: {{patientNumber}}
+                        </h3>
+    
+                         <h3 htmlFor="address" className="form-label font_custom_pdf">
+                            Date: {{patientDate}}
+                        </h3>
+                    </div>
+                   
+                    <div className="col-md-10 mt-2 px-2 px-sm-3 px-md-5 px-lg-0">
+                        <h3 htmlFor="address" className="form-label font_custom_pdf">
+                            Place: {{patientplace}}
+                        </h3>
+                        
+                    </div>
+    
+                    <div className="col-md-10 mt-2 px-2 px-sm-3 px-md-5 px-lg-0">
+    <img src={{parentsSignatureImage}} alt=''></img>
+                        <h3 htmlFor="signature" className="form-label font_custom_pdf">
+                        Signature and Thumb Impression of Patient/guardian if the patient is minor or mentally unsound
+                        </h3>
+                    </div>
+    
+                    <div className="col-md-10  d-flex justify-content-between mt-2 px-2 px-sm-3 px-md-5 px-lg-0">
+                        <h3 htmlFor="address" className="form-label font_custom_pdf">
+                            Name: {{parentsName}}
+                        </h3>
+    
+                         <h3 htmlFor="address" className="form-label font_custom_pdf">
+                            Relation with Patient: {{parentsRelation}}
+                        </h3>
+                    </div>
+    
+    
+    
+                    <div className="col-md-10  d-flex justify-content-between mt-2 px-2 px-sm-3 px-md-5 px-lg-0">
+                        <h3 htmlFor="address" className="form-label font_custom_pdf">
+                            Address: {{parentsAddress}}
+                        </h3>
+    
+                    </div>
+    
+    
+    
+                    <div className="col-md-10  d-flex justify-content-between mt-2 px-2 px-sm-3 px-md-5 px-lg-0">
+                        <h3 htmlFor="address" className="form-label font_custom_pdf">
+                            Phone Number: {{parentsAddress}}
+                        </h3>
+    
+                         <h3 htmlFor="address" className="form-label font_custom_pdf">
+                            Date: {{parentsDate}}
+                        </h3>
+                    </div>
+                   
+                    <div className="col-md-10 mt-2 px-2 px-sm-3 px-md-5 px-lg-0">
+                        <h3 htmlFor="address" className="form-label font_custom_pdf">
+                            Place: {{parentsPlace}}
+                        </h3>
+                        
+                    </div>
+                    
+
+<div style="
+display: flex;
+justify-content: space-between;
+margin-top:150px;
+"
+ className="d-flex justify-content-between" >
+
+ <div className="mt-5" >
+  <h3 htmlFor="signature" className="form-label mt-5">
+   Witness 1
+   </h3>
+   <div className="col-md-10  px-2 px-sm-3 px-md-5 px-lg-0">
+       <img src='' alt=''></img>
+   <h3 htmlFor="signature" className="form-label">
+   Signature:
+   </h3>
+</div>
+
+<div className="col-md-10  px-2 px-sm-3 px-md-5 px-lg-0">
+
+<h3 htmlFor="address" className="form-label">
+Tel:
+</h3>
+</div>
+
+<h3 htmlFor="address" className="form-label">
+       Address:
+   </h3>
+   <div className="col-md-10  px-2 px-sm-3 px-md-5 px-lg-0">
+
+  <h3 htmlFor="address" className="form-label">
+       Tel:
+   </h3>
+   </div>
+  </div>         
+  
+  <div className="mt-5">
+  <h3 htmlFor="signature" className="form-label mt-5">
+   Witness 2
+   </h3>
+   <div className="col-md-10  px-2 px-sm-3 px-md-5 px-lg-0">
+       <img src='' alt=''></img>
+   <h3 htmlFor="signature" className="form-label">
+   Signature:
+   </h3>
+</div>
+
+<div className="col-md-10  px-2 px-sm-3 px-md-5 px-lg-0">
+
+<h3 htmlFor="address" className="form-label">
+Tel:
+</h3>
+</div>
+
+<h3 htmlFor="address" className="form-label">
+       Address:
+   </h3>
+   <div className="col-md-10  px-2 px-sm-3 px-md-5 px-lg-0">
+
+  <h3 htmlFor="address" className="form-label">
+       Tel:
+   </h3>
+   </div>
+   </div>
+  </div>
+
+    `
+
+    let fullHtml = htmlStart + htmlEnd;
+
+
+    fullHtml = fullHtml.replace('{{patientName}}', singleConsentData?.patientName)
+                   .replace('{{patientAddress}}', singleConsentData?.address)
+                   .replace('{{patientNumber}}', singleConsentData?.mobileNo)
+                   .replace('{{patientDate}}', singleConsentData?.createdAt)
+                   .replace('{{patientSignature}}', singleConsentData?.signatureUrl)
+                  
+
+
+const reportemplateRef=useRef(null);
+
+// const  prindPdf=async()=>{
+//     const input =reportemplateRef.current;
+//     const canvas=await html2canvas(input)
+//     const imgData=canvas.toDataURL('image/png')
+//     console.log(imgData)
+
+//     const pdf=new jsPDF({
+//         orientation:"portrait",
+//         unit:"px",
+//         format:"a4"
+//     })
+
+//     const width=pdf.internal.pageSize.getWidth();
+
+//     const height=(canvas.height*width)/canvas.width;
+
+//     pdf.addImage(imgData,"PNG",0,0,width,height)
+//     pdf.save('document.pdf')
+// }
+
+
+const prindPdf = async () => {
+    const input = reportemplateRef.current;
+
+    try {
+        const canvas = await html2canvas(input, {
+            scale: 1,  // Adjust this scale to improve the quality of the output if needed
+            useCORS: true,
+            allowTaint: true  // Be cautious with this option as it might cause security or privacy issues
+        });
+        const imgData = canvas.toDataURL('image/png');
+        console.log(imgData);  // Make sure imgData is logging correctly
+
+        const pdf = new jsPDF({
+            orientation: "portrait",
+            unit: "px",
+            format: "a4"
+        });
+
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        const imgHeight = (canvas.height * pageWidth) / canvas.width;
+        let heightLeft = imgHeight;
+        let position = 0;
+
+        // Add the image to the first page
+        pdf.addImage(imgData, 'PNG', 0, position, pageWidth, imgHeight);
+        heightLeft -= pageHeight;
+
+        // Continue adding new pages as long as there is content to add
+        while (heightLeft > 0) {
+            position -= pageHeight;  // Move the position up by one page height
+            pdf.addPage();
+            pdf.addImage(imgData, 'PNG', 0, position, pageWidth, imgHeight);
+            heightLeft -= pageHeight;
+        }
+
+        pdf.save('document.pdf');
+    } catch (error) {
+        console.error("Error generating PDF", error);
+    }
+};
+
+
 
 
 
@@ -106,9 +351,7 @@ export default function ViewConsent() {
                        {singleConsentData?.gaurdianName}                       </span>
                         
                     </div>
-       
-                    
-                    
+                
                     <div className="col-md-5 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
                         <label htmlFor="mobileNo" className="form-label">
                         Mobile Number
@@ -133,8 +376,6 @@ export default function ViewConsent() {
                         {singleConsentData?.updatedAt}                       </span>
                         
                     </div>
-                   
-                    
                    
                     <div className="col-md-5 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
                         <label htmlFor="created By" className="form-label">
@@ -183,23 +424,39 @@ export default function ViewConsent() {
                         
                     </div>
 
-                    {caseType && <div className="col-md-10  px-2 px-sm-3 px-md-5 px-lg-0">
+                    {/* {caseType && <div className="col-md-10  px-2 px-sm-3 px-md-5 px-lg-0">
                     <label htmlFor="caseType" className="form-label">
                         Template Content
                     </label>
                     <QuillEditor
-                        // ref={quill}
                         theme="snow"
                         value={value}
-                        readOnly={true} // Set readOnly to true to disable editing
+                        readOnly={true} 
                         modules={{
-                            toolbar: false, // Hide the toolbar
+                            toolbar: false, 
                         }}
                     />
-                </div>}
+                </div>} */}
 
 
-                {allQuestions?.map((que, index) => (
+
+
+
+                <div ref={reportemplateRef}  id='pdf' dangerouslySetInnerHTML={{ __html: fullHtml }} className=" col-md-10 mt-2 px-2 px-sm-3 px-md-5 w-100 px-lg-5">
+                 
+                {/* <ReactToPrint
+        trigger={() => <button>Print this out!</button>}
+        content={() => printRef?.current}
+      /> */}
+                </div>
+
+
+           
+
+             
+               
+
+{allQuestions?.map((que, index) => (
                     <div key={index} className="col-md-10 w-100    px-2 px-sm-3 px-md-5 px-lg-5 mt-3">
                         <label htmlFor={`ques-${index}`} className="form-label">
                             <b>Question {index + 1} </b>   {que}
@@ -215,6 +472,12 @@ export default function ViewConsent() {
                         />
                     </div>
                 ))}
+
+<div className="col-md-10 w-100    px-2 px-sm-3 px-md-5 px-lg-5 ">
+    
+<button className='btn btn-primary w-100 mt-3' type="button" onClick={prindPdf} >Print</button>
+</div>
+
 
 </div>
 </div>

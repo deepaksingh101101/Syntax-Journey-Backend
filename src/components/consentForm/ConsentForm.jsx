@@ -50,6 +50,7 @@ const ConsentForm = () => {
     const handleClearSign = () => {
         sign.clear();
     };
+
     const generateSign = async () => {
         // Assuming sign is defined somewhere in your code
         const base64 = sign.getTrimmedCanvas().toDataURL('image/png');
@@ -92,11 +93,9 @@ const ConsentForm = () => {
         setCaseType(e.target.value)
         const res = await getApi("get", `/api/template/questionsByCaseType?caseType=${e.target.value}`);
         setAllQuestions(res?.data?.questions)
-
         const temp = await getApi("get", `/api/template/getTemplateByCaseType?caseType=${e.target.value}`);
         console.log(temp)
         setValue(temp?.data?.deltaForm)
-
     }
 
 
@@ -423,9 +422,13 @@ const ConsentForm = () => {
                     />
                 </div>}
 
+            
+
                 <div className="col-md-6">
                     <button type='button' className="btn bg-primary-color text-light p-5 w-100  " data-bs-toggle="modal" data-bs-target="#uploadSignatureModal"><i className="fa-solid fa-file-signature"></i> Upload Signature</button>
                 </div>
+
+             
 
                 {/* ----modal--- */}
 
