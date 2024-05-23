@@ -80,49 +80,49 @@ export default function ViewConsent() {
                     </div>
     
     
-    <div className="col-md-10 mt-5 px-2 px-sm-3 px-md-5 px-lg-0">
+    <div style='margin-top:50px' className="col-md-10 mt-5 px-2 px-sm-3 px-md-5 px-lg-0">
                         <h3 htmlFor="name" className="form-label font_custom_pdf">
-                            Name: {{patientName}}
+                           <b> Name:</b> {{patientName}}
                         </h3>
                         
                     </div>
                     <div className="col-md-10 mt-2 px-2 px-sm-3 px-md-5 px-lg-0">
                         <h3 htmlFor="address" className="form-label font_custom_pdf">
-                            Address: {{patientAddress}}
+                          <b>  Address:</b> {{patientAddress}}
                         </h3>
                         
                     </div>
                     <div className="col-md-10  d-flex justify-content-between mt-2 px-2 px-sm-3 px-md-5 px-lg-0">
                         <h3 htmlFor="address" className="form-label font_custom_pdf">
-                            Phone Number: {{patientNumber}}
+                          <b>  Phone Number: </b>{{patientNumber}}
                         </h3>
     
                          <h3 htmlFor="address" className="form-label font_custom_pdf">
-                            Date: {{patientDate}}
+                          <b>  Date: </b>{{patientDate}}
                         </h3>
                     </div>
                    
                     <div className="col-md-10 mt-2 px-2 px-sm-3 px-md-5 px-lg-0">
                         <h3 htmlFor="address" className="form-label font_custom_pdf">
-                            Place: {{patientplace}}
+                           <b> Place:</b> {{patientplace}}
                         </h3>
                         
                     </div>
     
-                    <div className="col-md-10 mt-2 px-2 px-sm-3 px-md-5 px-lg-0">
+                    <div style='margin-top:50px' className="col-md-10 mt-2 px-2 px-sm-3 px-md-5 px-lg-0">
     <img src={{parentsSignatureImage}} alt=''></img>
                         <h3 htmlFor="signature" className="form-label font_custom_pdf">
                         Signature and Thumb Impression of Patient/guardian if the patient is minor or mentally unsound
                         </h3>
                     </div>
     
-                    <div className="col-md-10  d-flex justify-content-between mt-2 px-2 px-sm-3 px-md-5 px-lg-0">
+                    <div style='margin-top:20px' className="col-md-10  d-flex justify-content-between mt-2 px-2 px-sm-3 px-md-5 px-lg-0">
                         <h3 htmlFor="address" className="form-label font_custom_pdf">
-                            Name: {{parentsName}}
+                          <b>  Name:</b> {{parentsName}}
                         </h3>
     
                          <h3 htmlFor="address" className="form-label font_custom_pdf">
-                            Relation with Patient: {{parentsRelation}}
+                           <b> Relation with Patient:</b> {{parentsRelation}}
                         </h3>
                     </div>
     
@@ -130,7 +130,7 @@ export default function ViewConsent() {
     
                     <div className="col-md-10  d-flex justify-content-between mt-2 px-2 px-sm-3 px-md-5 px-lg-0">
                         <h3 htmlFor="address" className="form-label font_custom_pdf">
-                            Address: {{parentsAddress}}
+                           <b> Address:</b> {{parentsAddress}}
                         </h3>
     
                     </div>
@@ -139,17 +139,17 @@ export default function ViewConsent() {
     
                     <div className="col-md-10  d-flex justify-content-between mt-2 px-2 px-sm-3 px-md-5 px-lg-0">
                         <h3 htmlFor="address" className="form-label font_custom_pdf">
-                            Phone Number: {{parentsAddress}}
+                           <b> Phone Number:</b> {{parentsAddress}}
                         </h3>
     
                          <h3 htmlFor="address" className="form-label font_custom_pdf">
-                            Date: {{parentsDate}}
+                           <b> Date:</b> {{parentsDate}}
                         </h3>
                     </div>
                    
                     <div className="col-md-10 mt-2 px-2 px-sm-3 px-md-5 px-lg-0">
                         <h3 htmlFor="address" className="form-label font_custom_pdf">
-                            Place: {{parentsPlace}}
+                           <b> Place: </b>{{parentsPlace}}
                         </h3>
                         
                     </div>
@@ -231,6 +231,7 @@ Tel:
                    .replace('{{patientNumber}}', singleConsentData?.mobileNo)
                    .replace('{{patientDate}}', singleConsentData?.createdAt)
                    .replace('{{patientSignature}}', singleConsentData?.signatureUrl)
+                   .replace('{{parentsRelation}}', singleConsentData?.relation)
                   
 
 
@@ -258,6 +259,7 @@ const reportemplateRef=useRef(null);
 
 
 const prindPdf = async () => {
+    setLoader(true)
     const input = reportemplateRef.current;
 
     try {
@@ -294,8 +296,11 @@ const prindPdf = async () => {
         }
 
         pdf.save('document.pdf');
+        setLoader(false)
     } catch (error) {
         console.error("Error generating PDF", error);
+        setLoader(false)
+
     }
 };
 
