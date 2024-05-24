@@ -49,7 +49,7 @@ export default function ViewConsent() {
 
          setHtmlStart(converter.convert()) 
 
-    
+    console.log(htmlStart)
         setLoader(false)
       } catch (error) {
         console.log(error)
@@ -110,8 +110,8 @@ export default function ViewConsent() {
                         
                     </div>
     
-                    <div style='margin-top:50px' className="col-md-10 mt-2 px-2 px-sm-3 px-md-5 px-lg-0">
-    <img src={{parentsSignatureImage}} alt=''></img>
+                    <div style='margin-top:500px' className="col-md-10 mt-2 px-2 px-sm-3 px-md-5 px-lg-0">
+                     <img src={{parentsSignatureImage}} alt=''></img>
                         <h3 htmlFor="signature" className="form-label font_custom_pdf">
                         Signature and Thumb Impression of Patient/guardian if the patient is minor or mentally unsound
                         </h3>
