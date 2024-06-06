@@ -655,10 +655,6 @@ const handleSubmitCustomEdit = () => {
 </div>
 
 {/* Custom Field Modal */}
-
-
-
-
 <div className="modal fade" id="editCustomModal" tabIndex="-1" aria-labelledby="modalLabel" aria-hidden="true">
   <div className="modal-dialog modal-fullscreen">
     <div className="modal-content">
@@ -913,7 +909,7 @@ const handleSubmitCustomEdit = () => {
 </div>
 </div>
 
-
+{/* faq started */}
      
 
 
