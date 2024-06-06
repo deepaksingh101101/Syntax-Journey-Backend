@@ -20,7 +20,7 @@ const AreaTop = ({title}) => {
         >
           <i className="fa-solid fa-bars fs-2"></i>
         </button>
-        <h2 className="area-top-title w-100 text-center ">{title}</h2>
+        <h2 className="area-top-title text-capitalize w-100 text-center ">{title}</h2>
       </div>
     </section>
   );

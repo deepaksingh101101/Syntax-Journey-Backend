@@ -4,3 +4,11 @@
 padding: 10px;
     border-radius: 5px;
 }
+
+.ql-container.ql-snow{
+    border: 0;
+}
+
+.height_of_quill .quill .ql-container, .ql-editor{
+min-height: auto !important;
+}
