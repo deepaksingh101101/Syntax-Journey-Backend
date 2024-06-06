@@ -26,7 +26,7 @@ const getTemplateById=async()=>{
     setValue(res?.data?.template?.deltaForm)
     setQuestions(res?.data?.template?.questions)
     setFaqs(res?.data?.template?.faqs)
-
+setCustomFields(res?.data?.template?.customFields)
 
     setImages(res?.data?.template?.imageUrl)
 
@@ -37,24 +37,52 @@ useEffect(() => {
 getTemplateById()
 }, [])
 
+function scrollToAndHighlightButton(elementId) {
+  const element = document.getElementById(elementId);
+  if (element) {
+      // Scroll to the element
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      // Add a class to highlight the button
+      element.classList.add('highlight');
+  } else {
+      console.error('Element not found:', elementId);
+  }
+}
 
   const submitHandler = async(event) => {
     event.preventDefault(); // Prevent the default form submission behavior
 
+
+    if(questions?.length<=0){
+      scrollToAndHighlightButton('question_add');
+      return
+    }
+    if(faqs?.length<=0){
+      scrollToAndHighlightButton('faq_btn');
+      return
+    }
+
     // Accessing the Quill editor instance and its contents in Delta format
     const editor = quill.current.getEditor();
     const deltaContent = editor.getContents();
-    
+    const faqEditor = faqQuill.current.getEditor();
+    const faqDeltaContent = faqEditor.getContents();
+
     const formData = {
       caseType: document.getElementById("Ctype").value,
-      questions: questions.map(question => ({ text: question?.text?question?.text:question })),
-      // html: quill.current.getEditor().root.innerHTML, // Get HTML content from Quill editor
-      html: "hi",
-      createdBy: "2312314343413",
+      videoUrl: document.getElementById("videoUrl").value,
+      questions: questions.map(question => ({ text: question })),
+      createdBy: JSON.parse(localStorage.getItem('user'))?.user?.email,
       deltaForm:deltaContent,
-      updatedBy:"deepak"
+      imageUrl:images,
+      faqs:faqs,
+      customFields:customFields,
+      updatedBy:JSON.parse(localStorage.getItem('user'))?.user?.email
+
+      // Faq Section
+
     };
-  
     console.log(formData)
    
 try {
@@ -190,6 +218,19 @@ try {
     setImages(updatedImages);
    };
 
+   const handleEditOption=(index)=>{
+    setOptionIndex(index)
+    
+    const fieldIndex = customFields[customEditIndex]
+    console.log(fieldIndex?.options[index]?.name)
+
+    setCustomOptionName(fieldIndex?.options[index]?.name)
+    setTempOptionDescription(fieldIndex?.options[index]?.description)
+    setCustomOptionVideo(fieldIndex?.options[index]?.videoUrl)
+    setTempOptionImage(fieldIndex?.options[index]?.imageUrl)
+   }
+  
+
    const handlefaqImageSelect = async (event) => {
     setImageLoader(true)
 
@@ -319,6 +360,220 @@ const handleSubmitEdit = () => {
   setFaqImages([])
 };
 
+
+const [key, setkey] = useState()
+const [tempOption, setTempOption] = useState()
+const optionsQuill = useRef(null); 
+const [tempOptionDescription, setTempOptionDescription] = useState()
+const [tempOptionVideo, setTempOptionVideo] = useState()
+const [tempOptionImage, setTempOptionImage] = useState([])
+const [customFields, setCustomFields] = useState([])
+const [customEditIndex, setCustomEditIndex] = useState()
+const [allOptions, setAllOptions] = useState([])
+const [customEditTitle, setCustomEditTitle] = useState()
+const [optionIndex, setOptionIndex] = useState()
+const [customOptionName, setCustomOptionName] = useState()
+const [customOptionVideo, setCustomOptionVideo] = useState()
+const customQuill = useRef(null); 
+
+
+const addThisOption = () => {
+  const option = {
+    name: tempOption,
+    description: tempOptionDescription,
+    videoUrl: tempOptionVideo,
+    imageUrl: tempOptionImage,
+  };
+
+  // Log the new option being added
+  console.log("Adding new option:", option);
+
+  // Then, check if the field with the specified key already exists
+  setCustomFields(prevCustomFields => {
+    const fieldIndex = prevCustomFields.findIndex(field => field.fieldName === key);
+    console.log("Field index found at:", fieldIndex);
+
+    if (fieldIndex !== -1) {
+      // If the field exists, update it by adding the new option to its options array
+      const updatedFields = [...prevCustomFields];
+      updatedFields[fieldIndex] = {
+        ...updatedFields[fieldIndex],
+        options: [...updatedFields[fieldIndex].options, option]
+      };
+      setTempOption("")
+      setTempOptionDescription("")
+      setTempOptionImage([])
+      setTempOptionVideo([])
+      console.log("Updated existing field with new option:", updatedFields);
+      return updatedFields;
+    } else {
+      // If the field does not exist, create a new field with the option
+      const newField = {
+        fieldName: key,
+        options: [option]
+      };
+      setTempOption("")
+      setTempOptionDescription("")
+      setTempOptionImage([])
+      setTempOptionVideo([])
+      console.log("Adding new field with new option:", newField);
+      return [...prevCustomFields, newField];
+    }
+  });
+};
+
+const handleEditCustom = (index) => {
+  // Access the custom field using the provided index
+  setCustomEditIndex(index)
+  const field = customFields[index];
+  setAllOptions(field?.options)
+      console.log(allOptions)
+  if (field) {
+    setCustomEditTitle(field.fieldName);
+
+    // Assuming you want to edit the first option for simplicity
+    if (field.options && field.options.length > 0) {
+      setAllOptions(field?.options)
+      console.log(allOptions)
+     }
+  }
+};
+
+const handleOptionsImageSelect = async (event) => {
+  setImageLoader(true)
+
+  const files = event.target.files;
+  const formData = new FormData();
+  
+  for (let i = 0; i < files.length; i++) {
+    formData.append('images', files[i]);
+  }
+
+  try {
+    const response = await uploadImage("/api/consent/uploadImage", formData);
+    console.log(response);
+    setTempOptionImage(prevUrls => [...prevUrls, ...response.imageUrls]); // Assuming the API responds with an array of image URLs
+    setImageLoader(false)
+  } catch (error) {
+    setLoader(false);
+    setImageLoader(true)
+    console.log(error);
+  }
+};
+
+const handleDeleteCustom = (index) => {
+  console.log("hello")
+  setCustomFields(prevCustomFields => {
+    // Filter out the element at the specified index
+    return prevCustomFields.filter((_, i) => i !== index);
+  });
+};
+
+const handleDeleteOptionsImage = (index) => {
+  const updatedImages = tempOptionImage.filter((_, i) => i !== index);
+  setTempOptionImage(updatedImages);
+ };
+
+ const handleDeleteCustomImageEdit = (index) => {
+  // Update the customImages state to filter out the image at the specified index
+  setTempOptionImage(currentImages => currentImages.filter((_, imgIndex) => imgIndex !== index));
+};
+
+const handleCustomImageSelect = async (event) => {
+  setImageLoader(true)
+
+  const files = event.target.files;
+  const formData = new FormData();
+  
+  for (let i = 0; i < files.length; i++) {
+    formData.append('images', files[i]);
+  }
+
+  try {
+    const response = await uploadImage("/api/consent/uploadImage", formData);
+    console.log(response);
+    setTempOptionImage(prevUrls => [...prevUrls, ...response.imageUrls]); // Assuming the API responds with an array of image URLs
+    setImageLoader(false)
+  } catch (error) {
+    setLoader(false);
+    setImageLoader(true)
+    console.log(error);
+  }
+};
+
+
+const handleSubmitCustomEdit = () => {
+  if (customEditIndex !== null && optionIndex !== null) {
+    // Make a deep copy of customFields to mutate
+    const updatedCustomFields = [...customFields];
+    const fieldOptions = [...updatedCustomFields[customEditIndex].options];
+
+    // Update the specific option
+    fieldOptions[optionIndex] = {
+      ...fieldOptions[optionIndex],
+      name: customOptionName,
+      description: tempOptionDescription,
+      videoUrl: customOptionVideo,
+      imageUrl: tempOptionImage,
+    };
+
+    // Update the options in the field
+    updatedCustomFields[customEditIndex] = {
+      ...updatedCustomFields[customEditIndex],
+      options: fieldOptions,
+    };
+
+    // Update the customFields state
+    setCustomFields(updatedCustomFields);
+
+  } else {
+    console.error('Invalid indices for editing custom field option');
+  }
+};
+
+
+
+
+
+// const handleSubmitCustomEdit = () => {
+//   // Ensure the indices are within the valid range
+//   if (customEditIndex >= 0 && customEditIndex < customFields.length &&
+//       optionIndex >= 0 && optionIndex < customFields[customEditIndex].options.length) {
+//     // Create a new copy of the customFields array
+//     const newCustomFields = [...customFields];
+
+//     // Create a new copy of the specific option array
+//     const newOptions = [...newCustomFields[customEditIndex].options];
+
+//     // Update the specific option with new values
+//     newOptions[optionIndex] = {
+//       ...newOptions[optionIndex],
+//       name: customOptionName,
+//       videoUrl: customOptionVideo,
+//       imageUrl: tempOptionImage
+//     };
+
+//     // Replace the options array in the specific custom field
+//     newCustomFields[customEditIndex] = {
+//       ...newCustomFields[customEditIndex],
+//       options: newOptions
+//     };
+
+//     // Update the state with the new custom fields array
+//     setCustomFields(newCustomFields);
+
+//     // Optionally reset editing state
+//     setCustomOptionName('');
+//     setCustomOptionVideo('');
+//     setTempOptionImage([]);
+//     // Reset the editing indices if needed
+//     setCustomEditIndex(null);
+//     setOptionIndex(null);
+//   } else {
+//     console.error('Invalid custom field or option index');
+//   }
+// };
+
   return (
     <div className="content-area">
       <AreaTop title={`Edit Template - ${caseType}`}/>
@@ -406,6 +661,163 @@ const handleSubmitEdit = () => {
                 </div>
 </div>
 
+
+
+{/* Custom Field Modal */}
+<div className="modal fade" id="editCustomModal" tabIndex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+  <div className="modal-dialog modal-fullscreen">
+    <div className="modal-content">
+      <div className="modal-header d-flex justify-content-center">
+        <h2 className="text-center">Edit Custom Field's</h2>
+      </div>
+
+      <div className="modal-body">
+       
+  
+
+  
+   
+
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+          <div className="col-md-12" id="faq">
+
+          <label htmlFor="faqTitle" className="form-label">Field Name</label>
+          <input
+            type="text"
+            className="form-control"
+            id="question_input"
+            placeholder="Enter FAQ Title"
+            name='faq_title'
+            // required={true}
+            value={customEditTitle}
+            onChange={(e) => setCustomEditTitle(e.target.value)}
+          />
+        </div>
+
+          <div className="table-responsive mt-5">
+      <table  className="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Description</th>
+            <th scope="col">Video URL</th>
+            <th scope="col">Images</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {allOptions?.map((option, index) => (
+            <tr key={index}>
+              <td>{option?.name}</td>
+              <td dangerouslySetInnerHTML={{ __html: option.description }} />
+              <td>{option?.videoUrl}</td>
+              <td>
+                {option?.imageUrl.map((image, idx) => (
+                  <img key={idx} src={image} alt={`Option ${index} Image ${idx}`} style={{ width: '50px', height: '50px', marginRight: '10px' }} />
+                ))}
+              </td>
+              <td className="d-flex  justify-content-between" >
+              <i onClick={()=>{handleDeleteImage(index)}} role="button" className="fa-solid bg-danger text-white p-1 fa-xmark  "></i>
+              <i  onClick={()=>{handleEditOption(index)}}   role="button "  className="fa-solid bg-primary p-1 text-white fa-pen-to-square"></i>
+                {/* <button className="btn btn-primary" onClick={() => onEdit(index)}>Edit</button>
+                <button className="btn btn-danger" onClick={() => onDelete(index)}>Delete</button> */}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <div  className="">
+            <div className="col-md-12" id="faqDescription">
+              <h3 className="text-center">Options</h3>
+              <div className="col-md-12">
+                <label htmlFor="name" className="form-label">Name</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="name"
+                  placeholder="Enter Option2 Name"
+                  value={customOptionName}
+                  onChange={(e) => setCustomOptionName(e.target.value)}
+                />
+              </div>
+              <label htmlFor="faqDescription" className="form-label">Option Description</label>
+              <QuillEditor
+                ref={customQuill}
+                theme="snow"
+                value={tempOptionDescription}
+                formats={formats}
+                modules={modules}
+                onChange={setTempOptionDescription}
+              />
+            </div>
+            <div className="col-md-12">
+              <label htmlFor="videoUrl2" className="form-label">Video Link</label>
+              <input
+                type="text"
+                className="form-control"
+                id="videoUrl2"
+                placeholder="Enter Video Link"
+                value={ customOptionVideo}
+                onChange={(e) => setCustomOptionVideo(e.target.value)}
+              />
+            </div>
+            <div className="col-md-12 my-3">
+              <h2 className="text-center">Option Images</h2>
+              {tempOptionImage?.length > 0 ? (
+                tempOptionImage?.map((image, idx) => (
+                  <div key={idx} className="mx-2 position-relative d-flex justify-content-start">
+                    <img className="img-wrapper" src={image} alt={`FAQ ${idx} Image ${idx}`} style={{ width: '100px', height: '100px' }} />
+                    <i onClick={() => handleDeleteCustomImageEdit(idx)} role="button" className="fa-solid bg-danger text-white p-1 fa-xmark position-absolute top-0 end-0"></i>
+                  </div>
+                ))
+              ) : 'No images'}
+              <label className="btn bg-primary-color text-light w-100">
+                Upload Image
+                <input
+                  type="file"
+                  style={{ display: 'none' }}
+                  onChange={handleCustomImageSelect}
+                  multiple
+                  accept=".jpg,.jpeg,.png"
+                />
+              </label>
+            </div>
+          </div>
+
+        <div className="col-12 d-flex justify-content-center">
+          {imageLoader && <Loader />}
+        </div>
+      </div>
+
+      
+      <div className="modal-footer">
+        <button type="button" data-bs-dismiss="modal" className="btn btn-secondary">Exit</button>
+        <button type="button" className="btn btn-main" data-bs-dismiss="modal" onClick={handleSubmitCustomEdit}>Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
         <div className="col-md-12">
           <label htmlFor="Ctype" className="form-label">
             Case Type
@@ -444,7 +856,7 @@ const handleSubmitEdit = () => {
             className="form-control"
             id="videoUrl"
             placeholder="Enter Video Link "
-            required
+            // required
             name='videUrl'
           />
         </div>
@@ -615,7 +1027,121 @@ const handleSubmitEdit = () => {
 
 
 
+<div className="">
+<div>
+  <h2 className="text-center">Create Custom Field's</h2>
+  <div className="col-md-12" id="faq">
+    <label htmlFor="faqTitle" className="form-label">Enter Field Name</label>
+    <input
+      type="text"
+      className="form-control"
+      id="key"
+      placeholder="Enter Field Name"
+      name='key'
+      // required={true}
+      value={key}
+      onChange={(e) => setkey(e.target.value)}
+    />
+  </div>
+  <div className="col-md-12 mt-3" id="faq">
+    <h5>Create Options</h5>
+    <label htmlFor="customOptions" className="form-label">Name </label>
 
+    <div className="d-flex justify-content-between align-items-center">
+    <input
+      type="text"
+      className="form-control w-100"
+      id="customOptions"
+      placeholder="Enter Options"
+      name='key'
+      // required={true}
+      value={tempOption}
+      onChange={(e) => setTempOption(e.target.value)}
+    />
+
+     {/* <button id="faq_btn" type="button" className="btn btn-success ms-3 my-3" onClick={addOption}>Add</button> */}
+     </div> 
+
+
+     
+
+
+
+     <div className="col-md-12" id="faqDescription">
+    <label htmlFor="faqDescription" className="form-label">{tempOption} Description</label>
+    <QuillEditor
+      ref={optionsQuill}
+      theme="snow"
+      value={tempOptionDescription}
+      formats={formats}
+      modules={modules}
+      onChange={setTempOptionDescription}
+    />
+  </div>
+  <div className="col-md-12">
+    <label htmlFor="videoUrltemp" className="form-label">Video Link</label>
+    <input
+      type="text"
+      className="form-control"
+      id="videoUrltemp"
+      placeholder="Enter Video Link"
+      value={tempOptionVideo}
+      onChange={(e) => setTempOptionVideo(e.target.value)}
+    />
+  </div>
+  <div className="col-md-12 my-3">
+    <label className="btn bg-primary-color text-light w-100 ">
+      Upload Image
+      <input
+        type="file"
+        style={{ display: 'none' }}
+        onChange={handleOptionsImageSelect}
+        multiple
+        accept=".jpg,.jpeg,.png"
+      />
+    </label>
+
+  </div>
+  <div className="col-md-12 d-flex justify-content-around mt-3">
+    {imageLoader && <Loader/>}
+  {tempOptionImage?.map((image, index) => (
+    <div className="position-relative" style={{width:"200px", height:"150px"}}   key={index}  >
+      <i onClick={()=>{handleDeleteOptionsImage(index)}} role="button" className="fa-solid bg-danger text-white p-1 fa-xmark position-absolute top-0 end-0"></i>
+    <img className='px-2 mx-2 img-fluid'style={{width:"200px", height:"150px"}} src={image} alt={`Uploaded file ${index + 1}`} />
+    </div>
+  ))}
+</div>
+<div className="col-md-12 my-3">
+<button id="faq_btn" type="button" className="btn btn-success w-100 my-3" onClick={addThisOption}>Add This Options</button>
+</div>
+  </div>
+
+  </div>
+
+        <div className="col-12  ">
+        <table border="1" className="table table-bordered" style={{ width: '100%' }}>
+            <thead>
+                <tr>
+                    <th>Serial No.</th>
+                    <th>Field Name</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {customFields?.map((item, index) => (
+                    <tr key={index}>
+                        <td>{index + 1}</td>
+                        <td>{item.fieldName}</td>
+                        <td className="d-flex position-relative justify-content-between">
+                            <i  onClick={() => handleDeleteCustom(index)} role="button" className="fa-solid bg-danger text-white p-1 fa-xmark top-0 end-0"></i>
+                            <i data-bs-toggle="modal" onClick={()=>{handleEditCustom(index)}} data-bs-target="#editCustomModal"   role="button "  className="fa-solid bg-primary p-1 text-white fa-pen-to-square  end-0"></i>
+                        </td>
+                    </tr>
+                ))}
+            </tbody>
+        </table>
+        </div>
+</div>
 
 
 
