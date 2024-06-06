@@ -69,7 +69,7 @@ const ConsentForm = () => {
         // Create a FormData object
         const formData = new FormData();
         const file = base64ToBlob(base64);
-        formData.append('Image', file, 'signature.png');
+        formData.append('images', file, 'signature.png');
 
         try {
             const response = await uploadImage("/api/consent/uploadImage", formData);
@@ -262,7 +262,7 @@ const ConsentForm = () => {
         className="form-control"
         id="Pname"
         placeholder="Enter Patient Name"
-        required
+        // required
         name="patientName"
         value={consentData.patientName}
         onChange={handleInputChange}
@@ -282,7 +282,7 @@ const ConsentForm = () => {
                         id="Pid"
                         name='patientId'
                         placeholder="Enter Paitent Id"
-                        required
+                         // required
                         value={consentData.patientId}
                         onChange={handleInputChange}
                     />
@@ -298,7 +298,7 @@ const ConsentForm = () => {
                 style={mobileRedBorder ? { border: "1px solid red" } : {}}
                 name='mobileNo'
                 placeholder="Enter Mobile Number"
-                required
+                // required
                 value={consentData.mobileNo}
                 onChange={handleInputChange}
             />
@@ -312,7 +312,7 @@ const ConsentForm = () => {
                         className="form-control "
                         id="Paadhar"
                         placeholder="Enter Aadhar Number"
-                        required
+                        // required
                         style={aadharRedBorder ? { border: "1px solid red" } : {}}
 
                         value={consentData.adharCard}
@@ -327,7 +327,7 @@ const ConsentForm = () => {
                     <select
                         className="form-control"
                         id="gender"
-                        required
+                        // required
                         value={consentData.gender}
                         onChange={handleInputChange}
                         name='gender'
@@ -346,7 +346,7 @@ const ConsentForm = () => {
                         type="date"
                         className="form-control "
                         id="Pdob"
-                        required
+                        // required
                         name='dob'
                         value={consentData.dob}
                         onChange={handleInputChange}
@@ -362,7 +362,7 @@ const ConsentForm = () => {
                         className="form-control "
                         id="Gname"
                         placeholder="Enter Gaurdian Name"
-                        required
+                        // required
                         name='gaurdianName'
                         value={consentData.gaurdianName}
                         onChange={handleInputChange}
@@ -377,7 +377,7 @@ const ConsentForm = () => {
                         className="form-control "
                         id="Paddress"
                         placeholder="Enter Patient Address"
-                        required
+                        // required
                         name='address'
                         value={consentData.address}
                         onChange={handleInputChange}
@@ -393,7 +393,7 @@ const ConsentForm = () => {
                         className="form-control "
                         id="relation"
                         placeholder="Enter relation with patient"
-                        required
+                        // required
                         name='relation'
                         value={consentData.relation}
                         onChange={handleInputChange}
@@ -406,7 +406,7 @@ const ConsentForm = () => {
                     <select
                         className="form-control"
                         id="caseType"
-                        required
+                        // required
                         name='caseType'
                         value={caseType}
                         onChange={handleCaseTypeChange}
@@ -433,7 +433,7 @@ const ConsentForm = () => {
                             placeholder="Enter Your Answer"
                             value={inputValues[index] || ''} // Use inputValues state to populate input value
                             onChange={(e) => handleAnswerChange(e, index)} // Pass index to identify which input is being changed
-                            required
+                            // required
                         />
                     </div>
                 ))}

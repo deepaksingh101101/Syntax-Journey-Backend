@@ -50,7 +50,7 @@ export default function ViewTemplate() {
   
    {!loader && 
     <div className="">
-      <AreaTop title={`Template Id - ${singleConsentData?._id}`}/>
+      <AreaTop title={`Case Type - ${singleConsentData?.caseType}`}/>
    <div className="container consentForm px-0 py-5 d-flex  flex-wrap justify-content-center align-items-center">
         {/* <div className="col-md-5 borderC mx-3 d-flex flex-column mb-5 justify-content-center ">
                         <label htmlFor="Pname" className="form-label">
@@ -61,7 +61,215 @@ export default function ViewTemplate() {
                         </span>
                         
                     </div> */}
-                    <div className="col-md-11 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
+                
+
+
+      
+
+<div className="col-md-11 my-4">
+  <div className="row">
+
+ 
+<label htmlFor="created By" className="form-label">
+                        {singleConsentData?.caseType}
+                        </label>
+<div className="col-md-7 height_of_quill">
+<QuillEditor
+            theme="snow"
+            value={value}
+            readOnly={true} // Set readOnly to true to disable editing
+            modules={{
+                toolbar: false, // Hide the toolbar
+              }}
+          />
+<div className="">
+{singleConsentData?.imageUrl.map((image,index)=>(
+
+
+<img style={{height:"200px", width:"250px"}} alt='' key={index} src={image}/>
+
+
+))}
+</div>
+
+</div>
+<div className="col-md-2">
+<label htmlFor="created By" className="form-label">
+                        {singleConsentData?.caseType}
+                        </label>
+
+                        <div className="video-container">
+      <video controls > {/* Adding controls and setting width */}
+        <source src={singleConsentData?.videoUrl} type="video/mp4" /> {/* Setting the video source and type */}
+        Your browser does not support the video tag. {/* Fallback message for unsupported browsers */}
+      </video>
+    </div>
+</div>
+
+</div>
+</div>
+
+
+ 
+
+
+
+
+
+
+
+<div className="col-md-11 my-4">
+<div className="accordion" id="accordionExample">
+
+
+
+ {singleConsentData?.faqs?.map((faq,index)=>(
+  <div key={index} className="accordion-item">
+    <h2 className="accordion-header">
+      <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+        {faq?.title}
+      </button>
+    </h2>
+    <div id="collapseOne" className="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+      <div className="accordion-body">
+      <div className="row">
+
+ 
+{/* <label htmlFor="created By" className="form-label">
+                        {faq?.caseType}
+                        </label> */}
+<div className="col-md-7 height_of_quill">
+<QuillEditor
+            theme="snow"
+            value={faq?.description}
+            readOnly={true} // Set readOnly to true to disable editing
+            modules={{
+                toolbar: false, // Hide the toolbar
+              }}
+          />
+<div className="">
+{faq?.imageUrl.map((image,index)=>(
+
+
+<img  className='object-fit-contain my-2' style={{height:"200px", width:"50vw"}} alt='' key={index} src={image}/>
+
+
+))}
+</div>
+
+</div>
+<div className="col-md-2">
+<label htmlFor="created By" className="form-label">
+                        {singleConsentData?.caseType}
+                        </label>
+
+                        <div className="video-container">
+      <video controls > {/* Adding controls and setting width */}
+        <source src={singleConsentData?.videoUrl} type="video/mp4" /> {/* Setting the video source and type */}
+        Your browser does not support the video tag. {/* Fallback message for unsupported browsers */}
+      </video>
+    </div>
+</div>
+</div>
+      </div>
+    </div>
+  </div>
+ )) }
+ 
+</div>
+</div>
+
+
+<div className="col-md-11">
+  <h3 className='text-center' >Questions</h3>
+  <ul className="list-group ">
+    {singleConsentData?.questions.map((question, index) => (
+      <div key={index} className="mt-2">
+        <span className="form-label">Question {index + 1}</span>
+        <li className="list-group-item my-1 d-flex justify-content-between align-items-center">
+          {question.text} {/* Accessing the text property of each question */}
+        </li>
+      </div>
+    ))}
+  </ul>
+</div>
+
+<div className="col-md-11 mt-3">
+<h3 className='text-center' >Custom Fields</h3>
+</div>
+
+
+
+<div className="col-md-11 my-4">
+
+ {singleConsentData?.customFields?.map((custom,index)=>(
+  <div key={index} className="row">
+
+ 
+<h4 htmlFor="created By" className="form-label my-5">
+                 <b>Field Name-</b>       {custom?.fieldName}
+                        </h4>
+
+                        <h6>Options of {custom?.fieldName}</h6>
+
+{custom?.options?.map((option,index)=>(
+<>
+<div key={index} className="col-md-7 height_of_quill">
+<h6><b>Option Name- </b>{option?.name}</h6>
+
+<QuillEditor
+            theme="snow"
+            value={option?.description}
+            readOnly={true} // Set readOnly to true to disable editing
+            modules={{
+                toolbar: false, // Hide the toolbar
+              }}
+          />
+<div className="d-flex align-items-center justify-content-center">
+{option?.imageUrl.map((image,index)=>(
+
+
+<img style={{height:"200px", width:"250px"}} alt='' key={index} src={image}/>
+
+
+))}
+</div>
+
+</div>
+<div className="col-md-2">
+{/* <label htmlFor="created By" className="form-label">
+                        {singleConsentData?.caseType}
+                        </label> */}
+
+                        <div className="video-container">
+      <video controls > {/* Adding controls and setting width */}
+        <source src={option?.videoUrl} type="video/mp4" /> {/* Setting the video source and type */}
+        Your browser does not support the video tag. {/* Fallback message for unsupported browsers */}
+      </video>
+    </div>
+</div>
+</>
+)) }
+
+</div>
+ )) }
+</div>
+
+
+
+
+
+
+
+
+
+
+<div className="col-md-11 mt-3">
+<h3 className='text-center' >Template Details</h3>
+</div>
+
+<div className="col-md-11 borderC mx-3 mt-3 d-flex mb-5 flex-column justify-content-center ">
+
                         <label htmlFor="patientId" className="form-label">
                         Created At
                         </label>
@@ -71,9 +279,6 @@ export default function ViewTemplate() {
                                          </span>
 
                     </div>
-                   
-      
-                    
                     <div className="col-md-11 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
                         <label htmlFor="adharCard" className="form-label">
                             Updated At
@@ -84,10 +289,6 @@ export default function ViewTemplate() {
                         </span>
                         
                     </div>
-                    
-                    
-                   
-        
                     <div className="col-md-11 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
                         <label htmlFor="created By" className="form-label">
                         Created By
@@ -104,7 +305,6 @@ export default function ViewTemplate() {
                         {singleConsentData?.updatedBy?singleConsentData?.updatedBy:"Unknown"}                      </span>
                         
                     </div>
-
                     <div className="col-md-11 borderC mx-3 d-flex flex-column mb-5 justify-content-center ">
                         <label htmlFor="caseType" className="form-label">
                             Case Type
@@ -114,34 +314,6 @@ export default function ViewTemplate() {
                         </span>
                         
                     </div>
-                    <div className="col-md-11">
-  <ul className="list-group ">
-    {singleConsentData?.questions.map((question, index) => (
-      <div key={index} className="mt-2">
-        <span className="form-label">Question {index + 1}</span>
-        <li className="list-group-item my-1 d-flex justify-content-between align-items-center">
-          {question.text} {/* Accessing the text property of each question */}
-        </li>
-      </div>
-    ))}
-  </ul>
-</div>
-
-<div className="col-md-11 my-4">
-<label htmlFor="created By" className="form-label">
-                        Template View
-                        </label>
-<QuillEditor
-            theme="snow"
-            value={value}
-            readOnly={true} // Set readOnly to true to disable editing
-            modules={{
-                toolbar: false, // Hide the toolbar
-              }}
-          />
-
-</div>
-
 
 
 </div>
