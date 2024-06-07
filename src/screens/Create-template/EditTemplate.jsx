@@ -72,7 +72,7 @@ function scrollToAndHighlightButton(elementId) {
     const formData = {
       caseType: document.getElementById("Ctype").value,
       videoUrl: document.getElementById("videoUrl").value,
-      questions: questions.map(question => ({ text: question })),
+      questions:  questions.map(question => ({ text: question})),
       createdBy: JSON.parse(localStorage.getItem('user'))?.user?.email,
       deltaForm:deltaContent,
       imageUrl:images,
