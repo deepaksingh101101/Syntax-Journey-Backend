@@ -23,9 +23,10 @@ const ConsentForm = () => {
     const [allQuestions, setAllQuestions] = useState()
     const [allAnswer, setAllAnswer] = useState()
     const [caseType, setCaseType] = useState()
+    const [customOption, setCustomOption] = useState()
     const [inputValues, setInputValues] = useState([]);
 
-    const [imageUrl, setImageUrl] = useState()
+    // const [imageUrl, ] = useState()
     const [VideoUrl, setVideoUrl] = useState()
     const [showPreview , setShowPreview] = useState();
 
@@ -46,11 +47,16 @@ const ConsentForm = () => {
     
 
     const [sign, setSign] = useState();
+    const [surgenSign, setSurgenSign] = useState();
 
     const handleClearSign = () => {
         sign.clear();
     };
+    const handleClearSurgenSign = () => {
+        surgenSign.clear();
+    };
 
+    const [imageUrl, setImageUrl] = useState()
     const generateSign = async () => {
         // Assuming sign is defined somewhere in your code
         const base64 = sign.getTrimmedCanvas().toDataURL('image/png');
@@ -73,12 +79,40 @@ const ConsentForm = () => {
 
         try {
             const response = await uploadImage("/api/consent/uploadImage", formData);
-            setImageUrl(response?.imageUrl)
+            setImageUrl(response?.imageUrls[0])
         } catch (error) {
             console.log(error);
         }
     };
 
+    const [surgenImageUrl, setSurgenImageUrl] = useState()
+    const generateSurgenSign = async () => {
+        // Assuming sign is defined somewhere in your code
+        const base64 = sign.getTrimmedCanvas().toDataURL('image/png');
+
+        // Convert base64 string to Blob
+        const base64ToBlob = (base64) => {
+            const byteCharacters = atob(base64.split(',')[1]);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            return new Blob([byteArray], { type: 'image/png' });
+        };
+
+        // Create a FormData object
+        const formData = new FormData();
+        const file = base64ToBlob(base64);
+        formData.append('images', file, 'signature.png');
+
+        try {
+            const response = await uploadImage("/api/consent/uploadImage", formData);
+            setSurgenImageUrl(response?.imageUrls[0])
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     const handleInputChange = async (e) => {
         setErrorMessage("")
@@ -95,10 +129,41 @@ const ConsentForm = () => {
         setCaseType(e.target.value)
         const res = await getApi("get", `/api/template/questionsByCaseType?caseType=${e.target.value}`);
         setAllQuestions(res?.data?.questions)
+        
         const temp = await getApi("get", `/api/template/getTemplateByCaseType?caseType=${e.target.value}`);
         console.log(temp)
         setValue(temp?.data?.deltaForm)
+        setSingleConsentData(temp?.data)
+        // setSingleConsentData(temp?.data?.template)
     }
+
+// Working here
+const [customFields, setCustomFields] = useState([])
+const handleCustomOptionChange = async (e, field) => {
+    const optionValue = e.target.value;
+    setCustomOption(optionValue);  // Assuming setCustomOption updates state for the current option value
+
+    setCustomFields(prevFields => [
+        ...prevFields,
+        {
+            fieldName: field,
+            option: optionValue
+        }
+    ]);
+    
+    console.log(customFields)
+    
+    // Ensure caseType is available here, either from state or props
+    const temp = await getApi("get", `/api/template/getOptions?caseType=${encodeURIComponent(caseType)}&fieldName=${encodeURIComponent(field)}&optionName=${encodeURIComponent(optionValue)}`);
+    console.log(temp);
+
+    if (temp?.data) {
+        // Assume setOptionsArray is the setter for the array state
+        setSingleOptionData(prevOptions => [...prevOptions, temp.data]);
+    }
+}
+
+
 
 
     const handleAnswerChange = async (e, index) => {
@@ -137,15 +202,15 @@ const ConsentForm = () => {
               setLoading(false)
               return
         }
-        if(videoUrlState===undefined){
-            Toast.fire({
-                icon: "error",
-                title: "We need Your Video",
-              });
-              setLoader(false)
-              setLoading(false)
-              return
-        }
+        // if(videoUrlState===undefined){
+        //     Toast.fire({
+        //         icon: "error",
+        //         title: "We need Your Video",
+        //       });
+        //       setLoader(false)
+        //       setLoading(false)
+        //       return
+        // }
 
         // const form = e.currentTarget;
         // if (!form.checkValidity()) {
@@ -156,15 +221,19 @@ const ConsentForm = () => {
         const data = {
             ...consentData,
             signatureUrl: imageUrl,
-            VideoUrl: videoUrlState,
+            surgenSignatureUrl: surgenImageUrl,
+            // VideoUrl: videoUrlState,
+            VideoUrl: "hello",
             caseType: caseType,
             createdBy: JSON.parse(localStorage.getItem('user'))?.user?.email,
             question: allQuestions.reduce((acc, question, index) => {
                 acc[question] = inputValues[index];
                 return acc;
-            }, {})
+            }, {}),
+            customFields:customFields
         };
     
+
         try {
             setLoading(true);
             let res = await postApi('post', `api/consent/submitConsent`, data);
@@ -240,6 +309,8 @@ const ConsentForm = () => {
     }
 
     const { activeRecordings } = useRecordWebcam()
+    const [singleConsentData, setSingleConsentData] = useState()
+    const [singleOptionData, setSingleOptionData] = useState([])
 
 
    const [mobileRedBorder, setMobileRedBorder] = useState(false)
@@ -399,6 +470,7 @@ const ConsentForm = () => {
                         onChange={handleInputChange}
                     />
                 </div>
+
                 <div className="col-md-12">
                     <label htmlFor="caseType" className="form-label">
                         Case Type
@@ -420,7 +492,214 @@ const ConsentForm = () => {
                 </div>
 
 
-                {allQuestions?.map((que, index) => (
+              
+
+
+                {caseType && 
+                
+              
+
+                <div className="col-md-12">
+                    <div className="col-md-11 my-4">
+  <div className="row">
+
+ 
+<label htmlFor="created By" className="form-label">
+                        {singleConsentData?.caseType}
+                        </label>
+<div className="col-md-7 height_of_quill">
+<QuillEditor
+            theme="snow"
+            value={value}
+            readOnly={true} // Set readOnly to true to disable editing
+            modules={{
+                toolbar: false, // Hide the toolbar
+              }}
+          />
+<div className="">
+{singleConsentData?.imageUrl.map((image,index)=>(
+
+
+<img style={{height:"200px", width:"250px"}} alt='' key={index} src={image}/>
+
+
+))}
+</div>
+
+</div>
+<div className="col-md-2">
+<label htmlFor="created By" className="form-label">
+                        {singleConsentData?.caseType}
+                        </label>
+
+                        <div className="video-container">
+      <video controls > {/* Adding controls and setting width */}
+        <source src={singleConsentData?.videoUrl} type="video/mp4" /> {/* Setting the video source and type */}
+        Your browser does not support the video tag. {/* Fallback message for unsupported browsers */}
+      </video>
+    </div>
+</div>
+
+</div>
+</div>
+
+<div className="col-md-11 my-4">
+<div className="accordion" id="accordionExample">
+
+
+
+ {singleConsentData?.faqs?.map((faq,index)=>(
+  <div key={index} className="accordion-item">
+    <h2 className="accordion-header">
+      <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+        {faq?.title}
+      </button>
+    </h2>
+    <div id="collapseOne" className="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+      <div className="accordion-body">
+      <div className="row">
+
+ 
+{/* <label htmlFor="created By" className="form-label">
+                        {faq?.caseType}
+                        </label> */}
+<div className="col-md-7 height_of_quill">
+<QuillEditor
+            theme="snow"
+            value={faq?.description}
+            readOnly={true} // Set readOnly to true to disable editing
+            modules={{
+                toolbar: false, // Hide the toolbar
+              }}
+          />
+<div className="">
+{faq?.imageUrl.map((image,index)=>(
+
+
+<img  className='object-fit-contain my-2' style={{height:"200px", width:"50vw"}} alt='' key={index} src={image}/>
+
+
+))}
+</div>
+
+</div>
+<div className="col-md-2">
+<label htmlFor="created By" className="form-label">
+                        {singleConsentData?.caseType}
+                        </label>
+
+                        <div className="video-container">
+      <video controls > {/* Adding controls and setting width */}
+        <source src={singleConsentData?.videoUrl} type="video/mp4" /> {/* Setting the video source and type */}
+        Your browser does not support the video tag. {/* Fallback message for unsupported browsers */}
+      </video>
+    </div>
+</div>
+</div>
+      </div>
+    </div>
+  </div>
+ )) }
+ 
+</div>
+</div>
+                </div>
+                
+                }
+
+
+{/* Custom Fields Started */}
+<div  className="col-md-12">
+<h3>Custom Fields</h3>
+</div>
+
+{ singleConsentData?.customFields?.map((custom,index)=>(
+    <div key={index} className="col-md-12">
+                    <label htmlFor="caseType" className="form-label">
+                       {custom?.fieldName}
+                    </label>
+                    <select
+                        className="form-control"
+                        id="caseType"
+                        // required
+                        name='caseType'
+                        value={customOption}
+                        onChange={(e) => handleCustomOptionChange(e, custom?.fieldName)}
+                        >
+                        <option>Select {custom?.fieldName}</option> {/* Default placeholder option */}
+                        {/* Map each case type to an option element */}
+                        {custom?.options?.map((option, index) => (
+                            <option key={index} value={option?.name}>{option?.name?.charAt(0).toUpperCase() + option?.name?.slice(1)}</option>
+                        ))}
+                    </select>
+
+
+                {customOption &&    <div className="col-md-12">
+                    <div className="col-md-11 my-4">
+  <div className="row">
+
+ 
+<label htmlFor="created By" className="form-label">
+                        {singleConsentData?.caseType}
+                        </label>
+<div className="col-md-7 height_of_quill">
+<QuillEditor
+            theme="snow"
+            value={singleOptionData[index]?.description}
+            readOnly={true} // Set readOnly to true to disable editing
+            modules={{
+                toolbar: false, // Hide the toolbar
+              }}
+          />
+<div className="">
+{singleOptionData[index]?.imageUrl?.map((image,index)=>(
+
+
+<img style={{height:"200px", width:"250px"}} alt='' key={index} src={image}/>
+
+
+))}
+</div>
+
+</div>
+<div className="col-md-2">
+<label htmlFor="created By" className="form-label">
+                        {singleConsentData?.caseType}
+                        </label>
+
+                        <div className="video-container">
+      <video controls > {/* Adding controls and setting width */}
+        <source src={singleOptionData[index]?.videoUrl} type="video/mp4" /> {/* Setting the video source and type */}
+        Your browser does not support the video tag. {/* Fallback message for unsupported browsers */}
+      </video>
+    </div>
+</div>
+
+</div>
+</div>
+
+                </div>}
+
+
+
+
+
+
+
+                </div>
+)) 
+}
+
+
+
+
+
+<div  className="col-md-12">
+<h3 className='mt-3'>Questions</h3>
+</div>
+
+
+{allQuestions?.map((que, index) => (
                     <div key={index} className="col-md-12">
                         <label htmlFor={`ques-${index}`} className="form-label">
                             <b>Question {index + 1} </b>   {que}
@@ -439,22 +718,9 @@ const ConsentForm = () => {
                 ))}
 
 
-                {caseType && <div className="col-md-12">
-                    <label htmlFor="caseType" className="form-label">
-                        Template Content
-                    </label>
-                    <QuillEditor
-                        // ref={quill}
-                        theme="snow"
-                        value={value}
-                        readOnly={true} // Set readOnly to true to disable editing
-                        modules={{
-                            toolbar: false, // Hide the toolbar
-                        }}
-                    />
-                </div>}
-
-            
+<div className="col-md-12">
+                    <button type='button' className="btn bg-primary-color text-light p-5 w-100  " data-bs-toggle="modal" data-bs-target="#uploadSurgenSignatureModal"><i className="fa-solid fa-file-signature"></i> Upload Surgen Signature</button>
+                </div>
 
                 <div className="col-md-6">
                     <button type='button' className="btn bg-primary-color text-light p-5 w-100  " data-bs-toggle="modal" data-bs-target="#uploadSignatureModal"><i className="fa-solid fa-file-signature"></i> Upload Signature</button>
@@ -485,6 +751,34 @@ const ConsentForm = () => {
                         </div>
                     </div>
                 </div>
+
+
+{/* Modal of surgen */}
+   <div className="modal fade" id="uploadSurgenSignatureModal" tabIndex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                    <div className="modal-dialog modal-fullscreen">
+                        <div className="modal-content">
+                        <div className="modal-header">
+                        <h2>Your Signature</h2>
+                            <button type="button" className="btn-close ms-auto p-4 " data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        
+                            <div className="modal-body">
+                                <SignatureCanvas
+                                    canvasProps={{width:1200,height:450, className: 'sigCanvas' }}
+                                    ref={data => setSurgenSign(data)}
+                                />
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-secondary" onClick={handleClearSurgenSign} >Reset</button>
+                                <button type="button" className="btn btn-main" data-bs-dismiss="modal" onClick={generateSurgenSign}>Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
 
 
                 <div className="modal fade" id="uploadVideoModal" tabIndex="-1" aria-labelledby="modalLabel" aria-hidden="true">

@@ -27,7 +27,7 @@ const getTemplateById=async()=>{
     setQuestions(res?.data?.template?.questions)
     setFaqs(res?.data?.template?.faqs)
 setCustomFields(res?.data?.template?.customFields)
-
+document.getElementById("videoUrl").value=res?.data?.template?.videoUrl
     setImages(res?.data?.template?.imageUrl)
 
     
