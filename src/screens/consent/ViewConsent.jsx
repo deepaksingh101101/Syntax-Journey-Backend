@@ -357,6 +357,38 @@ const prindPdf = async () => {
                        {singleConsentData?.gaurdianName}                       </span>
                         
                     </div>
+                    <div className="col-md-5 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
+                        <label htmlFor="gaurdianName" className="form-label">
+                        Relation With Patient
+                        </label>
+                        <span className="form-label">
+                       {singleConsentData?.relation}                       </span>
+                        
+                    </div>
+                    <div className="col-md-5 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
+                        <label htmlFor="gaurdianName" className="form-label">
+                        Address
+                        </label>
+                        <span className="form-label">
+                       {singleConsentData?.address}                       </span>
+                        
+                    </div>
+                    <div className="col-md-5 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
+                        <label htmlFor="gaurdianName" className="form-label">
+                        Date Of Birth
+                        </label>
+                        <span className="form-label">
+                       {singleConsentData?.dob}                       </span>
+                        
+                    </div>
+                    <div className="col-md-5 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
+                        <label htmlFor="gaurdianName" className="form-label">
+                        Gender
+                        </label>
+                        <span className="form-label">
+                       {singleConsentData?.gender}                       </span>
+                        
+                    </div>
                 
                     <div className="col-md-5 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
                         <label htmlFor="mobileNo" className="form-label">
@@ -450,36 +482,50 @@ const prindPdf = async () => {
 
 
 
-                <div ref={reportemplateRef}  id='pdf' dangerouslySetInnerHTML={{ __html: fullHtml }} className=" col-md-10 mt-2 px-2 px-sm-3 px-md-5 w-100 px-lg-5">
+                {/* <div ref={reportemplateRef}  id='pdf' dangerouslySetInnerHTML={{ __html: fullHtml }} className=" col-md-10 mt-2 px-2 px-sm-3 px-md-5 w-100 px-lg-5">
                  
-                {/* <ReactToPrint
-        trigger={() => <button>Print this out!</button>}
-        content={() => printRef?.current}
-      /> */}
-                </div>
+            
+                </div> */}
 
 
+<div  className="col-md-10 w-100    px-2 px-sm-3 px-md-5 px-lg-5 mt-3">
+<h3 className='text-center'>Custom Field's</h3>
+</div>   
            
 
-             
-               
+            {singleConsentData?.customFields?.map(item => (
+                 <div key={item._id} className="col-md-10 borderC mx-3 mt-2 d-flex mb-5 flex-column justify-content-center ">
+                 <label htmlFor="created By" className="form-label">
+              <b> Field Name-</b>  {item.fieldName}
+                 </label>
+                 <span className="form-label">
+                Option {item.option}                        </span>
+                 
+             </div>
+            ))}
 
-{allQuestions?.map((que, index) => (
-                    <div key={index} className="col-md-10 w-100    px-2 px-sm-3 px-md-5 px-lg-5 mt-3">
-                        <label htmlFor={`ques-${index}`} className="form-label">
-                            <b>Question {index + 1} </b>   {que}
-                        </label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            id={`ques-${index}`}
-                            name='questions'
-                            placeholder="Enter Your Answer"
-                            // value={inputValues[index] || ''}
-                            required
-                        />
-                    </div>
-                ))}
+<div  className="col-md-10 w-100    px-2 px-sm-3 px-md-5 px-lg-5 mt-3">
+<h3>Question's</h3>
+</div>       
+
+<div className='w-100' >
+            {Object.entries(singleConsentData.question).map(([key, value], index) => (
+                <div key={index} className="col-md-10 w-100 px-2 px-sm-3 px-md-5 px-lg-5 mt-3">
+                    <label htmlFor={`ques-${index}`} className="form-label w-100">
+                        <b>Question {index + 1} </b> {key}
+                    </label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        id={`ques-${index}`}
+                        name='questions'
+                        value={value}
+                        required
+                        readOnly
+                    />
+                </div>
+            ))}
+        </div>
 
 <div className="col-md-10 w-100    px-2 px-sm-3 px-md-5 px-lg-5 ">
     
