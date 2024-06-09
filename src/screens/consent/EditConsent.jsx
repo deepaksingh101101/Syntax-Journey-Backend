@@ -4,6 +4,7 @@ import SignatureCanvas from 'react-signature-canvas';
 import { getApi, patchApi, postApi, uploadImage } from '../../helpers/requestHelpers';
 import Loader from '../../components/loader/Loader';
 import { AreaTop } from '../../components';
+import QuillEditor from "react-quill";
 
 export default function EditConsent() {
 
@@ -29,6 +30,10 @@ const getAllcaseType=async()=>{
    let res=   await getApi("get",`/api/consent/consentById?consentId=${_id}`)
    console.log(res)
    setSingleConsentData(res?.data?.consent)
+
+  await handleCaseTypeUseEffect(res?.data?.consent?.caseType)
+
+
    setConsentData({
     patientId:res?.data?.consent?.patientId,
     patientName:res?.data?.consent?.patientName,
@@ -44,6 +49,11 @@ const getAllcaseType=async()=>{
    setImageUrl(res?.data?.consent?.signatureUrl)
 //    const rest = await getApi("get",`/api/template/questionsByCaseType?caseType=${res?.data?.consent?.caseType}`);
 //    setAllQuestions(rest?.data?.questions)
+setCustomFieldsArray(res?.data?.consent?.customFields)
+
+const res2 = await getApi("get", `/api/template/getTemplateByCaseType?caseType=${res?.data?.consent?.caseType}`);
+  
+setAllDataValue(res2?.data?.customFields)
 
 setLoader(false)
 
@@ -57,6 +67,7 @@ const {_id}=useParams()
 
 useEffect(() => {
     getAllcaseType()
+    
 }, [_id])
 
 
@@ -104,22 +115,28 @@ useEffect(() => {
       };
 
 
-      const handleCaseTypeChange=async(e)=>{
-        setCaseType(e.target.value)
-        const res = await getApi("get",`/api/template/questionsByCaseType?caseType=${e.target.value}`);
-        setAllQuestions(res?.data?.questions)
+    //   const handleCaseTypeChange=async(e)=>{
+    //     setCaseType(e.target.value)
+    //     const res = await getApi("get",`/api/template/questionsByCaseType?caseType=${e.target.value}`);
+    //     setAllQuestions(res?.data?.questions)
 
 
-      }
+    //   }
 
-
-
+    const [customFieldsArray, setCustomFieldsArray] = useState(() => {
+        return singleConsentData?.customFields?.map(field => ({
+            fieldName: field.fieldName,
+            option: field.option
+        })) || [];
+    });
+    
       const handleAnswerChange = (event, questionKey) => {
         const { value } = event.target;
         setInputValues(prevState => ({
           ...prevState,
           [questionKey]: value // Update the key with the new value
         }));
+        console.log(inputValues)
       };
 
       
@@ -137,12 +154,19 @@ if(consentData?.adharCard?.length!=12){
     return
 }
 
+
+setCustomFieldsArray(Object.keys(customOption).map(fieldName => ({
+    fieldName,
+    option: customOption[fieldName]
+})))
+
 const data = {
     ...consentData,
     signatureUrl: imageUrl,
     updatedBy:JSON.parse(localStorage.getItem('user'))?.user?.email,
     caseType:caseType,
     question: inputValues,
+    customFields:customFieldsArray
 };
 
 try {
@@ -158,6 +182,130 @@ navigate('/consentList')
    const [mobileRedBorder, setMobileRedBorder] = useState(false)
    const [aadharRedBorder, setAadharRedBorder] = useState(false)
 
+   const [customFields, setCustomFields] = useState([])
+
+   const [singleOptionData, setSingleOptionData] = useState([])
+
+//    const handleCustomOptionChange = (e, fieldName) => {
+//     setCustomOption(prevState => ({
+//         ...prevState,
+//         [fieldName]: e.target.value
+//     }));
+// };
+
+
+
+
+
+const handleCustomOptionChange = async (e, fieldName) => {
+    const optionValue = e.target.value;
+
+    // Directly update the customFieldsArray
+    setCustomFieldsArray(prevArray => {
+        // Find the index of the field if it exists
+        const index = prevArray.findIndex(item => item.fieldName === fieldName);
+        
+        // If the field is found, update the option value
+        if (index !== -1) {
+            const newArray = [...prevArray];
+            newArray[index] = { ...newArray[index], option: optionValue };
+            return newArray;
+        } 
+        
+        // If the field is not found, add it as a new entry
+        return [...prevArray, { fieldName, option: optionValue }];
+    });
+};
+
+
+
+
+
+const handleCustomEditOptionChange = async (option, field) => {
+    const optionValue = option;
+    setCustomOption(optionValue);  // Assuming setCustomOption updates the state for the current option value
+
+    // Update the customFields state array to modify the existing field or add a new one
+    setCustomFields(prevFields => {
+        const fieldIndex = prevFields.findIndex(f => f.fieldName === field);
+        const newField = { fieldName: field, option: optionValue };
+
+        if (fieldIndex !== -1) {
+            // If the field already exists, update it
+            return prevFields.map((item, index) => index === fieldIndex ? newField : item);
+        } else {
+            // If the field does not exist, add it
+            return [...prevFields, newField];
+        }
+    });
+
+    // Log the customFields state after the update (this will not immediately show the updated state)
+    console.log(customFields);
+
+    // Ensure caseType is available here, either from state or props
+    const temp = await getApi("get", `/api/template/getOptions?caseType=${encodeURIComponent(caseType)}&fieldName=${encodeURIComponent(field)}&optionName=${encodeURIComponent(optionValue)}`);
+    console.log(temp);
+
+    if (temp?.data) {
+        // Update singleOptionData by either adding new data or updating existing
+        setSingleOptionData(prevOptions => {
+            const index = prevOptions.findIndex(option => option.fieldName === field);
+            if (index !== -1) {
+                // If data exists for this field, update it
+                return prevOptions.map((opt, idx) => idx === index ? {...opt, ...temp.data} : opt);
+            } else {
+                // If no data exists for this field, add new data
+                return [...prevOptions, {...temp.data, fieldName: field}];
+            }
+        });
+    }
+};
+
+
+
+//    const [customOption, setCustomOption] = useState()
+   const [customOption, setCustomOption] = useState(() => {
+    // Initialize state based on singleConsentData
+    const initialOptions = {};
+    singleConsentData?.customFields?.forEach(field => {
+        initialOptions[field.fieldName] = field.option;
+    });
+    return initialOptions;
+});
+
+   const [allDataValue, setAllDataValue] = useState()
+
+
+
+const handleCaseTypeChange = async (e) => {
+    setCaseType(e?.target?.value)
+    const res = await getApi("get", `/api/template/questionsByCaseType?caseType=${e.target.value}`);
+    setAllQuestions(res?.data?.questions)
+    
+    const temp = await getApi("get", `/api/template/getTemplateByCaseType?caseType=${e.target.value}`);
+    console.log(temp)
+    setValue(temp?.data?.deltaForm)
+    setSingleConsentEditData(temp?.data)
+    console.log(temp?.data)
+    // setSingleConsentData(temp?.data?.template)
+}
+
+const handleCaseTypeUseEffect = async (caseType) => {
+    setCaseType(caseType)
+    const res = await getApi("get", `/api/template/questionsByCaseType?caseType=${caseType}`);
+    setAllQuestions(res?.data?.questions)
+    setInputValues(res?.data?.questions)
+    const temp = await getApi("get", `/api/template/getTemplateByCaseType?caseType=${caseType}`);
+    console.log(temp)
+    setValue(temp?.data?.deltaForm)
+    setSingleConsentEditData(temp?.data)
+    console.log(temp?.data)
+    // setSingleConsentData(temp?.data?.template)
+}
+
+const [value, setValue] = useState("");
+
+const [singleConsentEditData, setSingleConsentEditData] = useState()
 
   return (
 <>
@@ -336,13 +484,145 @@ navigate('/consentList')
         </div>
 
 
+
+
+
+
+
+
+
+
+
+        {caseType && 
+                
+              
+
+                <div className="col-md-12">
+                    <div className="col-md-11 my-4">
+  <div className="row">
+
+ 
+<label htmlFor="created By" className="form-label">
+                        {singleConsentEditData?.caseType}
+                        </label>
+<div className="col-md-7 height_of_quill">
+<QuillEditor
+            theme="snow"
+            value={value}
+            readOnly={true} // Set readOnly to true to disable editing
+            modules={{
+                toolbar: false, // Hide the toolbar
+              }}
+          />
+<div className="">
+{singleConsentEditData?.imageUrl.map((image,index)=>(
+
+
+<img style={{height:"200px", width:"250px"}} alt='' key={index} src={image}/>
+
+
+))}
+</div>
+
+</div>
+<div className="col-md-2">
+<label htmlFor="created By" className="form-label">
+                        {singleConsentEditData?.caseType}
+                        </label>
+
+                        <div className="video-container">
+      <video controls > {/* Adding controls and setting width */}
+        <source src={singleConsentEditData?.videoUrl} type="video/mp4" /> {/* Setting the video source and type */}
+        Your browser does not support the video tag. {/* Fallback message for unsupported browsers */}
+      </video>
+    </div>
+</div>
+
+</div>
+</div>
+
+<div className="col-md-11 my-4">
+<div className="accordion" id="accordionExample">
+
+
+
+ {singleConsentEditData?.faqs?.map((faq,index)=>(
+  <div key={index} className="accordion-item">
+    <h2 className="accordion-header">
+      <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+        {faq?.title}
+      </button>
+    </h2>
+    <div id="collapseOne" className="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+      <div className="accordion-body">
+      <div className="row">
+
+ 
+{/* <label htmlFor="created By" className="form-label">
+                        {faq?.caseType}
+                        </label> */}
+<div className="col-md-7 height_of_quill">
+<QuillEditor
+            theme="snow"
+            value={faq?.description}
+            readOnly={true} // Set readOnly to true to disable editing
+            modules={{
+                toolbar: false, // Hide the toolbar
+              }}
+          />
+<div className="">
+{faq?.imageUrl.map((image,index)=>(
+
+
+<img  className='object-fit-contain my-2' style={{height:"200px", width:"50vw"}} alt='' key={index} src={image}/>
+
+
+))}
+</div>
+
+</div>
+<div className="col-md-2">
+<label htmlFor="created By" className="form-label">
+                        {singleConsentEditData?.caseType}
+                        </label>
+
+                        <div className="video-container">
+      <video controls > {/* Adding controls and setting width */}
+        <source src={singleConsentData?.videoUrl} type="video/mp4" /> {/* Setting the video source and type */}
+        Your browser does not support the video tag. {/* Fallback message for unsupported browsers */}
+      </video>
+    </div>
+</div>
+</div>
+      </div>
+    </div>
+  </div>
+ )) }
+ 
+</div>
+</div>
+                </div>
+                
+                }
+
+
+
+
+
+
+
+
+
+
+
        
 
-        <div>
+        <div className='mt-2' >
+            <h3>Questions</h3>
       {Object.entries(singleConsentData?.question || {}).map(([que, index]) => (
         <div key={index} className="col-md-12">
-            <label htmlFor={`ques-${index}`} className="form-label">
-                {que}
+            <label htmlFor={`ques-${index}`} className="form-label mt-1">
+            • {que}
             </label>
             <input
                 type="text"
@@ -359,6 +639,39 @@ navigate('/consentList')
     </div>
 
 
+{/* Custom Fields Started */}
+<div  className="col-md-12">
+<h3>Custom Fields</h3>
+</div>
+
+<div>
+            {singleConsentData?.customFields?.map((custom, index) => {
+                const correspondingField = allDataValue?.find(field => field.fieldName === custom.fieldName);
+
+                return (
+                    <div key={index} className="col-md-12">
+                    <label htmlFor={`custom-${index}`} className="form-label">
+                        {custom?.fieldName}
+                    </label>
+                    <select
+                        className="form-control"
+                        id={`custom-${index}`}
+                        name={custom?.fieldName}
+                        value={customFieldsArray.find(item => item.fieldName === custom?.fieldName)?.option || ''}
+                        onChange={(e) => handleCustomOptionChange(e, custom?.fieldName)}
+                    >
+                        {correspondingField?.options?.map((option, idx) => (
+                            <option key={idx} value={option?.name}>
+                                {option?.name.charAt(0).toUpperCase() + option?.name.slice(1)}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                
+                    
+                );
+            })}
+        </div>
 
 
         <div className="col-md-6">

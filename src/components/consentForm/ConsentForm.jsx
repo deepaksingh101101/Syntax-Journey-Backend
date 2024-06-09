@@ -141,27 +141,44 @@ const ConsentForm = () => {
 const [customFields, setCustomFields] = useState([])
 const handleCustomOptionChange = async (e, field) => {
     const optionValue = e.target.value;
-    setCustomOption(optionValue);  // Assuming setCustomOption updates state for the current option value
+    setCustomOption(optionValue);  // Assuming setCustomOption updates the state for the current option value
 
-    setCustomFields(prevFields => [
-        ...prevFields,
-        {
-            fieldName: field,
-            option: optionValue
+    // Update the customFields state array to modify the existing field or add a new one
+    setCustomFields(prevFields => {
+        const fieldIndex = prevFields.findIndex(f => f.fieldName === field);
+        const newField = { fieldName: field, option: optionValue };
+
+        if (fieldIndex !== -1) {
+            // If the field already exists, update it
+            return prevFields.map((item, index) => index === fieldIndex ? newField : item);
+        } else {
+            // If the field does not exist, add it
+            return [...prevFields, newField];
         }
-    ]);
-    
-    console.log(customFields)
-    
+    });
+
+    // Log the customFields state after the update (this will not immediately show the updated state)
+    console.log(customFields);
+
     // Ensure caseType is available here, either from state or props
     const temp = await getApi("get", `/api/template/getOptions?caseType=${encodeURIComponent(caseType)}&fieldName=${encodeURIComponent(field)}&optionName=${encodeURIComponent(optionValue)}`);
     console.log(temp);
 
     if (temp?.data) {
-        // Assume setOptionsArray is the setter for the array state
-        setSingleOptionData(prevOptions => [...prevOptions, temp.data]);
+        // Update singleOptionData by either adding new data or updating existing
+        setSingleOptionData(prevOptions => {
+            const index = prevOptions.findIndex(option => option.fieldName === field);
+            if (index !== -1) {
+                // If data exists for this field, update it
+                return prevOptions.map((opt, idx) => idx === index ? {...opt, ...temp.data} : opt);
+            } else {
+                // If no data exists for this field, add new data
+                return [...prevOptions, {...temp.data, fieldName: field}];
+            }
+        });
     }
-}
+};
+
 
 
 

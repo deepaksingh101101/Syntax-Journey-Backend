@@ -503,19 +503,27 @@ const handleCustomImageSelect = async (event) => {
 
 
 const handleSubmitCustomEdit = () => {
-  if (customEditIndex !== null && optionIndex !== null) {
+  if (customEditIndex !== null) {
     // Make a deep copy of customFields to mutate
     const updatedCustomFields = [...customFields];
     const fieldOptions = [...updatedCustomFields[customEditIndex].options];
 
-    // Update the specific option
-    fieldOptions[optionIndex] = {
-      ...fieldOptions[optionIndex],
+    // Prepare the new or updated option object
+    const newOption = {
       name: customOptionName,
       description: tempOptionDescription,
       videoUrl: customOptionVideo,
       imageUrl: tempOptionImage,
     };
+
+    // Check if optionIndex is defined, if not, add the new option to the end of the list
+    if (typeof optionIndex !== 'undefined' && optionIndex !== null) {
+      // Update the specific option
+      fieldOptions[optionIndex] = newOption;
+    } else {
+      // Add new option to the end of the options list
+      fieldOptions.push(newOption);
+    }
 
     // Update the options in the field
     updatedCustomFields[customEditIndex] = {
@@ -525,11 +533,13 @@ const handleSubmitCustomEdit = () => {
 
     // Update the customFields state
     setCustomFields(updatedCustomFields);
+    console.log(updatedCustomFields);
 
   } else {
-    console.error('Invalid indices for editing custom field option');
+    console.error('Invalid index for editing custom field option');
   }
 };
+
 
 
 
