@@ -44,6 +44,7 @@ const getAllcaseType=async()=>{
     gaurdianName:res?.data?.consent?.gaurdianName,
     address:res?.data?.consent?.address,
     relation:res?.data?.consent?.relation,
+    question:res?.data?.consent?.question
    })
    setCaseType(res?.data?.consent?.caseType)
    setImageUrl(res?.data?.consent?.signatureUrl)
@@ -142,6 +143,9 @@ useEffect(() => {
       
    const handleConsentSubmit=async(e)=>{
 e.preventDefault();
+
+
+
 if(consentData?.mobileNo?.length!=10){
     setMobileRedBorder(true);
     window.scrollTo(0,0)
@@ -160,13 +164,21 @@ setCustomFieldsArray(Object.keys(customOption).map(fieldName => ({
     option: customOption[fieldName]
 })))
 
+
+const questionsObject = questionsArray.reduce((acc, { question, answer }) => {
+    acc[question] = answer;
+    return acc;
+  }, {});
+  
+
 const data = {
     ...consentData,
     signatureUrl: imageUrl,
     updatedBy:JSON.parse(localStorage.getItem('user'))?.user?.email,
     caseType:caseType,
-    question: inputValues,
-    customFields:customFieldsArray
+    // question: inputValues,
+    customFields:customFieldsArray,
+    question:questionsObject
 };
 
 try {
@@ -289,6 +301,35 @@ const handleCaseTypeChange = async (e) => {
     console.log(temp?.data)
     // setSingleConsentData(temp?.data?.template)
 }
+
+const questionsArray2 = consentData?.question
+  ? Object.entries(consentData?.question).map(([question, answer]) => ({
+      question,
+      answer,
+    }))
+  : [];
+
+const [questionsArray, setQuestionsArray] = useState(questionsArray2);
+
+useEffect(() => {
+  const updatedQuestionsArray = consentData?.question
+    ? Object.entries(consentData?.question).map(([question, answer]) => ({
+        question,
+        answer,
+      }))
+    : [];
+  setQuestionsArray(updatedQuestionsArray);
+}, [consentData]);
+
+const handleChangeAnswer = (question, newAnswer) => {
+  setQuestionsArray(prevQuestionsArray => 
+    prevQuestionsArray.map(q => 
+      q.question === question ? { ...q, answer: newAnswer } : q
+    )
+  );
+};
+
+// console.log(questionsArray);
 
 const handleCaseTypeUseEffect = async (caseType) => {
     setCaseType(caseType)
@@ -619,23 +660,25 @@ const [singleConsentEditData, setSingleConsentEditData] = useState()
 
         <div className='mt-2' >
             <h3>Questions</h3>
-      {Object.entries(singleConsentData?.question || {}).map(([que, index]) => (
-        <div key={index} className="col-md-12">
-            <label htmlFor={`ques-${index}`} className="form-label mt-1">
-            • {que}
-            </label>
-            <input
-                type="text"
-                className="form-control"
-                id={`ques-${index}`}
-                name='questions'
-                placeholder="Enter Your Answer"
-                value={inputValues[que] || index} // Use the key to fetch the value from state
-                onChange={(e) => handleAnswerChange(e, que)} // Pass the question key
-                required
-            />
+            <div className="row">
+            {questionsArray?.map(({ question, answer }, index) => (
+                <div key={index} className="col-md-12">
+                    <label htmlFor={`ques-${question}`} className="form-label mt-1">
+                        {question}
+                    </label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        id={`ques-${question}`}
+                        name="questions"
+                        placeholder="Enter Your Answer"
+                        value={answer}
+                        onChange={(e)=>{handleChangeAnswer(question, e.target.value)}}
+                    />
+                </div>
+            ))}
         </div>
-      ))}
+    
     </div>
 
 
