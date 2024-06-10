@@ -37,6 +37,10 @@ const ConsentForm = () => {
 
     }
 
+
+    const [smallLoader1, setsmallLoader1] = useState(false)
+    const [smallLoader2, setsmallLoader2] = useState(false)
+
     useEffect(() => {
         // Fetch case types when component mounts
         getAllcaseType();
@@ -126,6 +130,7 @@ const ConsentForm = () => {
     const quill = useRef();
 
     const handleCaseTypeChange = async (e) => {
+    setsmallLoader1(true)
         setCaseType(e.target.value)
         const res = await getApi("get", `/api/template/questionsByCaseType?caseType=${e.target.value}`);
         setAllQuestions(res?.data?.questions)
@@ -134,6 +139,8 @@ const ConsentForm = () => {
         console.log(temp)
         setValue(temp?.data?.deltaForm)
         setSingleConsentData(temp?.data)
+        console.log(temp?.data?.videoUrl)
+        setsmallLoader1(false)
         // setSingleConsentData(temp?.data?.template)
     }
 
@@ -350,7 +357,7 @@ const handleCustomOptionChange = async (e, field) => {
         className="form-control"
         id="Pname"
         placeholder="Enter Patient Name"
-        // required
+        required
         name="patientName"
         value={consentData.patientName}
         onChange={handleInputChange}
@@ -370,7 +377,7 @@ const handleCustomOptionChange = async (e, field) => {
                         id="Pid"
                         name='patientId'
                         placeholder="Enter Paitent Id"
-                         // required
+                         required
                         value={consentData.patientId}
                         onChange={handleInputChange}
                     />
@@ -386,7 +393,7 @@ const handleCustomOptionChange = async (e, field) => {
                 style={mobileRedBorder ? { border: "1px solid red" } : {}}
                 name='mobileNo'
                 placeholder="Enter Mobile Number"
-                // required
+                required
                 value={consentData.mobileNo}
                 onChange={handleInputChange}
             />
@@ -400,7 +407,7 @@ const handleCustomOptionChange = async (e, field) => {
                         className="form-control "
                         id="Paadhar"
                         placeholder="Enter Aadhar Number"
-                        // required
+                        required
                         style={aadharRedBorder ? { border: "1px solid red" } : {}}
 
                         value={consentData.adharCard}
@@ -415,12 +422,12 @@ const handleCustomOptionChange = async (e, field) => {
                     <select
                         className="form-control"
                         id="gender"
-                        // required
+                        required
                         value={consentData.gender}
                         onChange={handleInputChange}
                         name='gender'
                     >
-                        <option >Select Gender</option>
+                        <option  value=""  >Select Gender</option>
                         <option value="male">Male</option>
                         <option value="female">Female</option>
                         <option value="others">Others</option>
@@ -428,13 +435,13 @@ const handleCustomOptionChange = async (e, field) => {
                 </div>
                 <div className="col-md-4">
                     <label htmlFor="Pdob" className="form-label">
-                        D.O.B
+                        Date Of Birth
                     </label>
                     <input
                         type="date"
                         className="form-control "
                         id="Pdob"
-                        // required
+                        required
                         name='dob'
                         value={consentData.dob}
                         onChange={handleInputChange}
@@ -450,7 +457,7 @@ const handleCustomOptionChange = async (e, field) => {
                         className="form-control "
                         id="Gname"
                         placeholder="Enter Gaurdian Name"
-                        // required
+                        required
                         name='gaurdianName'
                         value={consentData.gaurdianName}
                         onChange={handleInputChange}
@@ -465,7 +472,7 @@ const handleCustomOptionChange = async (e, field) => {
                         className="form-control "
                         id="Paddress"
                         placeholder="Enter Patient Address"
-                        // required
+                        required
                         name='address'
                         value={consentData.address}
                         onChange={handleInputChange}
@@ -481,7 +488,7 @@ const handleCustomOptionChange = async (e, field) => {
                         className="form-control "
                         id="relation"
                         placeholder="Enter relation with patient"
-                        // required
+                        required
                         name='relation'
                         value={consentData.relation}
                         onChange={handleInputChange}
@@ -495,12 +502,12 @@ const handleCustomOptionChange = async (e, field) => {
                     <select
                         className="form-control"
                         id="caseType"
-                        // required
+                        required
                         name='caseType'
                         value={caseType}
                         onChange={handleCaseTypeChange}
                     >
-                        <option>Select Case Type</option> {/* Default placeholder option */}
+                        <option value="" >Select Case Type</option> {/* Default placeholder option */}
                         {/* Map each case type to an option element */}
                         {allCaseType?.map((caseType, index) => (
                             <option key={index} value={caseType}>{caseType.charAt(0).toUpperCase() + caseType.slice(1)}</option>
@@ -511,8 +518,11 @@ const handleCustomOptionChange = async (e, field) => {
 
               
 
-
-                {caseType && 
+{smallLoader1 && <div className="d-flex justify-content-center">
+    <Loader/>
+</div>
+}
+                {caseType && !smallLoader1 &&
                 
               
 
@@ -550,17 +560,28 @@ const handleCustomOptionChange = async (e, field) => {
                         </label>
 
                         <div className="video-container">
-      <video controls > {/* Adding controls and setting width */}
-        <source src={singleConsentData?.videoUrl} type="video/mp4" /> {/* Setting the video source and type */}
-        Your browser does not support the video tag. {/* Fallback message for unsupported browsers */}
-      </video>
+                        {/* <iframe height="fit-content" style={{height:"50vh",width:"30vw"}} src={singleConsentData?.videoUrl}  ></iframe> */}
+                        <iframe
+  width="380"
+  height="220"
+//   src="https://www.youtube.com/embed/IxYtTTCWCwk"
+  src={singleConsentData?.videoUrl}
+  frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowfullscreen>
+</iframe>
+
+      {/* <video controls > 
+        <source src={singleConsentData?.videoUrl} type="video/mp4" />
+        Your browser does not support the video tag.
+      </video> */}
     </div>
 </div>
 
 </div>
 </div>
 
-<div className="col-md-11 my-4">
+<div className="col-md-12 my-4">
 <div className="accordion" id="accordionExample">
 
 
@@ -606,10 +627,16 @@ const handleCustomOptionChange = async (e, field) => {
                         </label>
 
                         <div className="video-container">
-      <video controls > {/* Adding controls and setting width */}
-        <source src={singleConsentData?.videoUrl} type="video/mp4" /> {/* Setting the video source and type */}
-        Your browser does not support the video tag. {/* Fallback message for unsupported browsers */}
-      </video>
+   
+      <iframe
+  width="380"
+  height="220"
+//   src="https://www.youtube.com/embed/IxYtTTCWCwk"
+src={faq?.videoUrl}
+  frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowfullscreen>
+</iframe>
     </div>
 </div>
 </div>
@@ -626,6 +653,13 @@ const handleCustomOptionChange = async (e, field) => {
 
 
 {/* Custom Fields Started */}
+
+
+{caseType && !smallLoader1 && 
+    <div className="">
+
+
+
 <div  className="col-md-12">
 <h3>Custom Fields</h3>
 </div>
@@ -685,10 +719,12 @@ const handleCustomOptionChange = async (e, field) => {
                         </label>
 
                         <div className="video-container">
-      <video controls > {/* Adding controls and setting width */}
-        <source src={singleOptionData[index]?.videoUrl} type="video/mp4" /> {/* Setting the video source and type */}
-        Your browser does not support the video tag. {/* Fallback message for unsupported browsers */}
-      </video>
+            <iframe height="fit-content" style={{height:"50vh",width:"30vw"}} src={singleOptionData[index]?.videoUrl}  ></iframe>
+
+      {/* <video controls > 
+        <source src={singleOptionData[index]?.videoUrl} type="video/mp4" /> 
+        Your browser does not support the video tag.
+      </video> */}
     </div>
 </div>
 
@@ -706,11 +742,6 @@ const handleCustomOptionChange = async (e, field) => {
                 </div>
 )) 
 }
-
-
-
-
-
 <div  className="col-md-12">
 <h3 className='mt-3'>Questions</h3>
 </div>
@@ -733,7 +764,7 @@ const handleCustomOptionChange = async (e, field) => {
                         />
                     </div>
                 ))}
-
+</div>}
 
 <div className="col-md-12">
                     <button type='button' className="btn bg-primary-color text-light p-5 w-100  " data-bs-toggle="modal" data-bs-target="#uploadSurgenSignatureModal"><i className="fa-solid fa-file-signature"></i> Upload Surgen Signature</button>
@@ -757,7 +788,7 @@ const handleCustomOptionChange = async (e, field) => {
                         
                             <div className="modal-body">
                                 <SignatureCanvas
-                                    canvasProps={{width:1200,height:450, className: 'sigCanvas' }}
+                                    canvasProps={{width:1480,height:550, className: 'sigCanvas' }}
                                     ref={data => setSign(data)}
                                 />
                             </div>
@@ -781,7 +812,7 @@ const handleCustomOptionChange = async (e, field) => {
                         
                             <div className="modal-body">
                                 <SignatureCanvas
-                                    canvasProps={{width:1200,height:450, className: 'sigCanvas' }}
+                                    canvasProps={{width:1480,height:550, className: 'sigCanvas' }}
                                     ref={data => setSurgenSign(data)}
                                 />
                             </div>

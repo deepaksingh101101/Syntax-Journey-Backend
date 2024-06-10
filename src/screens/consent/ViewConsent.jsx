@@ -500,7 +500,7 @@ const prindPdf = async () => {
                  </label>
                  <span className="form-label">
                 Option {item.option}                        </span>
-                 
+                
              </div>
             ))}
 
