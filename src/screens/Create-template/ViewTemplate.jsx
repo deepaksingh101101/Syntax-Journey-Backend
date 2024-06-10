@@ -109,15 +109,6 @@ export default function ViewTemplate() {
 </div>
 </div>
 
-
- 
-
-
-
-
-
-
-
 <div className="col-md-11 my-4">
 <div className="accordion" id="accordionExample">
 
