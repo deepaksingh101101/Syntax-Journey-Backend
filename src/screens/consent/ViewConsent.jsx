@@ -529,7 +529,7 @@ const prindPdf = async () => {
 
 <div className="col-md-10 w-100    px-2 px-sm-3 px-md-5 px-lg-5 ">
     
-<button className='btn btn-primary w-100 mt-3' type="button" onClick={prindPdf} >Print</button>
+{/* <button className='btn btn-primary w-100 mt-3' type="button" onClick={prindPdf} >Print</button> */}
 </div>
 
 
