@@ -221,19 +221,23 @@ try {
     console.log(fieldIndex?.options[index]?.name)
 
     setCustomOptionName(fieldIndex?.options[index]?.name)
-    setTempOptionDescription(fieldIndex?.options[index]?.description)
+    // setTempOptionDescription(fieldIndex?.options[index]?.description)
+    setTempOptionDescriptionEdit(fieldIndex?.options[index]?.description)
     setCustomOptionVideo(fieldIndex?.options[index]?.videoUrl)
     setTempOptionImage(fieldIndex?.options[index]?.imageUrl)
+    
    }
   
    const [faqs, setFaqs] = useState([]);
    const [faqTitle, setFaqTitle] = useState('');
    const [faqDescription, setFaqDescription] = useState('');
+   const [editFaqDescription, setEditFaqDescription] = useState('');
    const [faqVideoUrl, setFaqVideoUrl] = useState('');
    const [faqImages, setFaqImages] = useState([]);
-   const faqQuill = useRef(null); 
-   const customQuill = useRef(null); 
-   const optionsQuill = useRef(null); 
+   const faqQuill = useRef(); 
+   const editFaqQuill = useRef(); 
+   const customQuill = useRef(); 
+   const optionsQuill = useRef(); 
 
    const handlefaqImageSelect = async (event) => {
     setImageLoader(true)
@@ -321,7 +325,8 @@ try {
     
     // Set the states with the values from the selected FAQ
     setFaqTitle(selectedFaq?.title);
-    setFaqDescription(selectedFaq?.description);
+    // setFaqDescription(selectedFaq?.description);
+    setEditFaqDescription(selectedFaq?.description);
     setFaqVideoUrl(selectedFaq?.videoUrl);
     setFaqImages(selectedFaq?.imageUrl);
   
@@ -337,7 +342,7 @@ const handleSubmitEdit = () => {
   // Create a new FAQ object with the updated data
   const newFaq = {
     title: faqTitle,
-    description: faqDescription,
+    description: editFaqDescription,
     videoUrl: faqVideoUrl,
     imageUrl: faqImages,
   };
@@ -373,7 +378,8 @@ const handleSubmitCustomEdit = () => {
       ...newOptions[optionIndex],
       name: customOptionName,
       videoUrl: customOptionVideo,
-      imageUrl: tempOptionImage
+      imageUrl: tempOptionImage,
+      description:tempOptionDescriptionEdit
     };
 
     // Replace the options array in the specific custom field
@@ -389,6 +395,7 @@ const handleSubmitCustomEdit = () => {
     setCustomOptionName('');
     setCustomOptionVideo('');
     setTempOptionImage([]);
+    setTempOptionDescriptionEdit('');
     // Reset the editing indices if needed
     setCustomEditIndex(null);
     setOptionIndex(null);
@@ -412,6 +419,7 @@ const handleSubmitCustomEdit = () => {
   const [key, setkey] = useState()
   const [tempOption, setTempOption] = useState()
   const [tempOptionDescription, setTempOptionDescription] = useState()
+  const [tempOptionDescriptionEdit, setTempOptionDescriptionEdit] = useState()
   const [tempOptionVideo, setTempOptionVideo] = useState()
   const [tempOptionImage, setTempOptionImage] = useState([])
   const [keyValues, setKeyVaues] = useState()
@@ -443,6 +451,7 @@ const handleSubmitCustomEdit = () => {
       };
       setTempOption("")
       setTempOptionDescription("")
+      setTempOptionDescriptionEdit("")
       setTempOptionImage([])
       setTempOptionVideo([])
       console.log("Updated existing field with new option:", updatedFields);
@@ -598,12 +607,12 @@ const handleSubmitCustomEdit = () => {
   <div className="col-md-12" id="faqDescription">
     <label htmlFor="faqDescription" className="form-label">FAQ's Description</label>
     <QuillEditor
-      ref={faqQuill}
+      ref={editFaqQuill}
       theme="snow"
-      value={faqDescription}
+      value={editFaqDescription}
       formats={formats}
       modules={modules}
-      onChange={setFaqDescription}
+      onChange={setEditFaqDescription}
     />
   </div>
   <div className="col-md-12">
@@ -753,10 +762,10 @@ const handleSubmitCustomEdit = () => {
               <QuillEditor
                 ref={customQuill}
                 theme="snow"
-                value={tempOptionDescription}
+                value={tempOptionDescriptionEdit}
                 formats={formats}
                 modules={modules}
-                onChange={setTempOptionDescription}
+                onChange={setTempOptionDescriptionEdit}
               />
             </div>
             <div className="col-md-12">
