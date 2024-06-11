@@ -12,6 +12,8 @@ const ConsentForm = () => {
     const OPTIONS = { options: { fileName: 'custom-name', fileType: 'webm', height: 1080, width: 1920 } }
     const { createRecording, openCamera, startRecording, stopRecording, closeCamera, clearAllRecordings } = useRecordWebcam()
     const [loader, setLoader] = useState(false);
+    const [surgenLoader, setSurgenLoader] = useState(false);
+    const [generalLoader, setGeneralLoader] = useState(false);
 
 
     const navigate = useNavigate();
@@ -62,6 +64,7 @@ const ConsentForm = () => {
 
     const [imageUrl, setImageUrl] = useState()
     const generateSign = async () => {
+        setGeneralLoader(true)
         // Assuming sign is defined somewhere in your code
         const base64 = sign.getTrimmedCanvas().toDataURL('image/png');
 
@@ -84,13 +87,16 @@ const ConsentForm = () => {
         try {
             const response = await uploadImage("/api/consent/uploadImage", formData);
             setImageUrl(response?.imageUrls[0])
+            setGeneralLoader(false)
         } catch (error) {
             console.log(error);
+            setGeneralLoader(false)
         }
     };
 
     const [surgenImageUrl, setSurgenImageUrl] = useState()
     const generateSurgenSign = async () => {
+        setSurgenLoader(true)
         // Assuming sign is defined somewhere in your code
         const base64 = sign.getTrimmedCanvas().toDataURL('image/png');
 
@@ -113,7 +119,9 @@ const ConsentForm = () => {
         try {
             const response = await uploadImage("/api/consent/uploadImage", formData);
             setSurgenImageUrl(response?.imageUrls[0])
+            setSurgenLoader(false)
         } catch (error) {
+            setSurgenLoader(false)
             console.log(error);
         }
     };
@@ -767,11 +775,40 @@ src={faq?.videoUrl}
 </div>}
 
 <div className="col-md-12">
-                    <button type='button' className="btn bg-primary-color text-light p-5 w-100  " data-bs-toggle="modal" data-bs-target="#uploadSurgenSignatureModal"><i className="fa-solid fa-file-signature"></i> Upload Surgen Signature</button>
+<button
+  type='button'
+  className=" d-flex justify-content-center align-items-center btn bg-primary-color text-light p-5 w-100"
+  data-bs-toggle="modal"
+  data-bs-target="#uploadSurgenSignatureModal"
+>
+  <i className="fa-solid fa-file-signature me-2"></i>
+  {surgenImageUrl ? 'Signature Uploaded' : 'Upload Surgen Signature'}
+
+  
+                                {surgenLoader && <div  className="d-flex mx-3 justify-content-end align-items-center">
+                                     <div style={{height:"20px",width:"20px"}} className="spinner-border text-white" role="status">
+
+</div>
+                                 </div>}
+
+                                 
+</button>
                 </div>
 
                 <div className="col-md-6">
-                    <button type='button' className="btn bg-primary-color text-light p-5 w-100  " data-bs-toggle="modal" data-bs-target="#uploadSignatureModal"><i className="fa-solid fa-file-signature"></i> Upload Signature</button>
+                    <button type='button' 
+                    className=" d-flex justify-content-center align-items-center btn bg-primary-color text-light p-5 w-100  " 
+                    data-bs-toggle="modal"
+                     data-bs-target="#uploadSignatureModal">
+                        <i className="fa-solid fa-file-signature mx-2">
+                        </i>
+                        {imageUrl ? 'Signature Uploaded' : 'Upload Signature'}
+                        {generalLoader && <div  className="d-flex mx-3 justify-content-end align-items-center">
+                                     <div style={{height:"20px",width:"20px"}} className="spinner-border text-white" role="status">
+
+</div>
+                                 </div>}
+                         </button>
                 </div>
 
              
@@ -811,6 +848,7 @@ src={faq?.videoUrl}
                         </div>
                         
                             <div className="modal-body">
+                               
                                 <SignatureCanvas
                                     canvasProps={{width:1480,height:550, className: 'sigCanvas' }}
                                     ref={data => setSurgenSign(data)}
