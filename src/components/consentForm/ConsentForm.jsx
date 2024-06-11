@@ -98,7 +98,7 @@ const ConsentForm = () => {
     const generateSurgenSign = async () => {
         setSurgenLoader(true)
         // Assuming sign is defined somewhere in your code
-        const base64 = sign.getTrimmedCanvas().toDataURL('image/png');
+        const base64 = surgenSign.getTrimmedCanvas().toDataURL('image/png');
 
         // Convert base64 string to Blob
         const base64ToBlob = (base64) => {
@@ -682,7 +682,8 @@ src={faq?.videoUrl}
                         id="caseType"
                         // required
                         name='caseType'
-                        value={customOption}
+                        // value={customOption}
+                        value={customFields[index]?.option?customFields[index]?.option:customOption}
                         onChange={(e) => handleCustomOptionChange(e, custom?.fieldName)}
                         >
                         <option>Select {custom?.fieldName}</option> {/* Default placeholder option */}
@@ -750,6 +751,7 @@ src={faq?.videoUrl}
                 </div>
 )) 
 }
+
 <div  className="col-md-12">
 <h3 className='mt-3'>Questions</h3>
 </div>
@@ -772,6 +774,7 @@ src={faq?.videoUrl}
                         />
                     </div>
                 ))}
+
 </div>}
 
 <div className="col-md-12">
@@ -812,6 +815,267 @@ src={faq?.videoUrl}
                 </div>
 
              
+{/* modal for prview */}
+
+
+<div className="modal fade" id="previewModal" tabIndex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                    <div className="modal-dialog modal-fullscreen">
+                        <div className="modal-content">
+                        <div className="modal-header d-flex justify-content-between">
+                        <h2 className='text-center' >Preview Consent Form</h2>
+                            <button type="button" className="btn-close ms-auto p-4 " data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        
+                            <div className="modal-body">
+                                <div className="row d-flex justify-content-between">
+
+                               
+                                <div className="col-md-5 borderC mx-3 d-flex flex-column mb-5 justify-content-center ">
+                        <label htmlFor="Pname" className="form-label">
+                            Patient Name
+                        </label>
+                        <span className="form-label">
+                            {consentData?.patientName}
+                        </span>
+                        
+                    </div>
+                    <div className="col-md-5 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
+                        <label htmlFor="patientId" className="form-label">
+                        Case Type
+                        </label>
+                        <span className="form-label">
+                    {caseType}            </span>
+                        
+                    </div>
+                    <div className="col-md-5 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
+                        <label htmlFor="patientId" className="form-label">
+                        Patient Id
+                        </label>
+                        <span className="form-label">
+                        {consentData?.patientId}                      </span>
+                        
+                    </div>
+                    <div className="col-md-5 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
+                        <label htmlFor="adharCard" className="form-label">
+                            Aadhar Number
+                        </label>
+                        <span className="form-label">
+                        {consentData?.adharCard}
+                        </span>
+                        
+                    </div>
+                    <div className="col-md-5 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
+                        <label htmlFor="gaurdianName" className="form-label">
+                        Gaurdian Name
+                        </label>
+                        <span className="form-label">
+                       {consentData?.gaurdianName}                       </span>
+                        
+                    </div>
+                    <div className="col-md-5 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
+                        <label htmlFor="gaurdianName" className="form-label">
+                        Relation With Patient
+                        </label>
+                        <span className="form-label">
+                       {consentData?.relation}                       </span>
+                        
+                    </div>
+                    <div className="col-md-5 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
+                        <label htmlFor="mobileNo" className="form-label">
+                        Mobile Number
+                        </label>
+                        <span className="form-label">
+                        {consentData?.mobileNo }                       </span>
+                        
+                    </div>
+                    <div className="col-md-5 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
+                        <label htmlFor="gaurdianName" className="form-label">
+                        Gender
+                        </label>
+                        <span className="form-label">
+                       {consentData?.gender}                       </span>
+                        
+                    </div>
+                   
+                   
+                    
+                    <div className="col-md-5 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
+                        <label htmlFor="gaurdianName" className="form-label">
+                        Address
+                        </label>
+                        <span className="form-label">
+                       {consentData?.address}                       </span>
+                        
+                    </div>
+                    <div className="col-md-5 borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
+                        <label htmlFor="gaurdianName" className="form-label">
+                        Date Of Birth
+                        </label>
+                        <span className="form-label">
+                       {consentData?.dob}                       </span>
+                        
+                    </div>
+
+                    </div>
+                    <div className="row d-flex justify-content-center">
+
+                    
+                    <div className="col-md-11  borderC mx-3 d-flex mb-5 flex-column justify-content-center ">
+                    { singleConsentData?.customFields?.map((custom,index)=>(
+    <div key={index} className="col-md-12">
+                    <label htmlFor="caseType" className="form-label">
+                       {customFields[index]?.fieldName} -: 
+                    </label>
+                    <span className="form-label">
+                    {customFields[index]?.option}
+
+                         </span>
+
+                         {customFields[index]?.option &&    <div className="col-md-12">
+                    <div className="col-md-11 my-4">
+  <div className="row">
+
+ 
+<label htmlFor="created By" className="form-label">
+                        {singleConsentData?.caseType}
+                        {/* {customFields[index]?.fieldName} */}
+                        </label>
+<div className="col-md-7 height_of_quill">
+<QuillEditor
+            theme="snow"
+            value={singleOptionData[index]?.description}
+            readOnly={true} // Set readOnly to true to disable editing
+            modules={{
+                toolbar: false, // Hide the toolbar
+              }}
+          />
+<div className="">
+{singleOptionData[index]?.imageUrl?.map((image,index)=>(
+
+
+<img style={{height:"200px", width:"250px"}} alt='' key={index} src={image}/>
+
+
+))}
+</div>
+
+</div>
+<div className="col-md-2">
+<label htmlFor="created By" className="form-label">
+                        {singleConsentData?.caseType}
+                        </label>
+
+                        <div className="video-container">
+            <iframe height="fit-content" style={{height:"50vh",width:"30vw"}} src={singleOptionData[index]?.videoUrl}  ></iframe>
+
+      {/* <video controls > 
+        <source src={singleOptionData[index]?.videoUrl} type="video/mp4" /> 
+        Your browser does not support the video tag.
+      </video> */}
+    </div>
+</div>
+
+</div>
+</div>
+
+                </div>}
+
+
+
+
+
+
+
+                </div>
+)) 
+}
+                        
+                    </div>
+
+
+                    {/* Question likho */}
+
+                    <div  className="col-md-12">
+<h3 className='mt-3 text-center'>Questions</h3>
+</div>
+
+
+{allQuestions?.map((que, index) => (
+                    <div key={index} className="col-md-12 my-2">
+                        <label htmlFor={`ques-${index}`} className="form-label">
+                            <b>Question {index + 1} </b>   {que}
+                        </label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            id={`ques-${index}`}
+                            name='questions'
+                            placeholder="Enter Your Answer"
+                            readOnly={true}
+                            value={inputValues[index] || ''} // Use inputValues state to populate input value
+                            // onChange={(e) => handleAnswerChange(e, index)} // Pass index to identify which input is being changed
+                            // required
+                        />
+                       
+                    </div>
+                ))}
+
+
+
+<div className="col-md-10 borderC mx-3  d-flex flex-column mb-5 justify-content-center ">
+                        <label htmlFor="caseType" className="form-label">
+                             Surgen Signature
+                        </label>
+                        <img style={{height:"200px",width:"300px"}} src={surgenImageUrl} alt=''></img>
+
+        
+                        
+                    </div>
+<div className="col-md-10 borderC mx-3  d-flex  py-3 flex-column mb-5 justify-content-center ">
+                        <label htmlFor="caseType" className="form-label">
+                             Patient Signature
+                        </label>
+                        <img style={{height:"200px",width:"300px"}} src={imageUrl} alt=''></img>
+                       
+                        
+                    </div>
+
+
+                    </div>
+{/* Custom form modal */}
+                    
+                
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-secondary"  >Close</button>
+                                {/* <button type="button" className="btn btn-main" data-bs-dismiss="modal" onClick={generateSign}>Save changes</button> */}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                 {/* ----modal--- */}
 
@@ -904,7 +1168,30 @@ src={faq?.videoUrl}
                 </div>
 
                 <div className="col-md-6">
-                    <button type="button" className="btn bg-primary-color text-light p-5 w-100  " data-bs-toggle="modal" data-bs-target="#uploadVideoModal"><i className="fa-solid fa-video"></i> Capture Consent Video</button>
+                    <button type="button" className="btn bg-primary-color text-light p-5 w-100  " data-bs-toggle="modal" data-bs-target="#uploadVideoModal"><i className="fa-solid fa-video"></i> {videoUrlState?'Captured':'Capture Consent Video'}</button>
+                </div>
+
+
+
+                <div className="col-md-12">
+<button
+  type='button'
+  className=" d-flex justify-content-center align-items-center btn bg-primary-color text-light  w-100"
+  data-bs-toggle="modal"
+  data-bs-target="#previewModal"
+>
+  <i className="fa-solid fa-file-signature me-2"></i>
+  Preview Form
+
+  
+                                {/* {surgenLoader && <div  className="d-flex mx-3 justify-content-end align-items-center">
+                                     <div style={{height:"20px",width:"20px"}} className="spinner-border text-white" role="status">
+
+</div>
+                                 </div>} */}
+
+                                 
+</button>
                 </div>
 
                 <div className="col-12">
