@@ -898,7 +898,7 @@ const handleSubmitCustomEdit = () => {
         </div>
 
         <div className="col-md-12">
-  <label className="btn bg-primary-color text-light w-100 p-5">
+  <label className="btn bg-primary-color text-light w-100 ">
     <i className="fa-solid fa-file-signature"></i> Upload Image
     <input
       type="file"

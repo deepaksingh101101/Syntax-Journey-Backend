@@ -572,10 +572,15 @@ const [singleConsentEditData, setSingleConsentEditData] = useState()
                         </label>
 
                         <div className="video-container">
-      <video controls > {/* Adding controls and setting width */}
-        <source src={singleConsentEditData?.videoUrl} type="video/mp4" /> {/* Setting the video source and type */}
-        Your browser does not support the video tag. {/* Fallback message for unsupported browsers */}
-      </video>
+                        <iframe
+  width="380"
+  height="220"
+//   src="https://www.youtube.com/embed/IxYtTTCWCwk"
+src={singleConsentEditData?.videoUrl}  frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowfullscreen>
+</iframe>
+
     </div>
 </div>
 
@@ -628,10 +633,17 @@ const [singleConsentEditData, setSingleConsentEditData] = useState()
                         </label>
 
                         <div className="video-container">
-      <video controls > {/* Adding controls and setting width */}
-        <source src={singleConsentData?.videoUrl} type="video/mp4" /> {/* Setting the video source and type */}
-        Your browser does not support the video tag. {/* Fallback message for unsupported browsers */}
-      </video>
+                        <iframe
+  width="380"
+  height="220"
+//   src="https://www.youtube.com/embed/IxYtTTCWCwk"
+src={singleConsentData?.videoUrl}
+ frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowfullscreen>
+</iframe>
+
+     
     </div>
 </div>
 </div>

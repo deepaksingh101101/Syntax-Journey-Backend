@@ -112,6 +112,7 @@ setOtp(newOtp)
 
 const [emailF, setEmailF] = useState("")
 
+const [isSendOtpClicked, setIsSendOtpClicked] = useState(false)
 
 const handleSendOtp=async()=>{
   setErrorMessage("")
@@ -121,10 +122,13 @@ setErrorMessage("Please Enter your email")
 return
 }
 
+
+
 try {
   let res=await postApi("post","api/user/forgetPassword",{email:emailF})
 console.log(res)
 if(res?.data?.status===true){
+  setIsSendOtpClicked(true)
   Toast.fire({
     icon: "success",
     title: "OTP sended to your email"
@@ -313,7 +317,7 @@ setLoading(false)
               </div>}
 
 
-             {forgetPasswordActive && !isOtpVerfied && <div className="mb-3 mt-3">
+             {forgetPasswordActive && !isOtpVerfied && isSendOtpClicked && <div className="mb-3 mt-3">
                 <label htmlFor="otp" className="form-label">
                   OTP
                 </label>
