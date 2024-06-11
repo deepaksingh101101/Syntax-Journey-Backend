@@ -122,6 +122,11 @@ export default function ConsentList() {
     actions: generateActionButtons(row),
   }));
 
+
+  const handleSearchSubmit=(e)=>{
+e.preventDefault()
+return
+  }
   return (
     <>
       {loader && (
@@ -135,7 +140,7 @@ export default function ConsentList() {
         <div style={{ minHeight: '90vh' }} className="container consentForm p-5">
           <div className="d-flex align-items-center mb-3 pb-3 justify-content-end">
             <div className="search-container">
-              <form className="d-flex flex-row-reverse" role="search">
+              <form onSubmit={handleSearchSubmit}  className="d-flex flex-row-reverse" role="search">
                 <input
                   className="form-control me-2"
                   type="search"

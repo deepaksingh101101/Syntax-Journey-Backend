@@ -113,6 +113,7 @@ setOtp(newOtp)
 const [emailF, setEmailF] = useState("")
 
 const [isSendOtpClicked, setIsSendOtpClicked] = useState(false)
+const [isOtpSended, setIsOtpSended] = useState(false)
 
 const handleSendOtp=async()=>{
   setErrorMessage("")
@@ -129,6 +130,7 @@ try {
 console.log(res)
 if(res?.data?.status===true){
   setIsSendOtpClicked(true)
+  setIsOtpSended(true)
   Toast.fire({
     icon: "success",
     title: "OTP sended to your email"
@@ -354,7 +356,7 @@ setLoading(false)
                   {loading && <div style={{height:"16px", width:"16px"}} className=" ms-3   spinner-border text-light" role="status">
                   </div>}
                 </button>}
-               {forgetPasswordActive  && !isOtpVerfied && <button type="submit" disabled={loading} className="btn fw-bold ">
+               {forgetPasswordActive  && !isOtpVerfied && <button type="submit" disabled={!isOtpSended || loading} className="btn fw-bold ">
                   Verfiy Otp
                   {loading && <div style={{height:"16px", width:"16px"}} className=" ms-3   spinner-border text-light" role="status">
                   </div>}
