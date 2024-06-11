@@ -99,10 +99,20 @@ export default function ViewTemplate() {
                         </label>
 
                         <div className="video-container">
-      <video controls > {/* Adding controls and setting width */}
-        <source src={singleConsentData?.videoUrl} type="video/mp4" /> {/* Setting the video source and type */}
-        Your browser does not support the video tag. {/* Fallback message for unsupported browsers */}
-      </video>
+    
+      {/* <iframe "  
+      ></iframe> */}
+
+<iframe
+  width="380"
+  height="220"
+  src={singleConsentData?.videoUrl}
+  frameborder="0"
+  allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowfullscreen>
+</iframe>
+      
+
     </div>
 </div>
 
@@ -155,10 +165,15 @@ export default function ViewTemplate() {
                         </label>
 
                         <div className="video-container">
-      <video controls > {/* Adding controls and setting width */}
-        <source src={singleConsentData?.videoUrl} type="video/mp4" /> {/* Setting the video source and type */}
-        Your browser does not support the video tag. {/* Fallback message for unsupported browsers */}
-      </video>
+      
+      <iframe
+  width="380"
+  height="220"
+  src={singleConsentData?.videoUrl}
+    frameborder="0"
+  allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowfullscreen>
+</iframe>
     </div>
 </div>
 </div>
@@ -233,10 +248,14 @@ export default function ViewTemplate() {
                         </label> */}
 
                         <div className="video-container">
-      <video controls > {/* Adding controls and setting width */}
-        <source src={option?.videoUrl} type="video/mp4" /> {/* Setting the video source and type */}
-        Your browser does not support the video tag. {/* Fallback message for unsupported browsers */}
-      </video>
+     
+      <iframe
+  width="380"
+  height="220"
+  src={option?.videoUrl}    frameborder="0"
+  allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowfullscreen>
+</iframe>
     </div>
 </div>
 </>

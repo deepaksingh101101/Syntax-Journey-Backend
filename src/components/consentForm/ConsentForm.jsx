@@ -254,8 +254,8 @@ const handleCustomOptionChange = async (e, field) => {
             ...consentData,
             signatureUrl: imageUrl,
             surgenSignatureUrl: surgenImageUrl,
-            // VideoUrl: videoUrlState,
-            VideoUrl: "hello",
+            VideoUrl: videoUrlState,
+            // VideoUrl: "hello",
             caseType: caseType,
             createdBy: JSON.parse(localStorage.getItem('user'))?.user?.email,
             question: allQuestions.reduce((acc, question, index) => {
@@ -320,6 +320,7 @@ const handleCustomOptionChange = async (e, field) => {
     const saveRecoding = async () => {
         setLoading(true);
         const formData = new FormData();
+        console.log( recordedState?.blob)
         formData.append('video', recordedState?.blob, 'recorded.webm');
         try {
 
@@ -572,10 +573,9 @@ const handleCustomOptionChange = async (e, field) => {
                         <iframe
   width="380"
   height="220"
-//   src="https://www.youtube.com/embed/IxYtTTCWCwk"
   src={singleConsentData?.videoUrl}
   frameborder="0"
-  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
   allowfullscreen>
 </iframe>
 
@@ -609,7 +609,7 @@ const handleCustomOptionChange = async (e, field) => {
 {/* <label htmlFor="created By" className="form-label">
                         {faq?.caseType}
                         </label> */}
-<div className="col-md-7 height_of_quill">
+<div className="col-md-7 ">
 <QuillEditor
             theme="snow"
             value={faq?.description}
@@ -636,15 +636,17 @@ const handleCustomOptionChange = async (e, field) => {
 
                         <div className="video-container">
    
-      <iframe
-  width="380"
+ 
+                        <iframe
+  width="391" 
   height="220"
-//   src="https://www.youtube.com/embed/IxYtTTCWCwk"
-src={faq?.videoUrl}
-  frameborder="0"
-  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-  allowfullscreen>
+  src={faq?.videoUrl}
+  frameborder="0" 
+  autoPlay={false}
+  allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowfullscreen>  
 </iframe>
+
     </div>
 </div>
 </div>
@@ -728,12 +730,21 @@ src={faq?.videoUrl}
                         </label>
 
                         <div className="video-container">
-            <iframe height="fit-content" style={{height:"50vh",width:"30vw"}} src={singleOptionData[index]?.videoUrl}  ></iframe>
+          
 
-      {/* <video controls > 
-        <source src={singleOptionData[index]?.videoUrl} type="video/mp4" /> 
-        Your browser does not support the video tag.
-      </video> */}
+
+
+<iframe
+  width="380"
+  height="220"
+//   src="https://www.youtube.com/embed/IxYtTTCWCwk"
+src={singleOptionData[index]?.videoUrl}
+  frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowfullscreen>
+</iframe>
+
+
     </div>
 </div>
 
@@ -785,7 +796,7 @@ src={faq?.videoUrl}
   data-bs-target="#uploadSurgenSignatureModal"
 >
   <i className="fa-solid fa-file-signature me-2"></i>
-  {surgenImageUrl ? 'Signature Uploaded' : 'Upload Surgen Signature'}
+  {surgenImageUrl ? 'Signature Uploaded' : 'Upload Surgeon Signature'}
 
   
                                 {surgenLoader && <div  className="d-flex mx-3 justify-content-end align-items-center">
@@ -1041,6 +1052,19 @@ src={faq?.videoUrl}
                     </div>
 
 
+                    <div className="col-md-10 borderC mx-3  d-flex  py-3 flex-column mb-5 justify-content-center ">
+                        <label htmlFor="caseType" className="form-label">
+                             Patient Video
+                        </label>
+                    <iframe
+  width="380"
+  height="500"
+  src={videoUrlState}
+  frameborder="0"
+  allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowfullscreen>
+</iframe>
+</div>
                     </div>
 {/* Custom form modal */}
                     

@@ -442,6 +442,11 @@ const prindPdf = async () => {
                             <video autoPlay  style={{width:"280px",height:"200px"}} src={singleConsentData?.VideoUrl}>
 
                             </video>
+
+                            {/* <iframe height="fit-content" style={{height:"50vh",width:"30vw"}} src={singleOptionData[index]?.videoUrl}  >
+
+                            </iframe> */}
+
                                                 </span>
                         
                     </div>
