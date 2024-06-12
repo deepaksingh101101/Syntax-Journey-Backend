@@ -570,14 +570,22 @@ const handleCustomOptionChange = async (e, field) => {
 
                         <div className="video-container">
                         {/* <iframe height="fit-content" style={{height:"50vh",width:"30vw"}} src={singleConsentData?.videoUrl}  ></iframe> */}
-                        <iframe
+                        {/* <iframe
   width="380"
   height="220"
   src={singleConsentData?.videoUrl}
   frameborder="0"
   allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
   allowfullscreen>
-</iframe>
+</iframe> */}
+{/* <iframe width="380" height="225"
+  src={singleConsentData?.videoUrl}
+  title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe> */}
+
+<iframe width="380" height="225"
+src={singleConsentData?.videoUrl}
+  title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 
       {/* <video controls > 
         <source src={singleConsentData?.videoUrl} type="video/mp4" />
@@ -637,7 +645,7 @@ const handleCustomOptionChange = async (e, field) => {
                         <div className="video-container">
    
  
-                        <iframe
+                        {/* <iframe
   width="391" 
   height="220"
   src={faq?.videoUrl}
@@ -645,7 +653,13 @@ const handleCustomOptionChange = async (e, field) => {
   autoPlay={false}
   allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
   allowfullscreen>  
-</iframe>
+</iframe> */}
+
+
+<iframe width="380" height="225"
+  src={faq?.videoUrl}
+  title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 
     </div>
 </div>
@@ -734,15 +748,13 @@ const handleCustomOptionChange = async (e, field) => {
 
 
 
-<iframe
-  width="380"
-  height="220"
-//   src="https://www.youtube.com/embed/IxYtTTCWCwk"
+
+
+<iframe width="380" height="225"
 src={singleOptionData[index]?.videoUrl}
-  frameborder="0"
-  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-  allowfullscreen>
-</iframe>
+title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+
 
 
     </div>
@@ -977,7 +989,13 @@ src={singleOptionData[index]?.videoUrl}
                         </label>
 
                         <div className="video-container">
-            <iframe height="fit-content" style={{height:"50vh",width:"30vw"}} src={singleOptionData[index]?.videoUrl}  ></iframe>
+           
+
+             <iframe width="380" height="225"
+src={singleOptionData[index]?.videoUrl} 
+title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+
 
       {/* <video controls > 
         <source src={singleOptionData[index]?.videoUrl} type="video/mp4" /> 
@@ -1056,14 +1074,14 @@ src={singleOptionData[index]?.videoUrl}
                         <label htmlFor="caseType" className="form-label">
                              Patient Video
                         </label>
-                    <iframe
-  width="380"
-  height="500"
+   
+
+<iframe width="380" height="225"
   src={videoUrlState}
-  frameborder="0"
-  allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-  allowfullscreen>
-</iframe>
+  title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+
+
 </div>
                     </div>
 {/* Custom form modal */}
