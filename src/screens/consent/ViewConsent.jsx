@@ -439,7 +439,7 @@ const prindPdf = async () => {
                         Video
                         </label>
                         <span className="form-label d-flex justify-content-center mt-2">
-                            <video autoPlay  style={{width:"280px",height:"200px"}} src={singleConsentData?.VideoUrl}>
+                            <video   controls={true} style={{width:"280px",height:"200px"}} src={singleConsentData?.VideoUrl}>
 
                             </video>
 
