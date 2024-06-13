@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import Loader from '../../components/loader/Loader';
 import { AreaTop } from '../../components';
 
+
 export default function ConsentList() {
   const [loader, setLoader] = useState(true);
   const [filteredData, setFilteredData] = useState([]);
