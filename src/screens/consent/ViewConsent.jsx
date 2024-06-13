@@ -493,9 +493,9 @@ const prindPdf = async () => {
                 </div> */}
 
 
-<div  className="col-md-10 w-100    px-2 px-sm-3 px-md-5 px-lg-5 mt-3">
+{singleConsentData?.customFields.length>=1 && <div  className="col-md-10 w-100    px-2 px-sm-3 px-md-5 px-lg-5 mt-3">
 <h3 className='text-center'>Custom Field's</h3>
-</div>   
+</div>   }
            
 
             {singleConsentData?.customFields?.map(item => (
@@ -514,7 +514,7 @@ const prindPdf = async () => {
 </div>       
 
 <div className='w-100' >
-            {Object.entries(singleConsentData.question).map(([key, value], index) => (
+            {Object.entries(singleConsentData?.question)?.map(([key, value], index) => (
                 <div key={index} className="col-md-10 w-100 px-2 px-sm-3 px-md-5 px-lg-5 mt-3">
                     <label htmlFor={`ques-${index}`} className="form-label w-100">
                         <b>Question {index + 1} </b> {key}
