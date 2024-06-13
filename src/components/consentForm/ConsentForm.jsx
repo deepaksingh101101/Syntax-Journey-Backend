@@ -283,39 +283,73 @@ const handleCustomOptionChange = async (e, field) => {
     
 
 
-    const handleClearVideo = () => {
 
-    }
 
 
 
     const [recordingState, setRecordingState] = useState()
 
-    const startRecoding = async () => {
-        setLoading(true);
-        const recording = await createRecording();
-
-
-        setRecordingState(recording);
-        await openCamera(recording?.id);
-        await startRecording(recording?.id);
-        setLoading(false);
-    };
+  
 
 
     const [recordedState, setRecordedState] = useState()
 
-    const stopRecoding = async () => {
-        const recorded = await stopRecording(recordingState?.id);
-        setRecordedState(recorded)
-        await closeCamera(recordingState?.id)
-        setShowPreview(true);
-        // Upload the blob to a back-end
-
-
-    };
 
     const [videoUrlState, setVideoUrlState] = useState();
+
+
+
+
+const handleClearVideo = () => {
+    // Reset state variables related to recordings
+    setRecordingState(undefined);
+    setRecordedState(undefined);
+    setShowPreview(false);
+
+    // Clear video sources
+    activeRecordings?.forEach(recording => {
+        if (recording.webcamRef.current) {
+            recording.webcamRef.current.srcObject = null;
+        }
+        if (recording.previewRef.current) {
+            recording.previewRef.current.srcObject = null;
+        }
+    });
+
+    // Clear loading state if it's still active
+    setLoading(false);
+
+    // Reset activeRecordings
+    // resetRecordings();
+    clearAllRecordings()
+};
+
+// Function to start recording
+const startRecoding = async () => {
+    setElapsedTime(0);
+    setLoading(true);
+    if (recordingState?.id) {
+        await stopRecording(recordingState.id);
+        await closeCamera(recordingState.id);
+    }
+
+    const recording = await createRecording();
+    setRecordingState(recording);
+    await openCamera(recording?.id);
+    await startRecording(recording?.id);
+    setLoading(false);
+};
+
+const stopRecoding = async () => {
+    const recorded = await stopRecording(recordingState?.id);
+    setRecordedState(recorded);
+    await closeCamera(recordingState?.id);
+    setShowPreview(true);
+    clearInterval(timerRef.current);
+
+};
+
+
 
     const saveRecoding = async () => {
         setLoading(true);
@@ -341,7 +375,7 @@ const handleCustomOptionChange = async (e, field) => {
         }
     }
 
-    const { activeRecordings } = useRecordWebcam()
+    let { activeRecordings } = useRecordWebcam()
     const [singleConsentData, setSingleConsentData] = useState()
     const [singleOptionData, setSingleOptionData] = useState([])
 
@@ -349,6 +383,19 @@ const handleCustomOptionChange = async (e, field) => {
    const [mobileRedBorder, setMobileRedBorder] = useState(false)
    const [aadharRedBorder, setAadharRedBorder] = useState(false)
 
+   const [elapsedTime, setElapsedTime] = useState(0);
+const timerRef = useRef(null);
+
+useEffect(() => {
+    if (recordingState) {
+        timerRef.current = setInterval(() => {
+            setElapsedTime(prevTime => prevTime + 1);
+        }, 1000);
+    } else {
+        clearInterval(timerRef.current);
+    }
+    return () => clearInterval(timerRef.current);
+}, [recordingState]);
 
     return (
         <>
@@ -1175,32 +1222,44 @@ title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; cli
 
                 <div className="modal fade" id="uploadVideoModal" tabIndex="-1" aria-labelledby="modalLabel" aria-hidden="true">
                     <div className="modal-dialog modal-fullscreen">
+               
                         <div className="modal-content">
-                            <button type="button" id='saveBtn' className="btn-close ms-auto p-4 " data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div className="modal-header d-flex justify-content-between">
+                    <h3 className='text-center' >Tap start recording button to start recording</h3>
+                            <button type="button" className="btn-close ms-auto p-2 " data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
                             {loading &&
-                                <div className="d-flex w-100 justify-content-center align-items-center">
+                                <div className="d-flex w-100 justify-content-center my-2 align-items-center">
                                     <Loader />
                                 </div>
                             }
                             <div className="modal-body d-flex align-items-center ">
-                                {activeRecordings.map(recording => (
-                                    <div key={recording.id} >
-                                        <h2 className={`text-center ${showPreview? 'd-none' : ''}`} >Your Camera</h2>
-                                        <video ref={recording.webcamRef} autoPlay className={`videoPreview ${showPreview? 'd-none' : ''}`} />
+                                {activeRecordings?.map(recording => (
+                                    <div key={recording?.id} >
+                                     <video ref={recording?.webcamRef} autoPlay className={`videoPreview ${showPreview? 'd-none' : ''}`} />
                                         <h2 className={`text-center ${!showPreview? 'd-none' : ''}`}>Your Video Preview</h2>
-                                        <video ref={recording.previewRef} controls className={`videoPreview ${!showPreview? 'd-none' : ''}`} />
+                                        <video ref={recording?.previewRef} controls className={`videoPreview ${!showPreview? 'd-none' : ''}`} />
                                     </div>
                                 ))}
                             </div>
                             <div className="modal-footer">
+                            <div className="timer">
+                            <div className="timer">
+                        {recordingState && !showPreview ? (
+                            `Recording Time: ${Math.floor(elapsedTime / 60)}:${elapsedTime % 60}`
+                        ) : (
+                            `Recorded Time: ${Math.floor(elapsedTime / 60)}:${elapsedTime % 60}`
+                        )}
+                    </div>                    </div>
                                 <button type="button" className="btn btn-secondary" onClick={handleClearVideo} >Reset</button>
-                                <button type="button" className="btn btn-main" onClick={startRecoding}>Start Recording </button>
-                                <button type="button" className="btn btn-danger" onClick={stopRecoding}>Stop Recording </button>
+                                <button type="button" disabled={showPreview} className="btn btn-main" onClick={startRecoding}>Start Recording </button>
+                                <button type="button" disabled={elapsedTime<=0 || showPreview} className="btn btn-danger" onClick={stopRecoding}>Stop Recording </button>
                                 <button
                                     type="button"
                                     className="btn btn-success"
                                     data-bs-dismiss={recordedState?.id && loading ? 'modal' : ''}
                                     onClick={saveRecoding}
+                                    disabled={!recordedState}
                                 >
                                     Save Recording
                                 </button>
