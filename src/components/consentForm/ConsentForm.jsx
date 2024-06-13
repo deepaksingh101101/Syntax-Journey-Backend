@@ -1177,7 +1177,7 @@ title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; cli
                 
                             </div>
                             <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary"  >Close</button>
+                                <button type="button" data-bs-dismiss="modal" className="btn btn-secondary"  >Close</button>
                                 {/* <button type="button" className="btn btn-main" data-bs-dismiss="modal" onClick={generateSign}>Save changes</button> */}
                             </div>
                         </div>
