@@ -16,6 +16,7 @@ import EditTemplate from "./screens/Create-template/EditTemplate";
 import CreateAdmin from "./screens/admin/CreateAdmin";
 import ViewAdmin from "./screens/admin/ViewAdmin";
 import {ValidSuperAdmin} from './middlewares/ValidSuperAdmin'
+import Stats from "./screens/stats/Stats";
 
 function App() {
   
@@ -33,7 +34,8 @@ function App() {
 
           <Route element={<PrivateComponent/>}> 
           <Route element={<BaseLayout />}>
-            <Route path="/Das" element={<Dashboard />} />
+            <Route path="/das" element={<Dashboard />} />
+            <Route path="/stats" element={<Stats />} />
             <Route path="/consentList" element={<ConsentList />} />
             <Route path="/viewConsent/:_id" element={<ViewConsent />} />
             <Route path="/editConsent/:_id" element={<EditConsent />} />
