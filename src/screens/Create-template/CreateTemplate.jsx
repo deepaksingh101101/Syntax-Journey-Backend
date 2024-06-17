@@ -46,6 +46,13 @@ function scrollToAndHighlightButton(elementId) {
 
   const submitHandler = async(event) => {
     event.preventDefault(); 
+
+    if(deltaContent.length<=0){
+scrollToAndHighlightButton("caseTypeEditor")
+    }
+
+
+
     if(questions?.length<=0){
       scrollToAndHighlightButton('question_add');
       return
@@ -253,6 +260,7 @@ try {
       const response = await uploadImage("/api/consent/uploadImage", formData);
       console.log(response);
       setFaqImages(prevUrls => [...prevUrls, ...response.imageUrls]); // Assuming the API responds with an array of image URLs
+      console.log(faqImages)
       setImageLoader(false)
     } catch (error) {
       setLoader(false);
@@ -263,7 +271,7 @@ try {
   
   const addFaq = () => {
 
-    if(faqTitle?.length<=0){
+    if(faqTitle?.length<=0 || faqDescription?.length<=0){
       return
     }
 
@@ -426,13 +434,30 @@ const handleSubmitCustomEdit = () => {
 
   const [options, setOptions] = useState([])
 
- const addThisOption = () => {
+ const addThisOption = (e) => {
+e.preventDefault()
+  
+
+// if(tempOption?.length<=0){
+//   scrollToAndHighlightButton('customOptions')
+//   return
+// }
+
+
+if(key.length<=0){
+    return
+}
+if(tempOption.length<=0){
+    return
+}
   const option = {
     name: tempOption,
     description: tempOptionDescription,
     videoUrl: tempOptionVideo,
     imageUrl: tempOptionImage,
   };
+
+
 
   // Log the new option being added
   console.log("Adding new option:", option);
@@ -552,6 +577,7 @@ const handleSubmitCustomEdit = () => {
       const response = await uploadImage("/api/consent/uploadImage", formData);
       console.log(response);
       setTempOptionImage(prevUrls => [...prevUrls, ...response.imageUrls]); // Assuming the API responds with an array of image URLs
+      console.log(tempOptionImage)
       setImageLoader(false)
     } catch (error) {
       setLoader(false);
@@ -604,7 +630,7 @@ const handleSubmitCustomEdit = () => {
       onChange={(e) => setFaqTitle(e.target.value)}
     />
   </div>
-  <div className="col-md-12" id="faqDescription">
+  <div className="col-md-12 my-3" id="faqDescription">
     <label htmlFor="faqDescription" className="form-label">FAQ's Description</label>
     <QuillEditor
       ref={editFaqQuill}
@@ -626,19 +652,10 @@ const handleSubmitCustomEdit = () => {
       onChange={(e) => setFaqVideoUrl(e.target.value)}
     />
   </div>
-  <div className="col-md-12 my-3">
-    <h2 className="text-center" >Faq Images</h2>
-    {faqImages?.length > 0 ? (
-                  faqImages?.map((image, idx) => (
-                    // <div key={idx} className="img-wrapper">
-                    <div  key={idx}  className=" mx-2 position-relative d-flex justify-content-start mx-2 ">
-                      <img className="img-wrapper " src={image} alt={`FAQ ${idx} Image ${idx}`} style={{ width: '100px', height: '100px' }} />
-                      <i  onClick={() => handleDeleteFaqImageEdit(idx)} role="button" className="fa-solid bg-danger text-white p-1 fa-xmark position-absolute top-0 end-0"></i>
-                      <div/>
-                     </div>
-                  ))
-                ) : 'No images'}
-    <label className="btn bg-primary-color text-light w-100 ">
+
+
+<div className="col-md-12 my-3">
+<label className="btn bg-primary-color text-light w-100 ">
       Upload Image
       <input
         type="file"
@@ -648,6 +665,20 @@ const handleSubmitCustomEdit = () => {
         accept=".jpg,.jpeg,.png"
       />
     </label>
+</div>
+
+  <div className="col-md-12 my-3 d-flex justify-content-center">
+    {faqImages?.length > 0 ? (
+                  faqImages?.map((image, idx) => (
+                    // <div key={idx} className="img-wrapper">
+                    <div  key={idx}  className=" mx-2 position-relative d-flex justify-content-start mx-2 ">
+                      <img className="img-wrapper mx-3 " src={image} alt={`FAQ ${idx} Image ${idx}`} style={{ width: '100px', height: '100px' }} />
+                      <i  onClick={() => handleDeleteFaqImageEdit(idx)} role="button" className="fa-solid bg-danger text-white p-1 fa-xmark position-absolute top-0 end-0"></i>
+                      <div/>
+                     </div>
+                  ))
+                ) : 'No images'}
+   
 
   </div>
 
@@ -758,7 +789,7 @@ const handleSubmitCustomEdit = () => {
                   onChange={(e) => setCustomOptionName(e.target.value)}
                 />
               </div>
-              <label htmlFor="faqDescription" className="form-label">Option Description</label>
+              <label htmlFor="faqDescription" className="form-label my-2">Option Description</label>
               <QuillEditor
                 ref={customQuill}
                 theme="snow"
@@ -779,17 +810,12 @@ const handleSubmitCustomEdit = () => {
                 onChange={(e) => setCustomOptionVideo(e.target.value)}
               />
             </div>
-            <div className="col-md-12 my-3">
-              <h2 className="text-center">Option Images</h2>
-              {tempOptionImage?.length > 0 ? (
-                tempOptionImage?.map((image, idx) => (
-                  <div key={idx} className="mx-2 position-relative d-flex justify-content-start">
-                    <img className="img-wrapper" src={image} alt={`FAQ ${idx} Image ${idx}`} style={{ width: '100px', height: '100px' }} />
-                    <i onClick={() => handleDeleteCustomImageEdit(idx)} role="button" className="fa-solid bg-danger text-white p-1 fa-xmark position-absolute top-0 end-0"></i>
-                  </div>
-                ))
-              ) : 'No images'}
-              <label className="btn bg-primary-color text-light w-100">
+           
+          </div>
+
+
+          <div className="col-md-12 d-flex my-3">
+          <label className="btn bg-primary-color text-light w-100">
                 Upload Image
                 <input
                   type="file"
@@ -799,9 +825,19 @@ const handleSubmitCustomEdit = () => {
                   accept=".jpg,.jpeg,.png"
                 />
               </label>
-            </div>
           </div>
-
+          <div className="col-md-12 my-3 d-flex">
+              {/* <h2 className="text-center">Option Images</h2> */}
+              {tempOptionImage?.length > 0 ? (
+                tempOptionImage?.map((image, idx) => (
+                  <div key={idx} className="mx-2 position-relative d-flex justify-content-start">
+                    <img className="img-wrapper" src={image} alt={`FAQ ${idx} Image ${idx}`} style={{ width: '200px', height: '150px' }} />
+                    <i onClick={() => handleDeleteCustomImageEdit(idx)} role="button" className="fa-solid bg-danger text-white p-1 fa-xmark position-absolute top-0 end-0"></i>
+                  </div>
+                ))
+              ) : 'No images'}
+            
+            </div>
         <div className="col-12 d-flex justify-content-center">
           {imageLoader && <Loader />}
         </div>
@@ -838,13 +874,14 @@ const handleSubmitCustomEdit = () => {
             name='caseType'
           />
         </div>
-        <div className="col-md-12" id="editor">
+        <div className="col-md-12 my-3" id="editor">
           <label htmlFor="editor_content mb-2" className="form-label">
             Description
           </label>
           <QuillEditor
             ref={quill}
             theme="snow"
+            id="caseTypeEditor"
             value={value}
             formats={formats}
             modules={modules}
@@ -942,7 +979,7 @@ const handleSubmitCustomEdit = () => {
       onChange={(e) => setFaqTitle(e.target.value)}
     />
   </div>
-  <div className="col-md-12" id="faqDescription">
+  <div className="col-md-12 my-3" id="faqDescription">
     <label htmlFor="faqDescription" className="form-label">FAQ's Description</label>
     <QuillEditor
       ref={faqQuill}
@@ -964,7 +1001,7 @@ const handleSubmitCustomEdit = () => {
       onChange={(e) => setFaqVideoUrl(e.target.value)}
     />
   </div>
-  <div className="col-md-12 my-3">
+  <div className="col-md-12 my-3 d-flex justify-content-between">
     <label className="btn bg-primary-color text-light w-100 ">
       Upload Image
       <input
@@ -975,7 +1012,20 @@ const handleSubmitCustomEdit = () => {
         accept=".jpg,.jpeg,.png"
       />
     </label>
+   
+  </div>
 
+  <div className="col-md-12 my-3 d-flex justify-content-between">
+  {faqImages?.length > 0 ? (
+                  faqImages?.map((image, idx) => (
+                    // <div key={idx} className="img-wrapper">
+                    <div  key={idx}  className=" mx-2 position-relative d-flex justify-content-between mx-2 ">
+                      <img className="img-wrapper " src={image} alt={`FAQ ${idx} Image ${idx}`} style={{ width: '200px', height: '150px' }} />
+                      <i  onClick={() => handleDeleteFaqImageEdit(idx)} role="button" className="fa-solid bg-danger text-white p-1 fa-xmark position-absolute top-0 end-0"></i>
+                      <div/>
+                     </div>
+                  ))
+                ) : 'No images'}
   </div>
 
   <div className="col-12 d-flex justify-content-center">
@@ -1041,11 +1091,14 @@ const handleSubmitCustomEdit = () => {
       id="key"
       placeholder="Enter Field Name"
       name='key'
-      // required={true}
+      required={true}
       value={key}
       onChange={(e) => setkey(e.target.value)}
     />
   </div>
+
+
+
   <div className="col-md-12 mt-3" id="faq">
     <h5>Create Options</h5>
     <label htmlFor="customOptions" className="form-label">Name </label>
@@ -1057,7 +1110,7 @@ const handleSubmitCustomEdit = () => {
       id="customOptions"
       placeholder="Enter Options"
       name='key'
-      // required={true}
+      required={true}
       value={tempOption}
       onChange={(e) => setTempOption(e.target.value)}
     />
@@ -1070,7 +1123,7 @@ const handleSubmitCustomEdit = () => {
 
 
 
-     <div className="col-md-12" id="faqDescription">
+     <div className="col-md-12 my-3" id="faqDescription">
     <label htmlFor="faqDescription" className="form-label">{tempOption} Description</label>
     <QuillEditor
       ref={optionsQuill}
@@ -1118,7 +1171,7 @@ const handleSubmitCustomEdit = () => {
 <button id="faq_btn" type="button" className="btn btn-success w-100 my-3" onClick={addThisOption}>Add This Options</button>
 </div>
   </div>
-
+ 
   </div>
 
         <div className="col-12  ">
