@@ -19,6 +19,12 @@ export default function Stats() {
     { date: '2025-01-09', admin: 'Admin1', createdForms: 22, gender: 'female' },
     { date: '2025-01-10', admin: 'Admin1', createdForms: 22, gender: 'other' },
     { date: '2025-02-05', admin: 'Admin1', createdForms: 22, gender: 'male' },
+    { date: '2025-02-05', admin: 'Admin1', createdForms: 22, gender: 'male' },
+    { date: '2025-02-05', admin: 'Admin1', createdForms: 22, gender: 'male' },
+    { date: '2025-02-05', admin: 'Admin1', createdForms: 22, gender: 'male' },
+    { date: '2025-02-05', admin: 'Admin1', createdForms: 22, gender: 'male' },
+    { date: '2025-02-05', admin: 'Admin1', createdForms: 22, gender: 'male' },
+   { date: '2025-02-05', admin: 'Admin1', createdForms: 22, gender: 'male' },
   ];
 
   const ageData = [
@@ -79,14 +85,14 @@ useEffect(() => {
           />
         </form>
 
-<form className="row g-3">
+<form className="row mt-5 g-3">
         <CaseTypeStats 
           data={data2} 
           adminEmail="Admin1" 
           caseTypes={allCaseType}
         />
       </form>
-<form className="row g-3">
+<form className="row mt-5 g-3">
         <AgeGroup 
           ageData={ageData}
         />
