@@ -13,7 +13,7 @@ const ConsentFormBarChart = ({ data, adminEmail }) => {
   const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {
-    const filtered = data.filter(entry =>
+    const filtered = data?.filter(entry =>
       entry.admin === adminEmail &&
       moment(entry.date).isBetween(moment(startDate).startOf('day'), moment(endDate).endOf('day'), undefined, '[]')
     );
@@ -38,9 +38,11 @@ const ConsentFormBarChart = ({ data, adminEmail }) => {
 
   return (
     <div>
-      <div className='d-flex justify-content-between' >
-        <div className="">
+      <h2 className='mb-2 pb-2' >Created Consent Form Stats</h2>
 
+      <div className='d-flex justify-content-between' >
+        
+        <div className="">
         <label className='me-3' >Start Date: </label>
         <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} />
         </div>
