@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css"; // Ensure you have imported Bootstrap CSS
 import logo from "../../assets/images/mytr.png";
 import "./login.scss";
+import { Link } from "react-router-dom";
 import {postApi} from '../../helpers/requestHelpers.js'
 import {Toast} from '../../components/alert/Alert.jsx'
 import { useNavigate } from "react-router-dom";

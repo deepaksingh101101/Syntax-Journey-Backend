@@ -1,0 +1,20 @@
+// .ql-container, .ql-editor{
+//     min-height: 50vh !important;
+// }
+
+.highlight {
+    animation: pulse 1s infinite;
+    border: 2px solid red; /* Example of making the button stand out */
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(255, 0, 0, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
+    }
+}

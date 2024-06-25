@@ -1,0 +1,6 @@
+/* Add this CSS in your stylesheet or inline style */
+.chart-container  canvas{
+    width: 300px;  /* Adjust the width as needed */
+    height: 300px; /* Adjust the height as needed */
+    margin: 0 auto; /* Center the chart */
+}  
