@@ -25,7 +25,7 @@ const BaseLayout = () => {
       <Sidebar />
       {/* right side/content of the page */}
       {/* <AreaTop/> */}
-      <div className="content-wrapper outlet_outer d-flex   ">
+      <div className="content-wrapper p-2 outlet_outer d-flex   ">
         <Outlet />
       </div>
       {/* <button

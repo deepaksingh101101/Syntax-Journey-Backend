@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef} from "react";
 import { ThemeContext } from "../../context/ThemeContext";
 import { LIGHT_THEME } from "../../constants/themeConstants";
-import mytrLogo from "../../assets/images/mytr.png"
+import journey from "../../assets/images/journey.png"
 // import LogoBlue from "../../assets/images/logo_blue.svg";
 import LogoWhite from "../../assets/images/logo_white.svg";
 import {
@@ -61,8 +61,8 @@ const Sidebar = () => {
       ref={navbarRef}
     >
       <div className="sidebar-top">
-        <div className="sidebar-brand">
-          <img src={mytrLogo} alt="" />
+        <div className="sidebar-brand d-flex justify-content-center">
+          <img src={journey} alt="" />
           {/* <span className="sidebar-brand-text">tabernam.</span> */}
         </div>
         <button className="sidebar-close-btn" onClick={closeSidebar}>
@@ -73,61 +73,13 @@ const Sidebar = () => {
         <div className="sidebar-menu">
           <ul className="menu-list p-0">
             <li className="menu-item">
-              <NavLink to="/das"  className="menu-link text-decoration-none" >
+              <NavLink to="/createCourse"  className="menu-link text-decoration-none" >
                 <span className="menu-link-icon">
                 <i className="fa-brands fa-wpforms"></i>
                 </span>
-                <span className="menu-link-text">Create Consent Form</span>
+                <span className="menu-link-text">Create Course</span>
               </NavLink>
             </li>
-           {authUserData && <li className="menu-item">
-              <NavLink to="/create-template" className="menu-link text-decoration-none">
-                <span className="menu-link-icon">
-                <i className="fa-solid fa-file-pen"></i>
-                </span>
-                <span className="menu-link-text">Create Template</span>
-              </NavLink>
-            </li>}
-            <li className="menu-item" >
-              <NavLink to="/consentList" className="menu-link text-decoration-none">
-                <span className="menu-link-icon">
-                <i className="fa-solid fa-file-waveform"></i>
-                </span>
-                <span className="menu-link-text">View Consent Form</span>
-              </NavLink>
-            </li>
-           {authUserData && <li className="menu-item" >
-              <NavLink to="/templateList" className="menu-link text-decoration-none">
-                <span className="menu-link-icon">
-                <i className="fa-solid fa-newspaper"></i>
-                </span>
-                <span className="menu-link-text">View Template</span>
-              </NavLink>
-            </li>}
-           {authUserData && <li className="menu-item" >
-              <NavLink to="/stats" className="menu-link text-decoration-none">
-                <span className="menu-link-icon">
-                <i className="fa-solid fa-user-tie"></i>
-                </span>
-                <span className="menu-link-text">Stats</span>
-              </NavLink>
-            </li>}
-           {authUserData && <li className="menu-item" >
-              <NavLink to="/createAdmin" className="menu-link text-decoration-none">
-                <span className="menu-link-icon">
-                <i className="fa-solid fa-user-tie"></i>
-                </span>
-                <span className="menu-link-text">Create Admin</span>
-              </NavLink>
-            </li>}
-           {authUserData && <li className="menu-item" >
-              <NavLink to="/viewAdmin" className="menu-link text-decoration-none">
-                <span className="menu-link-icon">
-                <i className="fa-solid fa-users-line"></i>
-                </span>
-                <span className="menu-link-text">View Admin List</span>
-              </NavLink>
-            </li>}
           </ul>
         </div>
 

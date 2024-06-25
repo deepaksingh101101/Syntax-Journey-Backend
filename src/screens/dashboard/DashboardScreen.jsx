@@ -1,12 +1,10 @@
-import { AreaCards, AreaCharts, AreaTable, AreaTop } from "../../components";
-import ConsentForm from "../../components/consentForm/ConsentForm";
+import {  AreaTop } from "../../components";
+import CreateCourse from "../../components/consentForm/CreateCourse";
 import "./consentForm.css"
 const Dashboard = () => {
   return (
-    <div className="content-area">
-      <AreaTop title='Consent Form'/>
-      <ConsentForm/>
-    </div>
+      <CreateCourse/>
+    
    
   );
 };
